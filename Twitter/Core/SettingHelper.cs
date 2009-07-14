@@ -13,5 +13,9 @@ namespace Twitter
             get { return "saints99"; } //Properties.Settings.Default.PassWord
             set { Properties.Settings.Default.PassWord = value; }
         }
+
+        public static string MessageInvalidUserSettings {
+            get { return Properties.Settings.Default.MessageInvalidUserSettings; }
+        }
     }
 }

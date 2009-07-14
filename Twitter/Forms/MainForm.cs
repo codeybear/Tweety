@@ -14,13 +14,16 @@ namespace Twitter
             InitializeComponent();
         }
 
+        // Allow access to user image from other forms
+        public Bitmap UserImage { set { picProfileImage.Image = value; } }
+
         //--------------------------------------------------------------
         // Events 
         //--------------------------------------------------------------
 
         private void MainForm_Load(object sender, EventArgs e) {
             // Get any friends images that have been stored
-            TwitterManager.LoadImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
+            Twitter.LoadImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
 
             // Setup timer to get friends timeline
             StatusTimer = new Timer();
@@ -28,15 +31,13 @@ namespace Twitter
             StatusTimer.Interval = 1000 * 60;
             StatusTimer.Start();
 
-            Result UserInfo = TwitterManager.GetUserInfo(SettingHelper.UserName);
-            picProfileImage.Image = UserInfo.ProfileImage;
-
             // Get friends timeline
             BackgroundWorker_SetupFriendsTimeLine();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            TwitterManager.SaveImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
+            Twitter.SaveImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
+            notifyIcon.Visible = false;
         }
 
         void StatusTimer_Tick(object sender, EventArgs e) {
@@ -44,7 +45,7 @@ namespace Twitter
         }
 
         private void btnUserInfo_Click(object sender, EventArgs e) {
-            Result user = TwitterManager.GetUserInfo(SettingHelper.UserName);
+            Result user = Twitter.GetUserInfo(SettingHelper.UserName);
             picProfileImage.Image = user.ProfileImage;
         }
 
@@ -66,11 +67,26 @@ namespace Twitter
 
         void BackgroundWorker_GetFriendsTimeLine(object sender, System.ComponentModel.DoWorkEventArgs e) {
             try {
-                e.Result = TwitterManager.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
+                e.Result = Twitter.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
             }
             catch (System.Net.WebException ex) {
-                btnMessage.Text = ex.Response.Headers["status"];
-                
+                if (ex.Response != null) {
+                    if (btnMessage.InvokeRequired) {
+                        Action ShowError = () => btnMessage.Text = ex.Response.Headers["status"];
+                        btnMessage.Invoke(ShowError);
+                    }
+                    else
+                        btnMessage.Text = "Error";
+                    //btnMessage.Text = ex.Response.Headers["status"];
+                }
+                else
+                    if (btnMessage.InvokeRequired)
+                        btnMessage.Invoke(new Action(() => btnMessage.Text = "Error"));
+                    else
+                        btnMessage.Text = "Error";  
+
+                    //btnMessage.Text = ex.ToString();
+
                 e.Cancel = true;
             }
         }
@@ -87,7 +103,7 @@ namespace Twitter
         }
 
         private void picProfileImage_Click(object sender, EventArgs e) {
-            SettingsForm SettingsForm = new SettingsForm();
+            SettingsForm SettingsForm = new SettingsForm(this);
             SettingsForm.ShowDialog();
         }
     }

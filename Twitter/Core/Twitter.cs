@@ -21,7 +21,7 @@ namespace Twitter
         public System.Drawing.Bitmap ProfileImage;
     }
 
-    public static class TwitterManager
+    public static class Twitter
     {
         private const int MAXCHARACTERS = 149;
         private const string TWITTER_URL = "http://twitter.com/";
@@ -159,15 +159,6 @@ namespace Twitter
                 xml.Load(Reader);
                 return xml;
             }
-        }
-
-        private static DateTime ParseDateTime(String sValue) {
-            String[] split = sValue.Split(Convert.ToChar(" "));
-
-            DateTime date = DateTime.Parse(split[1] + " " + split[2] + " " + split[5]);
-            date = DateTime.Parse(date.ToString("yyyy-MM-dd") + " " + split[3]);
-
-            return date.AddHours(TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours - Convert.ToInt32(split[4]));
         }
 
         //private static List<Result> GetUserInfoLinq(TextReader XMLUser)

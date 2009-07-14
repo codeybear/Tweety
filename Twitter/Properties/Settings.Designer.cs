@@ -46,5 +46,14 @@ namespace Twitter.Properties {
                 this["PassWord"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Unable to validate user settings")]
+        public string MessageInvalidUserSettings {
+            get {
+                return ((string)(this["MessageInvalidUserSettings"]));
+            }
+        }
     }
 }
