@@ -1,6 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
-using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
@@ -55,5 +55,54 @@ namespace Twitter
 
             return OutStream.ToArray();
         }
+
+        /// <summary> Access an object using Invoke if required </summary>
+        public static void AccessInvoke(ISynchronizeInvoke ThisObject, Action action) {
+            if (ThisObject.InvokeRequired)
+                ThisObject.Invoke(action, null);
+            else
+                action();
+        }
+
+        //public static void ShowAlert(string strMessage) {
+        //    Int16 a = default(Int16);
+
+        //    m_frmStatusInst.Show();
+
+        //    m_frmStatusInst.Left = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width() - m_frmStatusInst.Width;
+        //    m_frmStatusInst.Top = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height() - m_frmStatusInst.Height - 50;
+
+        //    m_frmStatusInst.linkEvent.Text() = strMessage;
+
+        //    for (a = 0; a <= 50; a++) {
+        //        System.Threading.Thread.Sleep(12);
+        //        m_frmStatusInst.Top = m_frmStatusInst.Top - 2;
+        //        m_frmStatusInst.Height = m_frmStatusInst.Height + 2;
+        //    }
+        //}
+
+        //public static void CloseAlert() {
+        //    Int16 a = default(Int16);
+
+        //    for (a = 0; a <= 50; a++) {
+        //        System.Threading.Thread.Sleep(5);
+        //        m_frmStatusInst.Top = m_frmStatusInst.Top + 2;
+        //        m_frmStatusInst.Height = m_frmStatusInst.Height - 2;
+        //        m_frmStatusInst.Refresh();
+        //    }
+
+        //    m_frmStatusInst.Hide();
+        //}
+
+        //public static void CheckVersionForUpgrade() {
+        //    System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
+        //    string sAppVersion = a.GetName().Version.ToString();
+
+        //    if (Properties.Settings.Default.ApplicationVersion != sAppVersion) {
+        //        Properties.Settings.Default.Upgrade();
+        //        Properties.Settings.Default.ApplicationVersion = sAppVersion;
+        //    }
+        //}
     }
 }
+

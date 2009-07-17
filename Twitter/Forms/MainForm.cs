@@ -25,11 +25,16 @@ namespace Twitter
             // Get any friends images that have been stored
             Twitter.LoadImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
 
+            //Utility.CheckVersionForUpgrade();
+
             // Setup timer to get friends timeline
             StatusTimer = new Timer();
             StatusTimer.Tick += new EventHandler(StatusTimer_Tick);
             StatusTimer.Interval = 1000 * 60;
             StatusTimer.Start();
+
+            // Get user's profile image
+            picProfileImage.Image = Twitter.GetUserProfileImageFromCache(SettingHelper.ProfileImageURL);
 
             // Get friends timeline
             BackgroundWorker_SetupFriendsTimeLine();
@@ -37,6 +42,7 @@ namespace Twitter
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
             Twitter.SaveImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
+            SettingHelper.Save();
             notifyIcon.Visible = false;
         }
 
@@ -60,8 +66,15 @@ namespace Twitter
         void BackgroundWorker_SetupFriendsTimeLine() {
             if (!BackgroundWorker.IsBusy) {
                 BackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(BackgroundWorker_GetFriendsTimeLine);
-                BackgroundWorker.RunWorkerCompleted += (sender, e) => BindResultsToGrid((List<Result>)e.Result);
+                BackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
                 BackgroundWorker.RunWorkerAsync();
+            }
+        }
+
+        void BackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
+            if (e.Result != null) {
+                BindResultsToGrid((List<Result>)e.Result);
+                if (btnMessage.Visible) btnMessage_Click(null, null);
             }
         }
 
@@ -70,24 +83,14 @@ namespace Twitter
                 e.Result = Twitter.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
             }
             catch (System.Net.WebException ex) {
-                if (ex.Response != null) {
-                    if (btnMessage.InvokeRequired) {
-                        Action ShowError = () => btnMessage.Text = ex.Response.Headers["status"];
-                        btnMessage.Invoke(ShowError);
-                    }
-                    else
-                        btnMessage.Text = "Error";
-                    //btnMessage.Text = ex.Response.Headers["status"];
-                }
+                string sMessage;
+
+                if (ex.Response != null)
+                    sMessage = ex.Response.Headers["status"];
                 else
-                    if (btnMessage.InvokeRequired)
-                        btnMessage.Invoke(new Action(() => btnMessage.Text = "Error"));
-                    else
-                        btnMessage.Text = "Error";  
+                    sMessage = ex.Message;
 
-                    //btnMessage.Text = ex.ToString();
-
-                e.Cancel = true;
+                Utility.AccessInvoke(this,() =>  ShowMessage(sMessage));
             }
         }
 
@@ -105,6 +108,27 @@ namespace Twitter
         private void picProfileImage_Click(object sender, EventArgs e) {
             SettingsForm SettingsForm = new SettingsForm(this);
             SettingsForm.ShowDialog();
+        }
+
+        private void btnMessage_Click(object sender, EventArgs e) {
+            btnMessage.Visible = false;
+
+            for (int iTop = 92; iTop >= 63; iTop -= 2) {
+                System.Threading.Thread.Sleep(25);
+                grdFriendStatus.Top = iTop;
+                grdFriendStatus.Height += 2;
+            }
+        }
+
+        private void ShowMessage(string sMessage) {
+            btnMessage.Visible = true;
+            btnMessage.Text = sMessage;
+
+            for (int iTop = 63; iTop <= 92; iTop += 2) {
+                System.Threading.Thread.Sleep(25);
+                grdFriendStatus.Top = iTop;
+                grdFriendStatus.Height -= 2;
+            }
         }
     }
 }

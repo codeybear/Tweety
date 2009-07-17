@@ -18,10 +18,13 @@ namespace Twitter
 
         private void btnOk_Click(object sender, EventArgs e) {
             try {
-                Result UserInfo = Twitter.GetUserInfo(SettingHelper.UserName);
-                _MainForm.UserImage = UserInfo.ProfileImage;
+                Result UserInfo = Twitter.GetUserInfo(txtUserName.Text);
+
                 SettingHelper.UserName = txtUserName.Text.Trim();
                 SettingHelper.Password = txtPassword.Text.Trim();
+                SettingHelper.ProfileImageURL = UserInfo.ProfileImageUrl;
+
+                _MainForm.UserImage = UserInfo.ProfileImage;
 
                 this.Close();
             }

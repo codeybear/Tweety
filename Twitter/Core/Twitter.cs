@@ -59,6 +59,13 @@ namespace Twitter
             return GetUserInfoFromNode(xml.DocumentElement);
         }
 
+        public static System.Drawing.Bitmap GetUserProfileImageFromCache(string sUserProfileURL) {
+            if (_ImageCache.ContainsKey(sUserProfileURL))
+                return _ImageCache.GetImage(sUserProfileURL);
+            else
+                return null;
+        }
+
         public static List<Result> GetFriendsTimeLine(string sUserName, string sPassword) {
             HttpWebResponse Response = GetWebResponse(PATH_FRIENDS_TIMELINE + ".xml", "GET", sUserName, sPassword);
             XmlDocument xml = LoadResponseToXMLDoc(Response);
@@ -160,21 +167,5 @@ namespace Twitter
                 return xml;
             }
         }
-
-        //private static List<Result> GetUserInfoLinq(TextReader XMLUser)
-        //{
-        //    XElement xml = XElement.Load(XMLUser);
-
-        //    var UserList = from User in xml.Elements("user")
-        //                   select new Result
-        //                   {
-        //                       Name = User.Element("name").Value,
-        //                       ProfileImageUrl = User.Element("profile_image_url").Value,
-        //                       Url = User.Element("url").Value,
-        //                       ProfileImage = GetBitmapFromURL(User.Element("profile_image_url").Value)
-        //                   };
-
-        //    return new List<Result>(UserList);
-        //}
     }
 }

@@ -42,11 +42,11 @@ namespace Twitter
             this.grdFriendStatus = new System.Windows.Forms.DataGridView();
             this.FriendImageColumn = new System.Windows.Forms.DataGridViewImageColumn();
             this.FriendStatusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.picProfileImage = new System.Windows.Forms.PictureBox();
             this.btnFriendsTimeline = new System.Windows.Forms.Button();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.btnMessage = new System.Windows.Forms.Button();
+            this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.grdFriendStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).BeginInit();
             this.SuspendLayout();
@@ -55,6 +55,8 @@ namespace Twitter
             // 
             this.grdFriendStatus.AllowUserToAddRows = false;
             this.grdFriendStatus.AllowUserToDeleteRows = false;
+            this.grdFriendStatus.AllowUserToResizeColumns = false;
+            this.grdFriendStatus.AllowUserToResizeRows = false;
             this.grdFriendStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -64,11 +66,12 @@ namespace Twitter
             this.grdFriendStatus.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.FriendImageColumn,
             this.FriendStatusColumn});
-            this.grdFriendStatus.Location = new System.Drawing.Point(9, 92);
+            this.grdFriendStatus.Location = new System.Drawing.Point(9, 63);
+            this.grdFriendStatus.MultiSelect = false;
             this.grdFriendStatus.Name = "grdFriendStatus";
             this.grdFriendStatus.ReadOnly = true;
             this.grdFriendStatus.RowHeadersVisible = false;
-            this.grdFriendStatus.Size = new System.Drawing.Size(330, 451);
+            this.grdFriendStatus.Size = new System.Drawing.Size(330, 480);
             this.grdFriendStatus.TabIndex = 4;
             // 
             // FriendImageColumn
@@ -95,7 +98,7 @@ namespace Twitter
             this.picProfileImage.Size = new System.Drawing.Size(48, 48);
             this.picProfileImage.TabIndex = 1;
             this.picProfileImage.TabStop = false;
-            this.toolTip.SetToolTip(this.picProfileImage, "Change Settings");
+            this.ToolTip.SetToolTip(this.picProfileImage, "Settings");
             this.picProfileImage.Click += new System.EventHandler(this.picProfileImage_Click);
             // 
             // btnFriendsTimeline
@@ -110,7 +113,7 @@ namespace Twitter
             this.btnFriendsTimeline.Name = "btnFriendsTimeline";
             this.btnFriendsTimeline.Size = new System.Drawing.Size(40, 40);
             this.btnFriendsTimeline.TabIndex = 5;
-            this.toolTip.SetToolTip(this.btnFriendsTimeline, "\\");
+            this.ToolTip.SetToolTip(this.btnFriendsTimeline, "Get Tweets");
             this.btnFriendsTimeline.UseVisualStyleBackColor = false;
             this.btnFriendsTimeline.Click += new System.EventHandler(this.btnFriendsTimeline_Click);
             // 
@@ -127,6 +130,8 @@ namespace Twitter
             this.btnMessage.Size = new System.Drawing.Size(330, 23);
             this.btnMessage.TabIndex = 6;
             this.btnMessage.UseVisualStyleBackColor = true;
+            this.btnMessage.Visible = false;
+            this.btnMessage.Click += new System.EventHandler(this.btnMessage_Click);
             // 
             // MainForm
             // 
@@ -138,8 +143,9 @@ namespace Twitter
             this.Controls.Add(this.btnFriendsTimeline);
             this.Controls.Add(this.grdFriendStatus);
             this.Controls.Add(this.picProfileImage);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "MainForm";
-            this.Text = "Twitter";
+            this.Text = "Twitty";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.grdFriendStatus)).EndInit();
@@ -152,8 +158,8 @@ namespace Twitter
         private System.Windows.Forms.Button btnFriendsTimeline;
         private System.Windows.Forms.DataGridViewImageColumn FriendImageColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn FriendStatusColumn;
-        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.Button btnMessage;
+        private System.Windows.Forms.ToolTip ToolTip;
 	}
 }
