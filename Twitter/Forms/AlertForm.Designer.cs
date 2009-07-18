@@ -31,9 +31,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(350, 127);
+            this.ClientSize = new System.Drawing.Size(236, 80);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "AlertForm";
-            this.Text = "Twitty Alert";
+            this.Text = "New Tweets";
             this.ResumeLayout(false);
 
         }

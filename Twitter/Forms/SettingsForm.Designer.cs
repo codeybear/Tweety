@@ -1,4 +1,4 @@
-﻿namespace Twitter
+﻿namespace Twitter.Forms
 {
     partial class SettingsForm
     {

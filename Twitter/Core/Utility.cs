@@ -64,22 +64,22 @@ namespace Twitter
                 action();
         }
 
-        //public static void ShowAlert(string strMessage) {
-        //    Int16 a = default(Int16);
+        public static void ShowAlert(string strMessage, System.Windows.Forms.Form AlertForm) {
+            AlertForm.Height = 0;
+            AlertForm.Show();
 
-        //    m_frmStatusInst.Show();
+            System.Drawing.Rectangle rect = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
 
-        //    m_frmStatusInst.Left = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width() - m_frmStatusInst.Width;
-        //    m_frmStatusInst.Top = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height() - m_frmStatusInst.Height - 50;
-
-        //    m_frmStatusInst.linkEvent.Text() = strMessage;
-
-        //    for (a = 0; a <= 50; a++) {
-        //        System.Threading.Thread.Sleep(12);
-        //        m_frmStatusInst.Top = m_frmStatusInst.Top - 2;
-        //        m_frmStatusInst.Height = m_frmStatusInst.Height + 2;
-        //    }
-        //}
+            AlertForm.Left = rect.Width - AlertForm.Width;
+            AlertForm.Top = rect.Height - AlertForm.Height;
+            return;
+            //AlertForm.linkEvent.Text() = strMessage;
+            for (int iCount = 0; iCount <= 50; iCount++) {
+                System.Threading.Thread.Sleep(12);
+                AlertForm.Top = AlertForm.Top - 2;
+                AlertForm.Height = AlertForm.Height + 2;
+            }
+        }
 
         //public static void CloseAlert() {
         //    Int16 a = default(Int16);

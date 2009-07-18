@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Twitter
+namespace Twitter.Forms
 {
     public partial class MainForm : Form
     {
@@ -82,15 +82,15 @@ namespace Twitter
             try {
                 e.Result = Twitter.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
             }
-            catch (System.Net.WebException ex) {
-                string sMessage;
+            catch (Exception ex) {
+                //string sMessage;
 
-                if (ex.Response != null)
-                    sMessage = ex.Response.Headers["status"];
-                else
-                    sMessage = ex.Message;
+                //if (ex.Response != null)
+                //    sMessage = ex.Response.Headers["status"];
+                //else
+                //    sMessage = ex.Message;
 
-                Utility.AccessInvoke(this,() =>  ShowMessage(sMessage));
+                Utility.AccessInvoke(this,() =>  ShowMessage(ex.Message));
             }
         }
 
@@ -116,7 +116,7 @@ namespace Twitter
             for (int iTop = 92; iTop >= 63; iTop -= 2) {
                 System.Threading.Thread.Sleep(25);
                 grdFriendStatus.Top = iTop;
-                grdFriendStatus.Height += 2;
+                //grdFriendStatus.Height += 2;
             }
         }
 
@@ -127,8 +127,12 @@ namespace Twitter
             for (int iTop = 63; iTop <= 92; iTop += 2) {
                 System.Threading.Thread.Sleep(25);
                 grdFriendStatus.Top = iTop;
-                grdFriendStatus.Height -= 2;
+                //grdFriendStatus.Height -= 2;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e) {
+            Utility.ShowAlert("Hi", new Forms.AlertForm());
         }
     }
 }

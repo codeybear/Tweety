@@ -6,7 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-namespace Twitter
+namespace Twitter.Forms
 {
 	partial class MainForm
 	{
@@ -37,7 +37,7 @@ namespace Twitter
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.grdFriendStatus = new System.Windows.Forms.DataGridView();
             this.FriendImageColumn = new System.Windows.Forms.DataGridViewImageColumn();
@@ -47,6 +47,7 @@ namespace Twitter
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.btnMessage = new System.Windows.Forms.Button();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.grdFriendStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).BeginInit();
             this.SuspendLayout();
@@ -84,8 +85,8 @@ namespace Twitter
             // FriendStatusColumn
             // 
             this.FriendStatusColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FriendStatusColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FriendStatusColumn.DefaultCellStyle = dataGridViewCellStyle1;
             this.FriendStatusColumn.HeaderText = "Status";
             this.FriendStatusColumn.Name = "FriendStatusColumn";
             this.FriendStatusColumn.ReadOnly = true;
@@ -133,17 +134,27 @@ namespace Twitter
             this.btnMessage.Visible = false;
             this.btnMessage.Click += new System.EventHandler(this.btnMessage_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(53, 9);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(238)))), ((int)(((byte)(232)))));
             this.ClientSize = new System.Drawing.Size(348, 555);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnMessage);
             this.Controls.Add(this.btnFriendsTimeline);
             this.Controls.Add(this.grdFriendStatus);
             this.Controls.Add(this.picProfileImage);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "MainForm";
             this.Text = "Twitty";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -161,5 +172,6 @@ namespace Twitter
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.Button btnMessage;
         private System.Windows.Forms.ToolTip ToolTip;
+        private System.Windows.Forms.Button button1;
 	}
 }
