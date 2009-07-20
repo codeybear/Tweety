@@ -25,19 +25,19 @@ namespace Twitter.Forms
             // Get any friends images that have been stored
             Twitter.LoadImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
 
-            //Utility.CheckVersionForUpgrade();
-
             // Setup timer to get friends timeline
             StatusTimer = new Timer();
             StatusTimer.Tick += new EventHandler(StatusTimer_Tick);
-            StatusTimer.Interval = 1000 * 60;
+            StatusTimer.Interval = 1000 * 120;
             StatusTimer.Start();
 
             // Get user's profile image
             picProfileImage.Image = Twitter.GetUserProfileImageFromCache(SettingHelper.ProfileImageURL);
 
             // Get friends timeline
-            BackgroundWorker_SetupFriendsTimeLine();
+            BackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(BackgroundWorker_GetFriendsTimeLine);
+            BackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
+            BackgroundWorker_GetFriendsTimeLine();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
@@ -47,7 +47,7 @@ namespace Twitter.Forms
         }
 
         void StatusTimer_Tick(object sender, EventArgs e) {
-            BackgroundWorker_SetupFriendsTimeLine();
+            BackgroundWorker_GetFriendsTimeLine();
         }
 
         private void btnUserInfo_Click(object sender, EventArgs e) {
@@ -56,19 +56,16 @@ namespace Twitter.Forms
         }
 
         private void btnFriendsTimeline_Click(object sender, EventArgs e) {
-            BackgroundWorker_SetupFriendsTimeLine();
+            BackgroundWorker_GetFriendsTimeLine();
         }
 
         //--------------------------------------------------------------
         //  Background worker for friends timeline
         //--------------------------------------------------------------
 
-        void BackgroundWorker_SetupFriendsTimeLine() {
-            if (!BackgroundWorker.IsBusy) {
-                BackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(BackgroundWorker_GetFriendsTimeLine);
-                BackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
+        void BackgroundWorker_GetFriendsTimeLine() {
+            if (!BackgroundWorker.IsBusy)
                 BackgroundWorker.RunWorkerAsync();
-            }
         }
 
         void BackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
@@ -116,7 +113,7 @@ namespace Twitter.Forms
             for (int iTop = 92; iTop >= 63; iTop -= 2) {
                 System.Threading.Thread.Sleep(25);
                 grdFriendStatus.Top = iTop;
-                //grdFriendStatus.Height += 2;
+                grdFriendStatus.Height += 2;
             }
         }
 
@@ -127,12 +124,12 @@ namespace Twitter.Forms
             for (int iTop = 63; iTop <= 92; iTop += 2) {
                 System.Threading.Thread.Sleep(25);
                 grdFriendStatus.Top = iTop;
-                //grdFriendStatus.Height -= 2;
+                grdFriendStatus.Height -= 2;
             }
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            Utility.ShowAlert("Hi", new Forms.AlertForm());
+            Utility.ShowAlert("Hi", new Forms.AlertForm("Test Alert"));
         }
     }
 }

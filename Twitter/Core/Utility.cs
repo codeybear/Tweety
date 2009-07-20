@@ -72,9 +72,8 @@ namespace Twitter
 
             AlertForm.Left = rect.Width - AlertForm.Width;
             AlertForm.Top = rect.Height - AlertForm.Height;
-            return;
-            //AlertForm.linkEvent.Text() = strMessage;
-            for (int iCount = 0; iCount <= 50; iCount++) {
+
+            for (int iCount = 0; iCount <= 30; iCount++) {
                 System.Threading.Thread.Sleep(12);
                 AlertForm.Top = AlertForm.Top - 2;
                 AlertForm.Height = AlertForm.Height + 2;
@@ -82,7 +81,7 @@ namespace Twitter
         }
 
         //public static void CloseAlert() {
-        //    Int16 a = default(Int16);
+        //    Int16 a = default(Int16);u
 
         //    for (a = 0; a <= 50; a++) {
         //        System.Threading.Thread.Sleep(5);

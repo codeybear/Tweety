@@ -156,7 +156,7 @@ namespace Twitter.Forms
             this.Controls.Add(this.grdFriendStatus);
             this.Controls.Add(this.picProfileImage);
             this.Name = "MainForm";
-            this.Text = "Twitty";
+            this.Text = "Tweety";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.grdFriendStatus)).EndInit();

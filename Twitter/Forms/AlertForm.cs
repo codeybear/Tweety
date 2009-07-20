@@ -11,8 +11,14 @@ namespace Twitter.Forms
 {
     public partial class AlertForm : Form
     {
-        public AlertForm() {
+        public AlertForm(string sMessage) {
             InitializeComponent();
+
+            linkMessage.Text = sMessage;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e) {
+            this.Close();
         }
     }
 }

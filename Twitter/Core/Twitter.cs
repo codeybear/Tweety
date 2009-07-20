@@ -29,6 +29,7 @@ namespace Twitter
         private const string PATH_FRIENDS_TIMELINE = "statuses/friends_timeline";
 
         private static ImageCache _ImageCache = new ImageCache();
+        private static Int64 _iLastId;
 
         // Public methods:
 
@@ -93,10 +94,16 @@ namespace Twitter
 
         private static List<Result> GetStatusList(XmlDocument xml) {
             List<Result> StatusList = new List<Result>();
+            bool bFirst = true;
 
             foreach (XmlNode StatusNode in xml.GetElementsByTagName("status")) {
                 Result StatusInfo = new Result();
                 StatusInfo.Text = StatusNode["text"].InnerText;
+
+                if (bFirst) {
+                    _iLastId = Convert.ToInt64(StatusNode["id"].InnerText);
+                    bFirst = false;
+                }
 
                 Result UserInfo = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));
                 StatusInfo.ProfileImage = UserInfo.ProfileImage;
