@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Twitter.Forms
+namespace Core.Forms
 {
     public partial class SettingsForm : Form
     {

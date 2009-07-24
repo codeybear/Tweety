@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace Twitter
+namespace Core
 {
     // Wrapper class to get/store user settings
     public static class SettingHelper

@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Twitter</RootNamespace>
+    <RootNamespace>Core</RootNamespace>
     <AssemblyName>Twitter</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\ImageCache.cs" />
+    <Compile Include="Core\WebHelper.cs" />
     <Compile Include="Forms\AlertForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace Twitter
+namespace Core
 {
     public class Utility
     {
@@ -40,20 +40,6 @@ namespace Twitter
                 LoadDict.Add(Item.Key, Item.Value);
 
             return LoadDict;
-        }
-
-        /// <summary> For copying a non-seekable stream to a byte array </summary>
-        public static byte[] CopyStreamToByteArray(Stream Stream) {
-            MemoryStream OutStream = new MemoryStream();
-            byte[] Buffer = new byte[1024];
-            int iBytesRead;
-
-            do {
-                iBytesRead = Stream.Read(Buffer, 0, Buffer.Length);
-                OutStream.Write(Buffer, 0, iBytesRead);
-            } while (iBytesRead > 0);
-
-            return OutStream.ToArray();
         }
 
         /// <summary> Access an object using Invoke if required </summary>

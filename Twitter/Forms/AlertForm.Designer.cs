@@ -1,4 +1,4 @@
-﻿namespace Twitter.Forms
+﻿namespace Core.Forms
 {
     partial class AlertForm
     {

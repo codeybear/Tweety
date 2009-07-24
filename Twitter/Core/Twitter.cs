@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Xml;
 
-namespace Twitter
+namespace Core
 {
     public class StatusAlert
     {
@@ -27,6 +26,7 @@ namespace Twitter
         private const string TWITTER_URL = "http://twitter.com/";
         private const string PATH_FRIENDS_STATUS = "statuses/friends/";
         private const string PATH_FRIENDS_TIMELINE = "statuses/friends_timeline";
+        private const string PATH_USERS_SHOW = "users/show/";
 
         private static ImageCache _ImageCache = new ImageCache();
         private static Int64 _iLastId;
@@ -34,29 +34,18 @@ namespace Twitter
         // Public methods:
 
         public static String UpdateStatus(String message) {
-            String returnValue;
-            HttpWebResponse response;
-
-            try {
-                response = GetWebResponse("statuses/update.xml?source=threeter&status=" + message, "POST");
-
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                returnValue = reader.ReadToEnd();
-                reader.Close();
-
-                if (returnValue.Contains("<status>"))
-                    returnValue = String.Empty;
-            }
-            catch (Exception e) {
-                returnValue = e.Message;
-            }
+            Stream ResponseStream = WebHelper.GetWebResponse("statuses/update.xml?source=threeter&status=" + message, WebHelper.HTTPPOST);
+            StreamReader reader = new StreamReader(ResponseStream);
+            string returnValue = reader.ReadToEnd();
+            reader.Close();
 
             return returnValue;
         }
 
         public static Result GetUserInfo(String sUserName) {
-            HttpWebResponse Response = GetWebResponse("users/show/" + sUserName + ".xml", "GET");
-            XmlDocument xml = LoadResponseToXMLDoc(Response);
+            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_USERS_SHOW + sUserName + ".xml", WebHelper.HTTPGET);
+            XmlDocument xml = new XmlDocument();
+            xml.Load(ResponseStream);
             return GetUserInfoFromNode(xml.DocumentElement);
         }
 
@@ -68,14 +57,16 @@ namespace Twitter
         }
 
         public static List<Result> GetFriendsTimeLine(string sUserName, string sPassword) {
-            HttpWebResponse Response = GetWebResponse(PATH_FRIENDS_TIMELINE + ".xml", "GET", sUserName, sPassword);
-            XmlDocument xml = LoadResponseToXMLDoc(Response);
+            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml", WebHelper.HTTPGET, sUserName, sPassword);
+            XmlDocument xml = new XmlDocument();
+            xml.Load(ResponseStream);
             return GetStatusList(xml);
         }
 
         public static List<Result> GetFriendsStatus(string sUserName) {
-            HttpWebResponse Response = GetWebResponse(PATH_FRIENDS_STATUS + sUserName + ".xml", "GET");
-            XmlDocument xml = LoadResponseToXMLDoc(Response);
+            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_FRIENDS_STATUS + sUserName + ".xml", WebHelper.HTTPGET);
+            XmlDocument xml = new XmlDocument();
+            xml.Load(ResponseStream);
             return GetUserList(xml);
         }
 
@@ -130,49 +121,13 @@ namespace Twitter
             UserInfo.ProfileImageUrl = UserNode["profile_image_url"].InnerText;
 
             if (!_ImageCache.ContainsKey(UserInfo.ProfileImageUrl)) {
-                byte[] ImageBytes = Utility.CopyStreamToByteArray(GetStreamFromURL(UserInfo.ProfileImageUrl));
+                byte[] ImageBytes = WebHelper.GetBytesFromURL(UserInfo.ProfileImageUrl);
                 _ImageCache.StoreImage(UserInfo.ProfileImageUrl, ImageBytes);
             }
 
             UserInfo.ProfileImage = _ImageCache.GetImage(UserInfo.ProfileImageUrl);
 
             return UserInfo;
-        }
-
-        private static Stream GetStreamFromURL(string sURL) {
-            HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(sURL);
-            WebResponse Response = Request.GetResponse();
-            return Response.GetResponseStream();
-        }
-
-        private static System.Drawing.Bitmap GetBitmapFromURL(string sURL) {
-            HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(sURL);
-            WebResponse Response = Request.GetResponse();
-            Stream ResponseStream = Response.GetResponseStream();
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(ResponseStream);
-
-            return bmp;
-        }
-
-        private static HttpWebResponse GetWebResponse(String urlParameters, String sMethod) {
-            HttpWebRequest request = WebRequest.Create(TWITTER_URL + urlParameters) as HttpWebRequest;
-            request.Method = sMethod;
-            return request.GetResponse() as HttpWebResponse;
-        }
-
-        private static HttpWebResponse GetWebResponse(String urlParameters, String sMethod, string sUserName, string sPassword) {
-            HttpWebRequest request = WebRequest.Create(TWITTER_URL + urlParameters) as HttpWebRequest;
-            request.Method = sMethod;
-            request.Credentials = new NetworkCredential(sUserName, sPassword);
-            return request.GetResponse() as HttpWebResponse;
-        }
-
-        private static XmlDocument LoadResponseToXMLDoc(HttpWebResponse Response) {
-            using (StreamReader Reader = new StreamReader(Response.GetResponseStream())) {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(Reader);
-                return xml;
-            }
         }
     }
 }

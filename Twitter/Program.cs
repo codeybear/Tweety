@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Twitter
+namespace Core
 {
 	/// <summary>
 	/// Class with program entry point.

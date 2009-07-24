@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.IO;
 
-namespace Twitter
+namespace Core
 {
     /// <summary> Store a dictionary of byte[] that represent images, items are returned as a bitmap
     /// items are kept as stream as they are compressed in this format and can be serialised </summary>

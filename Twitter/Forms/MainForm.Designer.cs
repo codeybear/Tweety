@@ -6,7 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-namespace Twitter.Forms
+namespace Core.Forms
 {
 	partial class MainForm
 	{
@@ -105,7 +105,7 @@ namespace Twitter.Forms
             // btnFriendsTimeline
             // 
             this.btnFriendsTimeline.BackColor = System.Drawing.Color.Transparent;
-            this.btnFriendsTimeline.BackgroundImage = global::Twitter.Properties.Resource.Twitter;
+            this.btnFriendsTimeline.BackgroundImage = global::Core.Properties.Resource.Twitter;
             this.btnFriendsTimeline.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnFriendsTimeline.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btnFriendsTimeline.FlatAppearance.BorderSize = 0;
