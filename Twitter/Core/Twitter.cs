@@ -5,8 +5,7 @@ using System.Xml;
 
 namespace Core
 {
-    public class StatusAlert
-    {
+    public class StatusAlert {
         public String ScreenName;
         public String Name;
         public String Text;
@@ -15,6 +14,7 @@ namespace Core
 
     public class Result
     {
+        public String ID;
         public String Text;
         public String ProfileImageUrl;
         public System.Drawing.Bitmap ProfileImage;
@@ -29,7 +29,6 @@ namespace Core
         private const string PATH_USERS_SHOW = "users/show/";
 
         private static ImageCache _ImageCache = new ImageCache();
-        private static Int64 _iLastId;
 
         // Public methods:
 
@@ -85,16 +84,11 @@ namespace Core
 
         private static List<Result> GetStatusList(XmlDocument xml) {
             List<Result> StatusList = new List<Result>();
-            bool bFirst = true;
 
             foreach (XmlNode StatusNode in xml.GetElementsByTagName("status")) {
                 Result StatusInfo = new Result();
                 StatusInfo.Text = StatusNode["text"].InnerText;
-
-                if (bFirst) {
-                    _iLastId = Convert.ToInt64(StatusNode["id"].InnerText);
-                    bFirst = false;
-                }
+                StatusInfo.ID = StatusNode["id"].InnerText;
 
                 Result UserInfo = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));
                 StatusInfo.ProfileImage = UserInfo.ProfileImage;

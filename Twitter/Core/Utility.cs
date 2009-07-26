@@ -48,23 +48,7 @@ namespace Core
                 ThisObject.Invoke(action, null);
             else
                 action();
-        }
-
-        public static void ShowAlert(string strMessage, System.Windows.Forms.Form AlertForm) {
-            AlertForm.Height = 0;
-            AlertForm.Show();
-
-            System.Drawing.Rectangle rect = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
-
-            AlertForm.Left = rect.Width - AlertForm.Width;
-            AlertForm.Top = rect.Height - AlertForm.Height;
-
-            for (int iCount = 0; iCount <= 30; iCount++) {
-                System.Threading.Thread.Sleep(12);
-                AlertForm.Top = AlertForm.Top - 2;
-                AlertForm.Height = AlertForm.Height + 2;
-            }
-        }
+    }
 
         //public static void CloseAlert() {
         //    Int16 a = default(Int16);u

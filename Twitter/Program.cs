@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Core
+namespace Tweety
 {
 	/// <summary>
 	/// Class with program entry point.

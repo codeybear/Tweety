@@ -1,23 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
-namespace Core.Forms
+namespace Forms
 {
     public partial class AlertForm : Form
     {
-        public AlertForm(string sMessage) {
+        Form _MainForm;
+
+        public AlertForm(string sMessage, Form MainForm) {
             InitializeComponent();
 
+            _MainForm = MainForm;
             linkMessage.Text = sMessage;
         }
 
         private void btnClose_Click(object sender, EventArgs e) {
+            this.Close();
+        }
+
+        private void AlertForm_Shown(object sender, EventArgs e) {
+            int iSteps = 10;
+
+            for (int iCount = 0; iCount < iSteps; iCount++) {
+                System.Threading.Thread.Sleep(100);
+                this.Opacity = (double)(iCount) / iSteps;
+                this.Refresh();
+                Application.DoEvents();
+            }
+        }
+
+        private void linkMessage_Click(object sender, EventArgs e) {
+            _MainForm.Show();
             this.Close();
         }
     }

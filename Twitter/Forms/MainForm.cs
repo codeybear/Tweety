@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Core;
 
-namespace Core.Forms
+namespace Forms
 {
     public partial class MainForm : Form
     {
         System.ComponentModel.BackgroundWorker BackgroundWorker = new System.ComponentModel.BackgroundWorker();
         Timer StatusTimer;
+        Int64 _lLastId;
 
         public MainForm() {
             InitializeComponent();
@@ -22,22 +24,18 @@ namespace Core.Forms
         //--------------------------------------------------------------
 
         private void MainForm_Load(object sender, EventArgs e) {
-            // Get any friends images that have been stored
-            Twitter.LoadImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
+            // Check for user settings before settings up form
+            if (SettingHelper.UserName == "") {
+                SettingsForm SettingsForm = new SettingsForm(this);
+                SettingsForm.ShowDialog();
 
-            // Setup timer to get friends timeline
-            StatusTimer = new Timer();
-            StatusTimer.Tick += new EventHandler(StatusTimer_Tick);
-            StatusTimer.Interval = 1000 * 120;
-            StatusTimer.Start();
-
-            // Get user's profile image
-            picProfileImage.Image = Twitter.GetUserProfileImageFromCache(SettingHelper.ProfileImageURL);
-
-            // Get friends timeline
-            BackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(BackgroundWorker_GetFriendsTimeLine);
-            BackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
-            BackgroundWorker_GetFriendsTimeLine();
+                if (SettingHelper.UserName == "")
+                    Close();
+                else
+                    Setup();
+            }
+            else
+                Setup();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
@@ -87,7 +85,7 @@ namespace Core.Forms
                 //else
                 //    sMessage = ex.Message;
 
-                Utility.AccessInvoke(this,() =>  ShowMessage(ex.Message));
+                Utility.AccessInvoke(this, () => ShowMessage(ex.Message));
             }
         }
 
@@ -95,11 +93,42 @@ namespace Core.Forms
         // Support Methods
         //--------------------------------------------------------------
 
+        /// <summary> Setup for the form to get tweets </summary>
+        void Setup() {
+            // Get any friends images that have been stored
+            Twitter.LoadImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
+
+            // Setup timer to get friends timeline
+            StatusTimer = new Timer();
+            StatusTimer.Tick += new EventHandler(StatusTimer_Tick);
+            StatusTimer.Interval = 1000 * 120;
+            StatusTimer.Start();
+
+            // Get user's profile image
+            picProfileImage.Image = Twitter.GetUserProfileImageFromCache(SettingHelper.ProfileImageURL);
+
+            // Get friends timeline
+            BackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(BackgroundWorker_GetFriendsTimeLine);
+            BackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
+            BackgroundWorker_GetFriendsTimeLine();
+        }
+
         void BindResultsToGrid(List<Result> ResultList) {
             grdFriendStatus.Rows.Clear();
 
-            foreach (Result UserInfo in ResultList)
+            foreach (Result UserInfo in ResultList) {
                 grdFriendStatus.Rows.Add(new object[] { UserInfo.ProfileImage, UserInfo.Text });
+            }
+
+            // Check to see if there are new tweets
+            Int64 lLastId = Convert.ToInt64(ResultList[0].ID);
+
+            if (_lLastId != lLastId) {
+                if(_lLastId != 0)
+                    ShowAlert(new AlertForm("New tweets have arrived", this));
+
+                _lLastId = lLastId;
+            }
         }
 
         private void picProfileImage_Click(object sender, EventArgs e) {
@@ -129,7 +158,19 @@ namespace Core.Forms
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            Utility.ShowAlert("Hi", new Forms.AlertForm("Test Alert"));
+            ShowAlert(new Forms.AlertForm("Test Alert", this));
+        }
+
+        public static void ShowAlert(System.Windows.Forms.Form AlertForm) {
+            AlertForm.Show();
+            System.Drawing.Rectangle rect = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
+
+            AlertForm.Left = rect.Width - AlertForm.Width;
+            AlertForm.Top = rect.Height - AlertForm.Height;
+        }
+
+        private void notifyIcon_Click(object sender, EventArgs e) {
+            this.Show();
         }
     }
 }

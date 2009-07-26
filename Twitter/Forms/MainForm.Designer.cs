@@ -6,7 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-namespace Core.Forms
+namespace Forms
 {
 	partial class MainForm
 	{
@@ -121,8 +121,9 @@ namespace Core.Forms
             // notifyIcon
             // 
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Text = "Twitter";
+            this.notifyIcon.Text = "Tweety";
             this.notifyIcon.Visible = true;
+            this.notifyIcon.Click += new System.EventHandler(this.notifyIcon_Click);
             // 
             // btnMessage
             // 
@@ -156,6 +157,7 @@ namespace Core.Forms
             this.Controls.Add(this.grdFriendStatus);
             this.Controls.Add(this.picProfileImage);
             this.Name = "MainForm";
+            this.ShowInTaskbar = false;
             this.Text = "Tweety";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

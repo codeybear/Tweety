@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using Core;
 
-namespace Core.Forms
+namespace Forms
 {
     public partial class SettingsForm : Form
     {
@@ -24,8 +25,6 @@ namespace Core.Forms
                 SettingHelper.Password = txtPassword.Text.Trim();
                 SettingHelper.ProfileImageURL = UserInfo.ProfileImageUrl;
 
-                _MainForm.UserImage = UserInfo.ProfileImage;
-
                 this.Close();
             }
             catch {
@@ -36,6 +35,10 @@ namespace Core.Forms
 
         private void btnCancel_Click(object sender, EventArgs e) {
             this.Close();
+        }
+
+        private void SettingsForm_Load(object sender, EventArgs e) {
+
         }
     }
 }
