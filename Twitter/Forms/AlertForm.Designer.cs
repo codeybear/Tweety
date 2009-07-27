@@ -70,6 +70,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "AlertForm";
             this.Opacity = 0;
+            this.ShowInTaskbar = false;
             this.Text = "New Tweets";
             this.Shown += new System.EventHandler(this.AlertForm_Shown);
             this.pnlMain.ResumeLayout(false);

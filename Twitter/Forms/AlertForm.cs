@@ -30,7 +30,8 @@ namespace Forms
         }
 
         private void linkMessage_Click(object sender, EventArgs e) {
-            _MainForm.Show();
+            _MainForm.WindowState = FormWindowState.Normal;
+
             this.Close();
         }
     }
