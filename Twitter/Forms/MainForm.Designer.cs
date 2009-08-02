@@ -37,59 +37,16 @@ namespace Forms
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.grdFriendStatus = new System.Windows.Forms.DataGridView();
-            this.FriendImageColumn = new System.Windows.Forms.DataGridViewImageColumn();
-            this.FriendStatusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.picProfileImage = new System.Windows.Forms.PictureBox();
             this.btnFriendsTimeline = new System.Windows.Forms.Button();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.btnMessage = new System.Windows.Forms.Button();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.button1 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.grdFriendStatus)).BeginInit();
+            this.tblTweets = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).BeginInit();
             this.SuspendLayout();
-            // 
-            // grdFriendStatus
-            // 
-            this.grdFriendStatus.AllowUserToAddRows = false;
-            this.grdFriendStatus.AllowUserToDeleteRows = false;
-            this.grdFriendStatus.AllowUserToResizeColumns = false;
-            this.grdFriendStatus.AllowUserToResizeRows = false;
-            this.grdFriendStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.grdFriendStatus.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-            this.grdFriendStatus.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grdFriendStatus.ColumnHeadersVisible = false;
-            this.grdFriendStatus.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.FriendImageColumn,
-            this.FriendStatusColumn});
-            this.grdFriendStatus.Location = new System.Drawing.Point(9, 63);
-            this.grdFriendStatus.MultiSelect = false;
-            this.grdFriendStatus.Name = "grdFriendStatus";
-            this.grdFriendStatus.ReadOnly = true;
-            this.grdFriendStatus.RowHeadersVisible = false;
-            this.grdFriendStatus.Size = new System.Drawing.Size(330, 480);
-            this.grdFriendStatus.TabIndex = 4;
-            // 
-            // FriendImageColumn
-            // 
-            this.FriendImageColumn.HeaderText = "Image";
-            this.FriendImageColumn.Name = "FriendImageColumn";
-            this.FriendImageColumn.ReadOnly = true;
-            this.FriendImageColumn.Width = 48;
-            // 
-            // FriendStatusColumn
-            // 
-            this.FriendStatusColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FriendStatusColumn.DefaultCellStyle = dataGridViewCellStyle1;
-            this.FriendStatusColumn.HeaderText = "Status";
-            this.FriendStatusColumn.Name = "FriendStatusColumn";
-            this.FriendStatusColumn.ReadOnly = true;
             // 
             // picProfileImage
             // 
@@ -145,34 +102,48 @@ namespace Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // tblTweets
+            // 
+            this.tblTweets.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tblTweets.AutoScroll = true;
+            this.tblTweets.ColumnCount = 2;
+            this.tblTweets.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
+            this.tblTweets.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tblTweets.Location = new System.Drawing.Point(3, 63);
+            this.tblTweets.Name = "tblTweets";
+            this.tblTweets.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.tblTweets.RowCount = 1;
+            this.tblTweets.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tblTweets.Size = new System.Drawing.Size(342, 481);
+            this.tblTweets.TabIndex = 8;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(238)))), ((int)(((byte)(232)))));
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(348, 555);
+            this.Controls.Add(this.tblTweets);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnMessage);
             this.Controls.Add(this.btnFriendsTimeline);
-            this.Controls.Add(this.grdFriendStatus);
             this.Controls.Add(this.picProfileImage);
             this.Name = "MainForm";
             this.Text = "Tweety";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this.grdFriendStatus)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).EndInit();
             this.ResumeLayout(false);
 
         }
         private System.Windows.Forms.PictureBox picProfileImage;
-        private System.Windows.Forms.DataGridView grdFriendStatus;
         private System.Windows.Forms.Button btnFriendsTimeline;
-        private System.Windows.Forms.DataGridViewImageColumn FriendImageColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FriendStatusColumn;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.Button btnMessage;
         private System.Windows.Forms.ToolTip ToolTip;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TableLayoutPanel tblTweets;
 	}
 }

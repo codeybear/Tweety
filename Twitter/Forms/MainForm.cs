@@ -68,7 +68,7 @@ namespace Forms
 
         void BackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
             if (e.Result != null) {
-                BindResultsToGrid((List<Result>)e.Result);
+                BindResultsToTable((List<Result>)e.Result);
                 if (btnMessage.Visible) btnMessage_Click(null, null);
             }
         }
@@ -113,22 +113,50 @@ namespace Forms
             BackgroundWorker_GetFriendsTimeLine();
         }
 
-        void BindResultsToGrid(List<Result> ResultList) {
-            grdFriendStatus.Rows.Clear();
+        /// <summary> Display the list of tweets inside a TableLayoutPanel control </summary>
+        void BindResultsToTable(List<Result> ResultList) {
+            tblTweets.RowCount = 1;
+            tblTweets.Controls.Clear();
 
-            foreach (Result UserInfo in ResultList) {
-                grdFriendStatus.Rows.Add(new object[] { UserInfo.ProfileImage, UserInfo.Text });
+            for (int iCount = 0; iCount < ResultList.Count; iCount++) {
+                Result UserInfo = ResultList[iCount];
+
+                PictureBox picProfile = new PictureBox();
+                picProfile.Margin = new Padding(2, 0, 2, 1);
+                picProfile.Image = UserInfo.ProfileImage;
+
+                RichTextBox rchUpdate = new RichTextBox();
+                rchUpdate.Anchor = (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top);
+                rchUpdate.BorderStyle = BorderStyle.None;
+                rchUpdate.Margin = new Padding(0);
+                rchUpdate.Height = 50;
+                //rchUpdate.Width = 50;
+                rchUpdate.Text = UserInfo.Text;
+                rchUpdate.ReadOnly = true;
+                rchUpdate.BackColor = Color.White;
+                rchUpdate.LinkClicked += new LinkClickedEventHandler(rchUpdate_LinkClicked);
+
+                tblTweets.Controls.Add(picProfile, 0, tblTweets.RowCount - 1);
+                tblTweets.Controls.Add(rchUpdate, 1, tblTweets.RowCount - 1);
+                tblTweets.RowCount += 1;
+                tblTweets.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             }
 
             // Check to see if there are new tweets
             Int64 lLastId = Convert.ToInt64(ResultList[0].ID);
 
             if (_lLastId != lLastId) {
-                if(_lLastId != 0)
+                if (_lLastId != 0)
                     ShowAlert(new AlertForm("New tweets have arrived", this));
 
                 _lLastId = lLastId;
             }
+        }
+
+        void rchUpdate_LinkClicked(object sender, LinkClickedEventArgs e) {
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            p.StartInfo.FileName = e.LinkText;
+            p.Start();
         }
 
         private void picProfileImage_Click(object sender, EventArgs e) {
@@ -141,8 +169,8 @@ namespace Forms
 
             for (int iTop = 92; iTop >= 63; iTop -= 2) {
                 System.Threading.Thread.Sleep(25);
-                grdFriendStatus.Top = iTop;
-                grdFriendStatus.Height += 2;
+                tblTweets.Top = iTop;
+                tblTweets.Height += 2;
             }
         }
 
@@ -152,8 +180,8 @@ namespace Forms
 
             for (int iTop = 63; iTop <= 92; iTop += 2) {
                 System.Threading.Thread.Sleep(25);
-                grdFriendStatus.Top = iTop;
-                grdFriendStatus.Height -= 2;
+                tblTweets.Top = iTop;
+                tblTweets.Height -= 2;
             }
         }
 
