@@ -133,7 +133,7 @@ namespace Forms
                 //rchUpdate.Width = 50;
                 rchUpdate.Text = UserInfo.Text;
                 rchUpdate.ReadOnly = true;
-                rchUpdate.BackColor = Color.White;
+                rchUpdate.BackColor = Color.WhiteSmoke;
                 rchUpdate.LinkClicked += new LinkClickedEventHandler(rchUpdate_LinkClicked);
 
                 tblTweets.Controls.Add(picProfile, 0, tblTweets.RowCount - 1);
@@ -147,7 +147,7 @@ namespace Forms
 
             if (_lLastId != lLastId) {
                 if (_lLastId != 0)
-                    ShowAlert(new AlertForm("New tweets have arrived", this));
+                    new AlertForm("New tweets have arrived", this);
 
                 _lLastId = lLastId;
             }
@@ -171,6 +171,7 @@ namespace Forms
                 System.Threading.Thread.Sleep(25);
                 tblTweets.Top = iTop;
                 tblTweets.Height += 2;
+                this.Refresh();
             }
         }
 
@@ -186,15 +187,7 @@ namespace Forms
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            ShowAlert(new Forms.AlertForm("Test Alert", this));
-        }
-
-        public static void ShowAlert(System.Windows.Forms.Form AlertForm) {
-            AlertForm.Show();
-            System.Drawing.Rectangle rect = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
-
-            AlertForm.Left = rect.Width - AlertForm.Width;
-            AlertForm.Top = rect.Height - AlertForm.Height;
+            new Forms.AlertForm("Test Alert", this);
         }
 
         private void notifyIcon_Click(object sender, EventArgs e) {

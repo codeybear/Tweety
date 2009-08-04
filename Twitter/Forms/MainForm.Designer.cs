@@ -51,7 +51,7 @@ namespace Forms
             // picProfileImage
             // 
             this.picProfileImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.picProfileImage.Location = new System.Drawing.Point(288, 9);
+            this.picProfileImage.Location = new System.Drawing.Point(295, 9);
             this.picProfileImage.Name = "picProfileImage";
             this.picProfileImage.Size = new System.Drawing.Size(48, 48);
             this.picProfileImage.TabIndex = 1;
@@ -94,7 +94,7 @@ namespace Forms
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(53, 9);
+            this.button1.Location = new System.Drawing.Point(129, 12);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 7;
@@ -116,14 +116,14 @@ namespace Forms
             this.tblTweets.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
             this.tblTweets.RowCount = 1;
             this.tblTweets.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tblTweets.Size = new System.Drawing.Size(342, 481);
+            this.tblTweets.Size = new System.Drawing.Size(340, 488);
             this.tblTweets.TabIndex = 8;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(348, 555);
             this.Controls.Add(this.tblTweets);
             this.Controls.Add(this.button1);

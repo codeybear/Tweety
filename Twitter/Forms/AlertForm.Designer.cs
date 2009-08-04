@@ -44,7 +44,7 @@
             // 
             this.btnClose.Location = new System.Drawing.Point(207, 3);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(23, 23);
+            this.btnClose.Size = new System.Drawing.Size(23, 24);
             this.btnClose.TabIndex = 1;
             this.btnClose.Text = "x";
             this.btnClose.UseVisualStyleBackColor = true;
@@ -71,6 +71,7 @@
             this.Name = "AlertForm";
             this.Opacity = 0;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "New Tweets";
             this.Shown += new System.EventHandler(this.AlertForm_Shown);
             this.pnlMain.ResumeLayout(false);
