@@ -78,13 +78,6 @@ namespace Forms
                 e.Result = Twitter.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
             }
             catch (Exception ex) {
-                //string sMessage;
-
-                //if (ex.Response != null)
-                //    sMessage = ex.Response.Headers["status"];
-                //else
-                //    sMessage = ex.Message;
-
                 Utility.AccessInvoke(this, () => ShowMessage(ex.Message));
             }
         }
@@ -130,11 +123,12 @@ namespace Forms
                 rchUpdate.BorderStyle = BorderStyle.None;
                 rchUpdate.Margin = new Padding(0);
                 rchUpdate.Height = 50;
-                //rchUpdate.Width = 50;
                 rchUpdate.Text = UserInfo.Text;
                 rchUpdate.ReadOnly = true;
                 rchUpdate.BackColor = Color.WhiteSmoke;
+
                 rchUpdate.LinkClicked += new LinkClickedEventHandler(rchUpdate_LinkClicked);
+                rchUpdate.ContentsResized += new ContentsResizedEventHandler(rchUpdate_ContentsResized);
 
                 tblTweets.Controls.Add(picProfile, 0, tblTweets.RowCount - 1);
                 tblTweets.Controls.Add(rchUpdate, 1, tblTweets.RowCount - 1);
@@ -147,9 +141,17 @@ namespace Forms
 
             if (_lLastId != lLastId) {
                 if (_lLastId != 0)
-                    new AlertForm("New tweets have arrived", this);
+                    new AlertForm("New tweets have arrived");
 
                 _lLastId = lLastId;
+            }
+        }
+
+        void rchUpdate_ContentsResized(object sender, ContentsResizedEventArgs e) {
+            RichTextBox rch = (RichTextBox)sender;
+            if (e.NewRectangle.Height > 50) {
+                rch.Height = e.NewRectangle.Height + 5;
+                tblTweets.Refresh();
             }
         }
 
@@ -187,7 +189,7 @@ namespace Forms
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            new Forms.AlertForm("Test Alert", this);
+            new Forms.AlertForm("Test Alert");
         }
 
         private void notifyIcon_Click(object sender, EventArgs e) {

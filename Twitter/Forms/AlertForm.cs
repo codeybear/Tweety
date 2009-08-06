@@ -3,15 +3,11 @@ using System.Windows.Forms;
 
 namespace Forms
 {
+    /// <summary> Display a popup messenger style alert form </summary>
     public partial class AlertForm : Form
     {
-        Form _MainForm;
-        Timer CloseTimer;
-
-        public AlertForm(string sMessage, Form MainForm) {
+        public AlertForm(string sMessage) {
             InitializeComponent();
-
-            _MainForm = MainForm;
 
             linkMessage.Text = sMessage;
 
@@ -22,38 +18,45 @@ namespace Forms
             this.TopMost = true;
 
             // Setup timer to close form
-            CloseTimer = new Timer();
-            CloseTimer.Tick += new EventHandler(CloseTimer_Tick);
             CloseTimer.Interval = 1000 * 10;
             CloseTimer.Start();
 
             this.Show();
         }
 
-        void CloseTimer_Tick(object sender, EventArgs e) {
-            this.Close();
+        /// <summary> Fade in/out the form </summary>
+        /// <param name="iSteps">Number of fade steps, make this negative to fade out</param>
+        /// <param name="iTime">Time between each step</param>
+        private void ShowHide(int iSteps, int iTime) {
+            for (int iCount = 0; iCount < Math.Abs(iSteps); iCount++) {
+                System.Threading.Thread.Sleep(iTime);
+
+                if (iSteps > 0)
+                    this.Opacity = (double)(iCount) / iSteps;
+                else
+                    this.Opacity = 1 - (double)(iCount) / Math.Abs(iSteps);
+
+                this.Refresh();
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e) {
             this.Close();
         }
 
-        // TODO refactor to show/hide
         private void AlertForm_Shown(object sender, EventArgs e) {
-            int iSteps = 10;
-
-            for (int iCount = 0; iCount < iSteps; iCount++) {
-                System.Threading.Thread.Sleep(100);
-                this.Opacity = (double)(iCount) / iSteps;
-                this.Refresh();
-                Application.DoEvents();
-            }
+            ShowHide(10, 50);
 
             this.TopMost = false;
         }
 
         private void linkMessage_Click(object sender, EventArgs e) {
-            _MainForm.WindowState = FormWindowState.Normal;
+            // TODO send an event
+            this.Close();
+        }
+
+        private void CloseTimer_Tick(object sender, EventArgs e) {
+            ShowHide(-10, 50);
 
             this.Close();
         }

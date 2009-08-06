@@ -25,9 +25,11 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             this.linkMessage = new System.Windows.Forms.LinkLabel();
             this.btnClose = new System.Windows.Forms.Button();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.CloseTimer = new System.Windows.Forms.Timer(this.components);
             this.pnlMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,6 +63,10 @@
             this.pnlMain.Size = new System.Drawing.Size(236, 80);
             this.pnlMain.TabIndex = 2;
             // 
+            // CloseTimer
+            // 
+            this.CloseTimer.Tick += new System.EventHandler(this.CloseTimer_Tick);
+            // 
             // AlertForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -85,5 +91,6 @@
         private System.Windows.Forms.LinkLabel linkMessage;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Panel pnlMain;
+        private System.Windows.Forms.Timer CloseTimer;
     }
 }
