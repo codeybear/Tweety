@@ -6,6 +6,8 @@ namespace Forms
     /// <summary> Display a popup messenger style alert form </summary>
     public partial class AlertForm : Form
     {
+        public event Action LinkClicked = delegate { };
+
         public AlertForm(string sMessage) {
             InitializeComponent();
 
@@ -51,7 +53,8 @@ namespace Forms
         }
 
         private void linkMessage_Click(object sender, EventArgs e) {
-            // TODO send an event
+            LinkClicked();
+
             this.Close();
         }
 

@@ -26,8 +26,9 @@ namespace Forms
         private void MainForm_Load(object sender, EventArgs e) {
             // Check for user settings before settings up form
             if (SettingHelper.UserName == "") {
-                SettingsForm SettingsForm = new SettingsForm(this);
-                SettingsForm.ShowDialog();
+                using (SettingsForm SettingsForm = new SettingsForm(this)) {
+                    SettingsForm.ShowDialog();
+                }
 
                 if (SettingHelper.UserName == "")
                     Close();
@@ -69,6 +70,7 @@ namespace Forms
         void BackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
             if (e.Result != null) {
                 BindResultsToTable((List<Result>)e.Result);
+                // TODO tidy this up
                 if (btnMessage.Visible) btnMessage_Click(null, null);
             }
         }
@@ -76,6 +78,8 @@ namespace Forms
         void BackgroundWorker_GetFriendsTimeLine(object sender, System.ComponentModel.DoWorkEventArgs e) {
             try {
                 e.Result = Twitter.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
+                //Result UserInfo = Twitter.GetUserInfo(SettingHelper.UserName);
+                //Utility.AccessInvoke(this, () => richTextBox1.Text = UserInfo.Text);
             }
             catch (Exception ex) {
                 Utility.AccessInvoke(this, () => ShowMessage(ex.Message));
@@ -115,20 +119,20 @@ namespace Forms
                 Result UserInfo = ResultList[iCount];
 
                 PictureBox picProfile = new PictureBox();
-                picProfile.Margin = new Padding(2, 0, 2, 1);
+                picProfile.Margin = new Padding(2, 0, 4, 1);
                 picProfile.Image = UserInfo.ProfileImage;
 
                 RichTextBox rchUpdate = new RichTextBox();
-                rchUpdate.Anchor = (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top);
+                rchUpdate.Anchor = (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom);
                 rchUpdate.BorderStyle = BorderStyle.None;
                 rchUpdate.Margin = new Padding(0);
-                rchUpdate.Height = 50;
+                rchUpdate.Height = 52;
                 rchUpdate.Text = UserInfo.Text;
                 rchUpdate.ReadOnly = true;
                 rchUpdate.BackColor = Color.WhiteSmoke;
+                //rchUpdate.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 
                 rchUpdate.LinkClicked += new LinkClickedEventHandler(rchUpdate_LinkClicked);
-                rchUpdate.ContentsResized += new ContentsResizedEventHandler(rchUpdate_ContentsResized);
 
                 tblTweets.Controls.Add(picProfile, 0, tblTweets.RowCount - 1);
                 tblTweets.Controls.Add(rchUpdate, 1, tblTweets.RowCount - 1);
@@ -144,14 +148,6 @@ namespace Forms
                     new AlertForm("New tweets have arrived");
 
                 _lLastId = lLastId;
-            }
-        }
-
-        void rchUpdate_ContentsResized(object sender, ContentsResizedEventArgs e) {
-            RichTextBox rch = (RichTextBox)sender;
-            if (e.NewRectangle.Height > 50) {
-                rch.Height = e.NewRectangle.Height + 5;
-                tblTweets.Refresh();
             }
         }
 
@@ -189,7 +185,12 @@ namespace Forms
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            new Forms.AlertForm("Test Alert");
+            AlertForm Alert = new Forms.AlertForm("Test Alert");
+            Alert.LinkClicked += new Action(Alert_LinkClicked);
+        }
+
+        void Alert_LinkClicked() {
+            this.TopLevel = true;
         }
 
         private void notifyIcon_Click(object sender, EventArgs e) {

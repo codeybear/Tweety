@@ -111,7 +111,8 @@ namespace Core
         private static Result GetUserInfoFromNode(XmlNode UserNode) {
             Result UserInfo = new Result();
 
-            UserInfo.Text = UserNode["name"].InnerText;
+            // TODO don't need this?
+            //UserInfo.Text = UserNode["name"].InnerText;
             UserInfo.ProfileImageUrl = UserNode["profile_image_url"].InnerText;
 
             if (!_ImageCache.ContainsKey(UserInfo.ProfileImageUrl)) {
