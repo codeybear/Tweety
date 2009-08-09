@@ -78,8 +78,8 @@ namespace Forms
         void BackgroundWorker_GetFriendsTimeLine(object sender, System.ComponentModel.DoWorkEventArgs e) {
             try {
                 e.Result = Twitter.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
-                //Result UserInfo = Twitter.GetUserInfo(SettingHelper.UserName);
-                //Utility.AccessInvoke(this, () => richTextBox1.Text = UserInfo.Text);
+                Result UserInfo = Twitter.GetUserInfo(SettingHelper.UserName);
+                Utility.AccessInvoke(this, () => rchStatus.Text = UserInfo.Text);
             }
             catch (Exception ex) {
                 Utility.AccessInvoke(this, () => ShowMessage(ex.Message));
@@ -130,7 +130,7 @@ namespace Forms
                 rchUpdate.Text = UserInfo.Text;
                 rchUpdate.ReadOnly = true;
                 rchUpdate.BackColor = Color.WhiteSmoke;
-                //rchUpdate.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                rchUpdate.ReadOnly = true;
 
                 rchUpdate.LinkClicked += new LinkClickedEventHandler(rchUpdate_LinkClicked);
 
@@ -144,8 +144,10 @@ namespace Forms
             Int64 lLastId = Convert.ToInt64(ResultList[0].ID);
 
             if (_lLastId != lLastId) {
-                if (_lLastId != 0)
-                    new AlertForm("New tweets have arrived");
+                if (_lLastId != 0) {
+                    AlertForm Alert = new Forms.AlertForm("New tweets have arrived");
+                    Alert.LinkClicked += new Action(Alert_LinkClicked);
+                }
 
                 _lLastId = lLastId;
             }
@@ -184,17 +186,22 @@ namespace Forms
             }
         }
 
-        private void button1_Click(object sender, EventArgs e) {
-            AlertForm Alert = new Forms.AlertForm("Test Alert");
-            Alert.LinkClicked += new Action(Alert_LinkClicked);
-        }
-
         void Alert_LinkClicked() {
             this.TopLevel = true;
         }
 
         private void notifyIcon_Click(object sender, EventArgs e) {
             this.Show();
+        }
+
+        private void rchStatus_Click(object sender, EventArgs e) {
+            UpdateForm Update = new UpdateForm(rchStatus.Text);
+            Update.StatusChanged += new Action<string>(Update_StatusChanged);
+            Update.ShowDialog();
+        }
+
+        void Update_StatusChanged(string sStatus) {
+            rchStatus.Text = sStatus;
         }
     }
 }

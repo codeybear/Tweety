@@ -26,14 +26,15 @@ namespace Core
         private const string TWITTER_URL = "http://twitter.com/";
         private const string PATH_FRIENDS_STATUS = "statuses/friends/";
         private const string PATH_FRIENDS_TIMELINE = "statuses/friends_timeline";
+        private const string PATH_STATUS_UPDATE = "statuses/update.xml?source=tweety&status=";
         private const string PATH_USERS_SHOW = "users/show/";
 
         private static ImageCache _ImageCache = new ImageCache();
 
         // Public methods:
 
-        public static String UpdateStatus(String message) {
-            Stream ResponseStream = WebHelper.GetWebResponse("statuses/update.xml?source=threeter&status=" + message, WebHelper.HTTPPOST);
+        public static String UpdateStatus(string sMessage, string sUserName, string sPassword) {
+            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_STATUS_UPDATE + sMessage, WebHelper.HTTPPOST, sUserName, sPassword);
             StreamReader reader = new StreamReader(ResponseStream);
             string returnValue = reader.ReadToEnd();
             reader.Close();
@@ -41,7 +42,7 @@ namespace Core
             return returnValue;
         }
 
-        public static Result GetUserInfo(String sUserName) {
+        public static Result GetUserInfo(string sUserName) {
             Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_USERS_SHOW + sUserName + ".xml", WebHelper.HTTPGET);
             XmlDocument xml = new XmlDocument();
             xml.Load(ResponseStream);
@@ -111,8 +112,14 @@ namespace Core
         private static Result GetUserInfoFromNode(XmlNode UserNode) {
             Result UserInfo = new Result();
 
-            // TODO don't need this?
-            //UserInfo.Text = UserNode["name"].InnerText;
+            // Get the user's latest status
+            XmlNode UserStatusNode = UserNode.SelectSingleNode("status");
+
+            // This info may not exist on all user nodes
+            if(UserStatusNode != null)
+                UserInfo.Text = UserStatusNode["text"].InnerText;
+
+            // UserInfo.Text = UserNode["name"].InnerText;
             UserInfo.ProfileImageUrl = UserNode["profile_image_url"].InnerText;
 
             if (!_ImageCache.ContainsKey(UserInfo.ProfileImageUrl)) {
