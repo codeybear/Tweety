@@ -16,9 +16,6 @@ namespace Forms
             InitializeComponent();
         }
 
-        // Allow access to user image from other forms
-        public Bitmap UserImage { set { picProfileImage.Image = value; } }
-
         //--------------------------------------------------------------
         // Events 
         //--------------------------------------------------------------
@@ -26,7 +23,7 @@ namespace Forms
         private void MainForm_Load(object sender, EventArgs e) {
             // Check for user settings before settings up form
             if (SettingHelper.UserName == "") {
-                using (SettingsForm SettingsForm = new SettingsForm(this)) {
+                using (SettingsForm SettingsForm = new SettingsForm()) {
                     SettingsForm.ShowDialog();
                 }
 
@@ -58,10 +55,24 @@ namespace Forms
             BackgroundWorker_GetFriendsTimeLine();
         }
 
+        void rchUpdate_LinkClicked(object sender, LinkClickedEventArgs e) {
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            p.StartInfo.FileName = e.LinkText;
+            p.Start();
+        }
+
+        private void picProfileImage_Click(object sender, EventArgs e) {
+            using (SettingsForm SettingsForm = new SettingsForm())
+                SettingsForm.ShowDialog();
+        }
+
+        private void btnMessage_Click(object sender, EventArgs e) {
+            ShowMessage(false, "");
+        }
+
         //--------------------------------------------------------------
         //  Background worker for friends timeline
         //--------------------------------------------------------------
-
         void BackgroundWorker_GetFriendsTimeLine() {
             if (!BackgroundWorker.IsBusy)
                 BackgroundWorker.RunWorkerAsync();
@@ -82,13 +93,28 @@ namespace Forms
                 Utility.AccessInvoke(this, () => rchStatus.Text = UserInfo.Text);
             }
             catch (Exception ex) {
-                Utility.AccessInvoke(this, () => ShowMessage(ex.Message));
+                Utility.AccessInvoke(this, () => ShowMessage(true, ex.Message));
             }
         }
 
         //--------------------------------------------------------------
         // Support Methods
         //--------------------------------------------------------------
+
+        /// <summary> Check for new tweets, and display if there are any </summary>
+        void HandleResults(List<Result> ResultList) {
+            // Check to see if there are new tweets
+            Int64 lLastId = Convert.ToInt64(ResultList[0].ID);
+
+            if (_lLastId != lLastId && _lLastId !=0) {
+                    BindResultsToTable(ResultList);
+
+                    AlertForm Alert = new Forms.AlertForm("New tweets have arrived");
+                    Alert.LinkClicked += () => this.Activate();
+                }
+
+                _lLastId = lLastId;
+        }
 
         /// <summary> Setup for the form to get tweets </summary>
         void Setup() {
@@ -118,10 +144,12 @@ namespace Forms
             for (int iCount = 0; iCount < ResultList.Count; iCount++) {
                 Result UserInfo = ResultList[iCount];
 
+                // Show the profile image
                 PictureBox picProfile = new PictureBox();
                 picProfile.Margin = new Padding(2, 0, 4, 1);
                 picProfile.Image = UserInfo.ProfileImage;
 
+                // Show the status text
                 RichTextBox rchUpdate = new RichTextBox();
                 rchUpdate.Anchor = (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom);
                 rchUpdate.BorderStyle = BorderStyle.None;
@@ -139,69 +167,35 @@ namespace Forms
                 tblTweets.RowCount += 1;
                 tblTweets.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             }
-
-            // Check to see if there are new tweets
-            Int64 lLastId = Convert.ToInt64(ResultList[0].ID);
-
-            if (_lLastId != lLastId) {
-                if (_lLastId != 0) {
-                    AlertForm Alert = new Forms.AlertForm("New tweets have arrived");
-                    Alert.LinkClicked += new Action(Alert_LinkClicked);
-                }
-
-                _lLastId = lLastId;
-            }
         }
 
-        void rchUpdate_LinkClicked(object sender, LinkClickedEventArgs e) {
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            p.StartInfo.FileName = e.LinkText;
-            p.Start();
-        }
-
-        private void picProfileImage_Click(object sender, EventArgs e) {
-            SettingsForm SettingsForm = new SettingsForm(this);
-            SettingsForm.ShowDialog();
-        }
-
-        private void btnMessage_Click(object sender, EventArgs e) {
-            btnMessage.Visible = false;
-
-            for (int iTop = 92; iTop >= 63; iTop -= 2) {
-                System.Threading.Thread.Sleep(25);
-                tblTweets.Top = iTop;
-                tblTweets.Height += 2;
-                this.Refresh();
-            }
-        }
-
-        private void ShowMessage(string sMessage) {
-            btnMessage.Visible = true;
+        // Show/hide the message button
+        private void ShowMessage(bool bShow, string sMessage) {
+            btnMessage.Visible = bShow;
             btnMessage.Text = sMessage;
 
-            for (int iTop = 63; iTop <= 92; iTop += 2) {
+            for (int iTop = 0; iTop <= 15; iTop += 2) {
                 System.Threading.Thread.Sleep(25);
-                tblTweets.Top = iTop;
-                tblTweets.Height -= 2;
-            }
-        }
 
-        void Alert_LinkClicked() {
-            this.TopLevel = true;
+                if (bShow) {
+                    tblTweets.Top += 2;
+                    tblTweets.Height -= 2;
+                }
+                else {
+                    tblTweets.Top -= 2;
+                    tblTweets.Height += 2;
+                }
+            }
         }
 
         private void notifyIcon_Click(object sender, EventArgs e) {
-            this.Show();
+            this.Activate();
         }
 
         private void rchStatus_Click(object sender, EventArgs e) {
             UpdateForm Update = new UpdateForm(rchStatus.Text);
-            Update.StatusChanged += new Action<string>(Update_StatusChanged);
+            Update.StatusChanged += Status => rchStatus.Text = Status;
             Update.ShowDialog();
-        }
-
-        void Update_StatusChanged(string sStatus) {
-            rchStatus.Text = sStatus;
         }
     }
 }

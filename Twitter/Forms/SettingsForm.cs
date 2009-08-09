@@ -6,12 +6,8 @@ namespace Forms
 {
     public partial class SettingsForm : Form
     {
-        private MainForm _MainForm;
-
-        public SettingsForm(MainForm MainForm) {
+        public SettingsForm() {
             InitializeComponent();
-
-            _MainForm = MainForm;
 
             txtUserName.Text = SettingHelper.UserName;
             txtPassword.Text = SettingHelper.Password;

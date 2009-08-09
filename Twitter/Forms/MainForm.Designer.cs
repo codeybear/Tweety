@@ -144,7 +144,9 @@ namespace Forms
             this.Controls.Add(this.btnMessage);
             this.Controls.Add(this.btnFriendsTimeline);
             this.Controls.Add(this.picProfileImage);
+            this.MaximizeBox = false;
             this.Name = "MainForm";
+            this.ShowInTaskbar = false;
             this.Text = "Tweety";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
