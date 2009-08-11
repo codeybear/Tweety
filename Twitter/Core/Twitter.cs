@@ -49,11 +49,13 @@ namespace Core
             return GetUserInfoFromNode(xml.DocumentElement);
         }
 
-        public static System.Drawing.Bitmap GetUserProfileImageFromCache(string sUserProfileURL) {
-            if (_ImageCache.ContainsKey(sUserProfileURL))
-                return _ImageCache.GetImage(sUserProfileURL);
-            else
-                return null;
+        public static System.Drawing.Bitmap GetUserProfileImage(string sUserProfileURL) {
+            if (!_ImageCache.ContainsKey(sUserProfileURL)) {
+                byte[] ImageBytes = WebHelper.GetBytesFromURL(sUserProfileURL);
+                _ImageCache.StoreImage(sUserProfileURL, ImageBytes);
+            }
+
+            return _ImageCache.GetImage(sUserProfileURL);
         }
 
         public static List<Result> GetFriendsTimeLine(string sUserName, string sPassword) {

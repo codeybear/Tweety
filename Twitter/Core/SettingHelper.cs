@@ -15,11 +15,6 @@ namespace Core
             set { Properties.Settings.Default.PassWord = value; }
         }
 
-        public static string ProfileImageURL {
-            get { return Properties.Settings.Default.ProfileImageURL; }
-            set { Properties.Settings.Default.ProfileImageURL = value; }            
-        }
-
         public static string MessageInvalidUserSettings {
             get { return Properties.Settings.Default.MessageInvalidUserSettings; }
         }

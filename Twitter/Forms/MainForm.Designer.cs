@@ -40,7 +40,6 @@ namespace Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.picProfileImage = new System.Windows.Forms.PictureBox();
             this.btnFriendsTimeline = new System.Windows.Forms.Button();
-            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.btnMessage = new System.Windows.Forms.Button();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.button1 = new System.Windows.Forms.Button();
@@ -75,13 +74,6 @@ namespace Forms
             this.ToolTip.SetToolTip(this.btnFriendsTimeline, "Get Tweets");
             this.btnFriendsTimeline.UseVisualStyleBackColor = false;
             this.btnFriendsTimeline.Click += new System.EventHandler(this.btnFriendsTimeline_Click);
-            // 
-            // notifyIcon
-            // 
-            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Text = "Tweety";
-            this.notifyIcon.Visible = true;
-            this.notifyIcon.Click += new System.EventHandler(this.notifyIcon_Click);
             // 
             // btnMessage
             // 
@@ -144,9 +136,9 @@ namespace Forms
             this.Controls.Add(this.btnMessage);
             this.Controls.Add(this.btnFriendsTimeline);
             this.Controls.Add(this.picProfileImage);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.ShowInTaskbar = false;
             this.Text = "Tweety";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -156,7 +148,6 @@ namespace Forms
         }
         private System.Windows.Forms.PictureBox picProfileImage;
         private System.Windows.Forms.Button btnFriendsTimeline;
-        private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.Button btnMessage;
         private System.Windows.Forms.ToolTip ToolTip;
         private System.Windows.Forms.Button button1;

@@ -39,7 +39,6 @@ namespace Forms
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
             Twitter.SaveImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
             SettingHelper.Save();
-            notifyIcon.Visible = false;
         }
 
         void StatusTimer_Tick(object sender, EventArgs e) {
@@ -78,6 +77,18 @@ namespace Forms
                 BackgroundWorker.RunWorkerAsync();
         }
 
+        void BackgroundWorker_GetFriendsTimeLine(object sender, System.ComponentModel.DoWorkEventArgs e) {
+            try {
+                e.Result = Twitter.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
+                Result UserInfo = Twitter.GetUserInfo(SettingHelper.UserName);
+                Utility.AccessInvoke(this, () => rchStatus.Text = UserInfo.Text);
+                picProfileImage.Image = Twitter.GetUserProfileImage(UserInfo.ProfileImageUrl);
+            }
+            catch (Exception ex) {
+                Utility.AccessInvoke(this, () => ShowMessage(true, ex.Message));
+            }
+        }
+
         void BackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
             if (e.Result != null) {
                 BindResultsToTable((List<Result>)e.Result);
@@ -86,21 +97,9 @@ namespace Forms
             }
         }
 
-        void BackgroundWorker_GetFriendsTimeLine(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            try {
-                e.Result = Twitter.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
-                Result UserInfo = Twitter.GetUserInfo(SettingHelper.UserName);
-                Utility.AccessInvoke(this, () => rchStatus.Text = UserInfo.Text);
-            }
-            catch (Exception ex) {
-                Utility.AccessInvoke(this, () => ShowMessage(true, ex.Message));
-            }
-        }
-
         //--------------------------------------------------------------
         // Support Methods
         //--------------------------------------------------------------
-
         /// <summary> Check for new tweets, and display if there are any </summary>
         void HandleResults(List<Result> ResultList) {
             // Check to see if there are new tweets
@@ -126,9 +125,6 @@ namespace Forms
             StatusTimer.Tick += new EventHandler(StatusTimer_Tick);
             StatusTimer.Interval = 1000 * 120;
             StatusTimer.Start();
-
-            // Get user's profile image
-            picProfileImage.Image = Twitter.GetUserProfileImageFromCache(SettingHelper.ProfileImageURL);
 
             // Get friends timeline
             BackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(BackgroundWorker_GetFriendsTimeLine);
@@ -174,7 +170,7 @@ namespace Forms
             btnMessage.Visible = bShow;
             btnMessage.Text = sMessage;
 
-            for (int iTop = 0; iTop <= 15; iTop += 2) {
+            for (int iTop = 0; iTop <= 24; iTop += 2) {
                 System.Threading.Thread.Sleep(25);
 
                 if (bShow) {
@@ -185,11 +181,9 @@ namespace Forms
                     tblTweets.Top -= 2;
                     tblTweets.Height += 2;
                 }
-            }
-        }
 
-        private void notifyIcon_Click(object sender, EventArgs e) {
-            this.Activate();
+                this.Refresh();
+            }
         }
 
         private void rchStatus_Click(object sender, EventArgs e) {

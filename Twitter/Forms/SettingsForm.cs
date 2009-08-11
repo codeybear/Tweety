@@ -19,7 +19,6 @@ namespace Forms
 
                 SettingHelper.UserName = txtUserName.Text.Trim();
                 SettingHelper.Password = txtPassword.Text.Trim();
-                SettingHelper.ProfileImageURL = UserInfo.ProfileImageUrl;
 
                 this.Close();
             }
