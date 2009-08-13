@@ -50,19 +50,6 @@ namespace Core
                 action();
     }
 
-        //public static void CloseAlert() {
-        //    Int16 a = default(Int16);u
-
-        //    for (a = 0; a <= 50; a++) {
-        //        System.Threading.Thread.Sleep(5);
-        //        m_frmStatusInst.Top = m_frmStatusInst.Top + 2;
-        //        m_frmStatusInst.Height = m_frmStatusInst.Height - 2;
-        //        m_frmStatusInst.Refresh();
-        //    }
-
-        //    m_frmStatusInst.Hide();
-        //}
-
         //public static void CheckVersionForUpgrade() {
         //    System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
         //    string sAppVersion = a.GetName().Version.ToString();

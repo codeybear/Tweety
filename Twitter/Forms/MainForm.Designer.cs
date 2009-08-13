@@ -115,6 +115,7 @@ namespace Forms
             // 
             this.rchStatus.BackColor = System.Drawing.Color.WhiteSmoke;
             this.rchStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rchStatus.Cursor = System.Windows.Forms.Cursors.No;
             this.rchStatus.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rchStatus.Location = new System.Drawing.Point(52, 9);
             this.rchStatus.Name = "rchStatus";

@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.ComponentModel;
 using Core;
 
 namespace Forms
 {
     public partial class MainForm : Form
     {
-        System.ComponentModel.BackgroundWorker BackgroundWorker = new System.ComponentModel.BackgroundWorker();
+        BackgroundWorker bgwFriendsTimeLine = new BackgroundWorker();
+        BackgroundWorker bgwMyStatus = new BackgroundWorker();
+
         Timer StatusTimer;
         Int64 _lLastId;
 
@@ -42,16 +45,12 @@ namespace Forms
         }
 
         void StatusTimer_Tick(object sender, EventArgs e) {
-            BackgroundWorker_GetFriendsTimeLine();
-        }
-
-        private void btnUserInfo_Click(object sender, EventArgs e) {
-            Result user = Twitter.GetUserInfo(SettingHelper.UserName);
-            picProfileImage.Image = user.ProfileImage;
+            bgwFriendsTimeLine_Start();
+            bgwMyStatus_Start();
         }
 
         private void btnFriendsTimeline_Click(object sender, EventArgs e) {
-            BackgroundWorker_GetFriendsTimeLine();
+            bgwFriendsTimeLine_Start();
         }
 
         void rchUpdate_LinkClicked(object sender, LinkClickedEventArgs e) {
@@ -72,28 +71,49 @@ namespace Forms
         //--------------------------------------------------------------
         //  Background worker for friends timeline
         //--------------------------------------------------------------
-        void BackgroundWorker_GetFriendsTimeLine() {
-            if (!BackgroundWorker.IsBusy)
-                BackgroundWorker.RunWorkerAsync();
+        void bgwFriendsTimeLine_Start() {
+            if (!bgwFriendsTimeLine.IsBusy)
+                bgwFriendsTimeLine.RunWorkerAsync();
         }
 
-        void BackgroundWorker_GetFriendsTimeLine(object sender, System.ComponentModel.DoWorkEventArgs e) {
+        void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
             try {
                 e.Result = Twitter.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
-                Result UserInfo = Twitter.GetUserInfo(SettingHelper.UserName);
-                Utility.AccessInvoke(this, () => rchStatus.Text = UserInfo.Text);
-                picProfileImage.Image = Twitter.GetUserProfileImage(UserInfo.ProfileImageUrl);
             }
             catch (Exception ex) {
                 Utility.AccessInvoke(this, () => ShowMessage(true, ex.Message));
             }
         }
 
-        void BackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) {
+        void bgwFriendsTimeLine_Completed(object sender, RunWorkerCompletedEventArgs e) {
             if (e.Result != null) {
-                BindResultsToTable((List<Result>)e.Result);
-                // TODO tidy this up
-                if (btnMessage.Visible) btnMessage_Click(null, null);
+                HandleResults((List<Result>)e.Result);
+                ShowMessage(false, "");
+            }
+        }
+
+        //--------------------------------------------------------------
+        //  Background worker for my status
+        //--------------------------------------------------------------
+        void bgwMyStatus_Start() {
+            if (!bgwMyStatus.IsBusy)
+                bgwMyStatus.RunWorkerAsync();
+        }
+        
+        void bgwMyStatus_DoWork(object sender, DoWorkEventArgs e) {
+            try {
+                e.Result = Twitter.GetUserInfo(SettingHelper.UserName);
+            }
+            catch (Exception ex) {
+                Utility.AccessInvoke(this, () => ShowMessage(true, ex.Message));
+            }
+        }
+
+        void bgwMyStatus_Completed(object sender, RunWorkerCompletedEventArgs e) {
+            if (e.Result != null) {
+                Result MyInfo = (Result)e.Result;
+                rchStatus.Text = MyInfo.Text;
+                picProfileImage.Image = Twitter.GetUserProfileImage(MyInfo.ProfileImageUrl);
             }
         }
 
@@ -105,17 +125,19 @@ namespace Forms
             // Check to see if there are new tweets
             Int64 lLastId = Convert.ToInt64(ResultList[0].ID);
 
-            if (_lLastId != lLastId && _lLastId !=0) {
-                    BindResultsToTable(ResultList);
+            if (_lLastId != lLastId) {
+                BindResultsToTable(ResultList);
 
+                if (_lLastId != 0) {
                     AlertForm Alert = new Forms.AlertForm("New tweets have arrived");
                     Alert.LinkClicked += () => this.Activate();
                 }
+            }
 
-                _lLastId = lLastId;
+            _lLastId = lLastId;
         }
 
-        /// <summary> Setup for the form to get tweets </summary>
+        /// <summary> Setup for the form to get tweets</summary>
         void Setup() {
             // Get any friends images that have been stored
             Twitter.LoadImageCache(System.IO.Path.Combine(Application.StartupPath, "ImageCache.txt"));
@@ -127,9 +149,14 @@ namespace Forms
             StatusTimer.Start();
 
             // Get friends timeline
-            BackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(BackgroundWorker_GetFriendsTimeLine);
-            BackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
-            BackgroundWorker_GetFriendsTimeLine();
+            bgwFriendsTimeLine.DoWork += new DoWorkEventHandler(bgwFriendsTimeLine_DoWork);
+            bgwFriendsTimeLine.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwFriendsTimeLine_Completed);
+            bgwFriendsTimeLine_Start();
+
+            // Get my details
+            bgwMyStatus.DoWork += new DoWorkEventHandler(bgwMyStatus_DoWork);
+            bgwMyStatus.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwMyStatus_Completed);
+            bgwMyStatus_Start();
         }
 
         /// <summary> Display the list of tweets inside a TableLayoutPanel control </summary>
@@ -167,8 +194,17 @@ namespace Forms
 
         // Show/hide the message button
         private void ShowMessage(bool bShow, string sMessage) {
-            btnMessage.Visible = bShow;
             btnMessage.Text = sMessage;
+
+            // Dont animate again if the button is already visible
+            if (btnMessage.Visible == true && bShow == true)
+                return;
+
+            // Dont animate again if the button is already not visible
+            if (btnMessage.Visible == false && bShow == false)
+                return;
+
+            btnMessage.Visible = bShow;
 
             for (int iTop = 0; iTop <= 24; iTop += 2) {
                 System.Threading.Thread.Sleep(25);
