@@ -64,5 +64,14 @@ namespace Core.Properties {
                 return ((string)(this["ApplicationVersion"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("New tweets have arrived")]
+        public string MessageNewTweets {
+            get {
+                return ((string)(this["MessageNewTweets"]));
+            }
+        }
     }
 }

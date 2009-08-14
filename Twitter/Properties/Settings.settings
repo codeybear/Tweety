@@ -14,5 +14,8 @@
     <Setting Name="ApplicationVersion" Type="System.String" Scope="Application">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="MessageNewTweets" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">New tweets have arrived</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

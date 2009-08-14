@@ -19,6 +19,10 @@ namespace Core
             get { return Properties.Settings.Default.MessageInvalidUserSettings; }
         }
 
+        public static string MessageNewTweets {
+            get { return Properties.Settings.Default.MessageNewTweets; }
+        }
+
         public static void Save() {
             Properties.Settings.Default.Save();
         }

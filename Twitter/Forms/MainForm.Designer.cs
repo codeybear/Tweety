@@ -115,15 +115,15 @@ namespace Forms
             // 
             this.rchStatus.BackColor = System.Drawing.Color.WhiteSmoke;
             this.rchStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rchStatus.Cursor = System.Windows.Forms.Cursors.No;
+            this.rchStatus.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.rchStatus.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rchStatus.Location = new System.Drawing.Point(52, 9);
+            this.rchStatus.MaxLength = 140;
             this.rchStatus.Name = "rchStatus";
             this.rchStatus.ReadOnly = true;
             this.rchStatus.Size = new System.Drawing.Size(237, 48);
             this.rchStatus.TabIndex = 9;
             this.rchStatus.Text = "";
-            this.rchStatus.Click += new System.EventHandler(this.rchStatus_Click);
             // 
             // MainForm
             // 

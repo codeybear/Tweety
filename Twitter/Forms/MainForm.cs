@@ -68,6 +68,17 @@ namespace Forms
             ShowMessage(false, "");
         }
 
+        private void rchStatus_Click(object sender, EventArgs e) {
+            UpdateForm Update = new UpdateForm(rchStatus.Text);
+            Update.StatusChanged += Status => rchStatus.Text = Status;
+            Update.ShowDialog();
+        }
+
+        void AlertLink_Clicked() {
+            this.Activate();
+            rchStatus.Text += "Link Clicked - " + DateTime.Now;
+        }
+
         //--------------------------------------------------------------
         //  Background worker for friends timeline
         //--------------------------------------------------------------
@@ -99,7 +110,7 @@ namespace Forms
             if (!bgwMyStatus.IsBusy)
                 bgwMyStatus.RunWorkerAsync();
         }
-        
+
         void bgwMyStatus_DoWork(object sender, DoWorkEventArgs e) {
             try {
                 e.Result = Twitter.GetUserInfo(SettingHelper.UserName);
@@ -114,6 +125,8 @@ namespace Forms
                 Result MyInfo = (Result)e.Result;
                 rchStatus.Text = MyInfo.Text;
                 picProfileImage.Image = Twitter.GetUserProfileImage(MyInfo.ProfileImageUrl);
+
+                rchStatus.Click += new EventHandler(rchStatus_Click);
             }
         }
 
@@ -129,8 +142,8 @@ namespace Forms
                 BindResultsToTable(ResultList);
 
                 if (_lLastId != 0) {
-                    AlertForm Alert = new Forms.AlertForm("New tweets have arrived");
-                    Alert.LinkClicked += () => this.Activate();
+                    AlertForm Alert = new Forms.AlertForm(SettingHelper.MessageNewTweets);
+                    Alert.LinkClicked += new Action(AlertLink_Clicked);
                 }
             }
 
@@ -181,6 +194,7 @@ namespace Forms
                 rchUpdate.Text = UserInfo.Text;
                 rchUpdate.ReadOnly = true;
                 rchUpdate.BackColor = Color.WhiteSmoke;
+                rchUpdate.Cursor = Cursors.Arrow;
                 rchUpdate.ReadOnly = true;
 
                 rchUpdate.LinkClicked += new LinkClickedEventHandler(rchUpdate_LinkClicked);
@@ -220,12 +234,6 @@ namespace Forms
 
                 this.Refresh();
             }
-        }
-
-        private void rchStatus_Click(object sender, EventArgs e) {
-            UpdateForm Update = new UpdateForm(rchStatus.Text);
-            Update.StatusChanged += Status => rchStatus.Text = Status;
-            Update.ShowDialog();
         }
     }
 }
