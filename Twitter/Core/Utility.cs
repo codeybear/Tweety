@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Core
 {
-    static public class Utility
+    public class Utility
     {
         public class DictItem<TKey, TValue>
         {
@@ -27,7 +27,7 @@ namespace Core
             Writer.Close();
         }
 
-        /// <summary> DeSerialize a dictionary from an xml file </summary>
+        /// <summary> Deserialize a dictionary from an xml file </summary>
         public static Dictionary<TKey, TValue> DeserializeDictionary<TKey, TValue>(string sFileName) {
             XmlSerializer serializer = new XmlSerializer(typeof(List<DictItem<TKey, TValue>>));
             FileStream fs = new FileStream(sFileName, FileMode.Open);
