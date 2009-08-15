@@ -5,22 +5,13 @@ using System.Xml;
 
 namespace Core
 {
-    class WebHelper
+    static class WebHelper
     {
         public const string HTTPGET = "GET";
         public const string HTTPPOST = "POST";
 
         public static byte[] GetBytesFromURL(string sURL) {
             return CopyStreamToByteArray(GetWebResponse(sURL, HTTPGET));
-        }
-
-        public static System.Drawing.Bitmap GetBitmapFromURL(string sURL) {
-            HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(sURL);
-            WebResponse Response = Request.GetResponse();
-            Stream ResponseStream = Response.GetResponseStream();
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(ResponseStream);
-
-            return bmp;
         }
 
         public static Stream GetWebResponse(String sURL, String sMethod) {

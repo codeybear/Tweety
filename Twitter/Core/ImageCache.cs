@@ -29,7 +29,7 @@ namespace Core
         }
 
         public void Load(string sFileName) {
-            _ImageCache = Utility.DeSerializeDictionary<string, byte[]>(sFileName);
+            _ImageCache = Utility.DeserializeDictionary<string, byte[]>(sFileName);
         }
     }
 }

@@ -25,12 +25,12 @@ namespace Forms
 
         private void MainForm_Load(object sender, EventArgs e) {
             // Check for user settings before settings up form
-            if (SettingHelper.UserName == "") {
+            if (String.IsNullOrEmpty(SettingHelper.UserName)) {
                 using (SettingsForm SettingsForm = new SettingsForm()) {
                     SettingsForm.ShowDialog();
                 }
 
-                if (SettingHelper.UserName == "")
+            	if (String.IsNullOrEmpty(SettingHelper.UserName))
                     Close();
                 else
                     Setup();
@@ -83,13 +83,15 @@ namespace Forms
         //  Background worker for friends timeline
         //--------------------------------------------------------------
         void bgwFriendsTimeLine_Start() {
-            if (!bgwFriendsTimeLine.IsBusy)
+            if (!bgwFriendsTimeLine.IsBusy) {
+                this.Text = "Tweety - Looking for tweets...";
                 bgwFriendsTimeLine.RunWorkerAsync();
+            }
         }
 
         void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
-            try {
-                e.Result = Twitter.GetFriendsTimeLine(SettingHelper.UserName, SettingHelper.Password);
+            try {   
+                e.Result = Twitter.GetFriendsTimeline(SettingHelper.UserName, SettingHelper.Password);
             }
             catch (Exception ex) {
                 Utility.AccessInvoke(this, () => ShowMessage(true, ex.Message));
@@ -100,6 +102,7 @@ namespace Forms
             if (e.Result != null) {
                 HandleResults((List<Result>)e.Result);
                 ShowMessage(false, "");
+                this.Text = "Tweety";
             }
         }
 

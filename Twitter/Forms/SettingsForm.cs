@@ -15,6 +15,7 @@ namespace Forms
 
         private void btnOk_Click(object sender, EventArgs e) {
             try {
+    			// TODO make a call that checks both username and password
                 Result UserInfo = Twitter.GetUserInfo(txtUserName.Text);
 
                 SettingHelper.UserName = txtUserName.Text.Trim();

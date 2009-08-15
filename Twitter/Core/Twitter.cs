@@ -31,8 +31,12 @@ namespace Core
 
         private static ImageCache _ImageCache = new ImageCache();
 
-        // Public methods:
+        //--------------------------------------------------------------
+        // Public methods
+        //--------------------------------------------------------------
 
+        /// <summary> Update a specified user's status </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "s")]
         public static String UpdateStatus(string sMessage, string sUserName, string sPassword) {
             Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_STATUS_UPDATE + sMessage, WebHelper.HTTPPOST, sUserName, sPassword);
             StreamReader reader = new StreamReader(ResponseStream);
@@ -42,6 +46,7 @@ namespace Core
             return returnValue;
         }
 
+        /// <summary> Get a specified user's details </summary>
         public static Result GetUserInfo(string sUserName) {
             Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_USERS_SHOW + sUserName + ".xml", WebHelper.HTTPGET);
             XmlDocument xml = new XmlDocument();
@@ -49,6 +54,7 @@ namespace Core
             return GetUserInfoFromNode(xml.DocumentElement);
         }
 
+        /// <summary> Get a specified user's profile image </summary>
         public static System.Drawing.Bitmap GetUserProfileImage(string sUserProfileURL) {
             if (!_ImageCache.ContainsKey(sUserProfileURL)) {
                 byte[] ImageBytes = WebHelper.GetBytesFromURL(sUserProfileURL);
@@ -58,18 +64,12 @@ namespace Core
             return _ImageCache.GetImage(sUserProfileURL);
         }
 
-        public static List<Result> GetFriendsTimeLine(string sUserName, string sPassword) {
+        /// <summary> Get friends timeline </summary>
+        public static List<Result> GetFriendsTimeline(string sUserName, string sPassword) {
             Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml", WebHelper.HTTPGET, sUserName, sPassword);
             XmlDocument xml = new XmlDocument();
             xml.Load(ResponseStream);
             return GetStatusList(xml);
-        }
-
-        public static List<Result> GetFriendsStatus(string sUserName) {
-            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_FRIENDS_STATUS + sUserName + ".xml", WebHelper.HTTPGET);
-            XmlDocument xml = new XmlDocument();
-            xml.Load(ResponseStream);
-            return GetUserList(xml);
         }
 
         /// <summary> Persist user images on the file system <\summary>
@@ -83,7 +83,9 @@ namespace Core
             _ImageCache.Load(sFileName);
         }
 
+        //--------------------------------------------------------------
         // Private Methods
+        //--------------------------------------------------------------
 
         private static List<Result> GetStatusList(XmlDocument xml) {
             List<Result> StatusList = new List<Result>();
@@ -100,15 +102,6 @@ namespace Core
             }
 
             return StatusList;
-        }
-
-        private static List<Result> GetUserList(XmlDocument xml) {
-            List<Result> UserInfoList = new List<Result>();
-
-            foreach (XmlNode UserNode in xml.GetElementsByTagName("user"))
-                UserInfoList.Add(GetUserInfoFromNode(UserNode));
-
-            return UserInfoList;
         }
 
         private static Result GetUserInfoFromNode(XmlNode UserNode) {

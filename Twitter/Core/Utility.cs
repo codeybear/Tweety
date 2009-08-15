@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Core
 {
-    public class Utility
+    static public class Utility
     {
         public class DictItem<TKey, TValue>
         {
@@ -28,7 +28,7 @@ namespace Core
         }
 
         /// <summary> DeSerialize a dictionary from an xml file </summary>
-        public static Dictionary<TKey, TValue> DeSerializeDictionary<TKey, TValue>(string sFileName) {
+        public static Dictionary<TKey, TValue> DeserializeDictionary<TKey, TValue>(string sFileName) {
             XmlSerializer serializer = new XmlSerializer(typeof(List<DictItem<TKey, TValue>>));
             FileStream fs = new FileStream(sFileName, FileMode.Open);
             var LoadList = (List<DictItem<TKey, TValue>>)serializer.Deserialize(fs);
@@ -48,17 +48,7 @@ namespace Core
                 ThisObject.Invoke(action, null);
             else
                 action();
-    }
-
-        //public static void CheckVersionForUpgrade() {
-        //    System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
-        //    string sAppVersion = a.GetName().Version.ToString();
-
-        //    if (Properties.Settings.Default.ApplicationVersion != sAppVersion) {
-        //        Properties.Settings.Default.Upgrade();
-        //        Properties.Settings.Default.ApplicationVersion = sAppVersion;
-        //    }
-        //}
+        }
     }
 }
 
