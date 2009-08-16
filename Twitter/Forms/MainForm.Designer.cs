@@ -113,6 +113,8 @@ namespace Forms
             // 
             // rchStatus
             // 
+            this.rchStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.rchStatus.BackColor = System.Drawing.Color.WhiteSmoke;
             this.rchStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rchStatus.Cursor = System.Windows.Forms.Cursors.Arrow;

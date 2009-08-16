@@ -36,7 +36,6 @@ namespace Core
         //--------------------------------------------------------------
 
         /// <summary> Update a specified user's status </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "s")]
         public static String UpdateStatus(string sMessage, string sUserName, string sPassword) {
             Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_STATUS_UPDATE + sMessage, WebHelper.HTTPPOST, sUserName, sPassword);
             StreamReader reader = new StreamReader(ResponseStream);
