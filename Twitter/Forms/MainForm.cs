@@ -69,14 +69,16 @@ namespace Forms
         }
 
         private void rchStatus_Click(object sender, EventArgs e) {
-            UpdateForm Update = new UpdateForm(rchStatus.Text);
-            Update.StatusChanged += Status => rchStatus.Text = Status;
-            Update.ShowDialog();
+            using (UpdateForm Update = new UpdateForm(rchStatus.Text))
+            {
+                Update.StatusChanged += Status => rchStatus.Text = Status;
+                Update.ShowDialog();
+            }
         }
 
         void AlertLink_Clicked() {
+            this.WindowState = FormWindowState.Normal;
             this.Activate();
-            rchStatus.Text += "Link Clicked - " + DateTime.Now;
         }
 
         //--------------------------------------------------------------
@@ -145,7 +147,7 @@ namespace Forms
                 BindResultsToTable(ResultList);
 
                 if (_lLastId != 0) {
-                    AlertForm Alert = new Forms.AlertForm(SettingHelper.MessageNewTweets);
+                    AlertForm Alert = new Forms.AlertForm(SettingHelper.MessageNewTweets, SettingHelper.TweetyIcon);
                     Alert.LinkClicked += new Action(AlertLink_Clicked);
                 }
             }
@@ -238,5 +240,6 @@ namespace Forms
                 this.Refresh();
             }
         }
+
     }
 }

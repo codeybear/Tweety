@@ -8,22 +8,23 @@ namespace Forms
     {
         public event Action LinkClicked = delegate { };
 
-        public AlertForm(string sMessage) {
+        public AlertForm(string sMessage, System.Drawing.Bitmap bmp) {
             InitializeComponent();
 
             linkMessage.Text = sMessage;
+            picImage.Image = bmp;
 
             // Display form in bottom right of screen above taskbar
             System.Drawing.Rectangle rect = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new System.Drawing.Point(rect.Width - this.Width, rect.Height - this.Height);
-            this.TopMost = true;
 
             // Setup timer to close form
             CloseTimer.Interval = 1000 * 10;
             CloseTimer.Start();
 
             this.Show();
+            this.Activate();
         }
 
         /// <summary> Fade in/out the form </summary>
@@ -48,8 +49,6 @@ namespace Forms
 
         private void AlertForm_Shown(object sender, EventArgs e) {
             ShowHide(10, 50);
-
-            this.TopMost = false;
         }
 
         private void linkMessage_Click(object sender, EventArgs e) {

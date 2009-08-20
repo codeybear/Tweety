@@ -29,24 +29,29 @@
             this.linkMessage = new System.Windows.Forms.LinkLabel();
             this.btnClose = new System.Windows.Forms.Button();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.picImage = new System.Windows.Forms.PictureBox();
             this.CloseTimer = new System.Windows.Forms.Timer(this.components);
             this.pnlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picImage)).BeginInit();
             this.SuspendLayout();
             // 
             // linkMessage
             // 
             this.linkMessage.AutoSize = true;
-            this.linkMessage.Location = new System.Drawing.Point(19, 18);
+            this.linkMessage.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkMessage.Location = new System.Drawing.Point(47, 29);
             this.linkMessage.Name = "linkMessage";
-            this.linkMessage.Size = new System.Drawing.Size(0, 13);
+            this.linkMessage.Size = new System.Drawing.Size(150, 16);
             this.linkMessage.TabIndex = 0;
+            this.linkMessage.TabStop = true;
+            this.linkMessage.Text = "Test Alert Description";
             this.linkMessage.Click += new System.EventHandler(this.linkMessage_Click);
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(207, 3);
+            this.btnClose.Location = new System.Drawing.Point(212, 3);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(23, 24);
+            this.btnClose.Size = new System.Drawing.Size(19, 22);
             this.btnClose.TabIndex = 1;
             this.btnClose.Text = "x";
             this.btnClose.UseVisualStyleBackColor = true;
@@ -56,12 +61,21 @@
             // 
             this.pnlMain.BackColor = System.Drawing.Color.Transparent;
             this.pnlMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlMain.Controls.Add(this.picImage);
             this.pnlMain.Controls.Add(this.btnClose);
             this.pnlMain.Controls.Add(this.linkMessage);
             this.pnlMain.Location = new System.Drawing.Point(0, 0);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(236, 80);
             this.pnlMain.TabIndex = 2;
+            // 
+            // picImage
+            // 
+            this.picImage.Location = new System.Drawing.Point(11, 23);
+            this.picImage.Name = "picImage";
+            this.picImage.Size = new System.Drawing.Size(32, 32);
+            this.picImage.TabIndex = 2;
+            this.picImage.TabStop = false;
             // 
             // CloseTimer
             // 
@@ -82,6 +96,7 @@
             this.Shown += new System.EventHandler(this.AlertForm_Shown);
             this.pnlMain.ResumeLayout(false);
             this.pnlMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picImage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -92,5 +107,6 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.Timer CloseTimer;
+        private System.Windows.Forms.PictureBox picImage;
     }
 }
