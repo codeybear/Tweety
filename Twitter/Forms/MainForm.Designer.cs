@@ -42,7 +42,6 @@ namespace Forms
             this.btnFriendsTimeline = new System.Windows.Forms.Button();
             this.btnMessage = new System.Windows.Forms.Button();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.button1 = new System.Windows.Forms.Button();
             this.tblTweets = new System.Windows.Forms.TableLayoutPanel();
             this.rchStatus = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.picProfileImage)).BeginInit();
@@ -85,15 +84,6 @@ namespace Forms
             this.btnMessage.Visible = false;
             this.btnMessage.Click += new System.EventHandler(this.btnMessage_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(52, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // tblTweets
             // 
             this.tblTweets.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -126,6 +116,8 @@ namespace Forms
             this.rchStatus.Size = new System.Drawing.Size(237, 48);
             this.rchStatus.TabIndex = 9;
             this.rchStatus.Text = "";
+            this.rchStatus.Visible = false;
+            this.rchStatus.Click += new System.EventHandler(this.rchStatus_Click);
             // 
             // MainForm
             // 
@@ -135,7 +127,6 @@ namespace Forms
             this.ClientSize = new System.Drawing.Size(348, 555);
             this.Controls.Add(this.rchStatus);
             this.Controls.Add(this.tblTweets);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnMessage);
             this.Controls.Add(this.btnFriendsTimeline);
             this.Controls.Add(this.picProfileImage);
@@ -153,7 +144,6 @@ namespace Forms
         private System.Windows.Forms.Button btnFriendsTimeline;
         private System.Windows.Forms.Button btnMessage;
         private System.Windows.Forms.ToolTip ToolTip;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TableLayoutPanel tblTweets;
         private System.Windows.Forms.RichTextBox rchStatus;
 	}

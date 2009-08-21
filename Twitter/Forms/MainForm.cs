@@ -101,10 +101,11 @@ namespace Forms
         }
 
         void bgwFriendsTimeLine_Completed(object sender, RunWorkerCompletedEventArgs e) {
+            this.Text = "Tweety";
+
             if (e.Result != null) {
                 HandleResults((List<Result>)e.Result);
                 ShowMessage(false, "");
-                this.Text = "Tweety";
             }
         }
 
@@ -129,9 +130,8 @@ namespace Forms
             if (e.Result != null) {
                 Result MyInfo = (Result)e.Result;
                 rchStatus.Text = MyInfo.Text;
+                rchStatus.Visible = true;
                 picProfileImage.Image = Twitter.GetUserProfileImage(MyInfo.ProfileImageUrl);
-
-                rchStatus.Click += new EventHandler(rchStatus_Click);
             }
         }
 
@@ -240,6 +240,5 @@ namespace Forms
                 this.Refresh();
             }
         }
-
     }
 }

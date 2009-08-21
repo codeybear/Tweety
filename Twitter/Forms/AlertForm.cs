@@ -23,8 +23,8 @@ namespace Forms
             CloseTimer.Interval = 1000 * 10;
             CloseTimer.Start();
 
+            this.TopMost = true;
             this.Show();
-            this.Activate();
         }
 
         /// <summary> Fade in/out the form </summary>
@@ -49,6 +49,7 @@ namespace Forms
 
         private void AlertForm_Shown(object sender, EventArgs e) {
             ShowHide(10, 50);
+            this.TopMost = false;
         }
 
         private void linkMessage_Click(object sender, EventArgs e) {
