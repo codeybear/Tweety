@@ -30,7 +30,7 @@ namespace Forms
                     SettingsForm.ShowDialog();
                 }
 
-            	if (String.IsNullOrEmpty(SettingHelper.UserName))
+                if (String.IsNullOrEmpty(SettingHelper.UserName))
                     Close();
                 else
                     Setup();
@@ -69,8 +69,7 @@ namespace Forms
         }
 
         private void rchStatus_Click(object sender, EventArgs e) {
-            using (UpdateForm Update = new UpdateForm(rchStatus.Text))
-            {
+            using (UpdateForm Update = new UpdateForm(rchStatus.Text)) {
                 Update.StatusChanged += Status => rchStatus.Text = Status;
                 Update.ShowDialog();
             }
@@ -92,7 +91,7 @@ namespace Forms
         }
 
         void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
-            try {   
+            try {
                 e.Result = Twitter.GetFriendsTimeline(SettingHelper.UserName, SettingHelper.Password);
             }
             catch (Exception ex) {
