@@ -69,6 +69,9 @@ namespace Forms
         }
 
         private void rchStatus_Click(object sender, EventArgs e) {
+            picProfileImage.Focus();
+            rchStatus.Select(0, 0);
+
             using (UpdateForm Update = new UpdateForm(rchStatus.Text)) {
                 Update.StatusChanged += Status => rchStatus.Text = Status;
                 Update.ShowDialog();
@@ -83,6 +86,7 @@ namespace Forms
         //--------------------------------------------------------------
         //  Background worker for friends timeline
         //--------------------------------------------------------------
+
         void bgwFriendsTimeLine_Start() {
             if (!bgwFriendsTimeLine.IsBusy) {
                 this.Text = "Tweety - Looking for tweets...";
@@ -111,6 +115,7 @@ namespace Forms
         //--------------------------------------------------------------
         //  Background worker for my status
         //--------------------------------------------------------------
+
         void bgwMyStatus_Start() {
             if (!bgwMyStatus.IsBusy)
                 bgwMyStatus.RunWorkerAsync();
@@ -137,6 +142,7 @@ namespace Forms
         //--------------------------------------------------------------
         // Support Methods
         //--------------------------------------------------------------
+
         /// <summary> Check for new tweets, and display if there are any </summary>
         void HandleResults(List<Result> ResultList) {
             // Check to see if there are new tweets
@@ -188,6 +194,7 @@ namespace Forms
                 PictureBox picProfile = new PictureBox();
                 picProfile.Margin = new Padding(2, 0, 4, 1);
                 picProfile.Image = UserInfo.ProfileImage;
+                picProfile.SizeMode = PictureBoxSizeMode.AutoSize;
 
                 // Show the status text
                 RichTextBox rchUpdate = new RichTextBox();
@@ -200,6 +207,9 @@ namespace Forms
                 rchUpdate.BackColor = Color.WhiteSmoke;
                 rchUpdate.Cursor = Cursors.Arrow;
                 rchUpdate.ReadOnly = true;
+
+                // Hide the carat when richtextbox is selected
+                rchUpdate.Click += (sender, e) => picProfileImage.Focus();
 
                 rchUpdate.LinkClicked += new LinkClickedEventHandler(rchUpdate_LinkClicked);
 

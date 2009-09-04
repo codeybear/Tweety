@@ -49,7 +49,7 @@ namespace Core
         public static Result GetUserInfo(string sUserName) {
             Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_USERS_SHOW + sUserName + ".xml", WebHelper.HTTPGET);
             XmlDocument xml = new XmlDocument();
-            xml.Load(ResponseStream);          
+            xml.Load(ResponseStream);
             return GetUserInfoFromNode(xml.DocumentElement);
         }
 
@@ -113,7 +113,6 @@ namespace Core
             if(UserStatusNode != null)
                 UserInfo.Text = UserStatusNode["text"].InnerText;
 
-            // UserInfo.Text = UserNode["name"].InnerText;
             UserInfo.ProfileImageUrl = UserNode["profile_image_url"].InnerText;
 
             if (!_ImageCache.ContainsKey(UserInfo.ProfileImageUrl)) {

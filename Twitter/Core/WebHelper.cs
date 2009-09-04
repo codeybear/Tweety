@@ -15,16 +15,19 @@ namespace Core
         }
 
         public static Stream GetWebResponse(String sURL, String sMethod) {
-            HttpWebRequest request = WebRequest.Create(sURL) as HttpWebRequest;
-            request.Method = sMethod;
-            return request.GetResponse().GetResponseStream();
+            return GetWebResponse(sURL, sMethod, "", "");
         }
 
         public static Stream GetWebResponse(String sURL, String sMethod, string sUserName, string sPassword) {
             HttpWebRequest request = WebRequest.Create(sURL) as HttpWebRequest;
             request.Method = sMethod;
-            request.Credentials = new NetworkCredential(sUserName, sPassword);
-            return request.GetResponse().GetResponseStream();
+
+            if (!string.IsNullOrEmpty(sUserName) && !string.IsNullOrEmpty(sPassword)) 
+                request.Credentials = new NetworkCredential(sUserName, sPassword);
+
+            HttpWebResponse Response = (HttpWebResponse)request.GetResponse();
+            Console.WriteLine("{0} - {1}", Response.StatusCode, Response.StatusDescription);
+            return Response.GetResponseStream();
         }
 
         /// <summary> For copying a non-seekable stream to a byte array </summary>

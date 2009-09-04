@@ -91,7 +91,7 @@ namespace Forms
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tblTweets.AutoScroll = true;
             this.tblTweets.ColumnCount = 2;
-            this.tblTweets.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
+            this.tblTweets.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tblTweets.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tblTweets.Location = new System.Drawing.Point(3, 63);
             this.tblTweets.Name = "tblTweets";
