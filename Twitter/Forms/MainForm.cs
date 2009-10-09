@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using System.ComponentModel;
 using Core;
 
 namespace Forms
@@ -95,12 +95,7 @@ namespace Forms
         }
 
         void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
-            try {
-                e.Result = Twitter.GetFriendsTimeline(SettingHelper.UserName, SettingHelper.Password);
-            }
-            catch (Exception ex) {
-                Utility.AccessInvoke(this, () => ShowMessage(true, ex.Message));
-            }
+            e.Result = Twitter.GetFriendsTimeline(SettingHelper.UserName, SettingHelper.Password);
         }
 
         void bgwFriendsTimeLine_Completed(object sender, RunWorkerCompletedEventArgs e) {
@@ -122,12 +117,7 @@ namespace Forms
         }
 
         void bgwMyStatus_DoWork(object sender, DoWorkEventArgs e) {
-            try {
-                e.Result = Twitter.GetUserInfo(SettingHelper.UserName);
-            }
-            catch (Exception ex) {
-                Utility.AccessInvoke(this, () => ShowMessage(true, ex.Message));
-            }
+            e.Result = Twitter.GetUserInfo(SettingHelper.UserName);
         }
 
         void bgwMyStatus_Completed(object sender, RunWorkerCompletedEventArgs e) {
@@ -248,6 +238,10 @@ namespace Forms
 
                 this.Refresh();
             }
+        }
+
+        public void ExceptionHandler(object sender, System.Threading.ThreadExceptionEventArgs e) {
+            Utility.AccessInvoke(this, () => ShowMessage(true, e.Exception.Message));
         }
     }
 }

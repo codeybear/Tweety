@@ -16,7 +16,11 @@ namespace Tweety
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Forms.MainForm());
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+
+            Forms.MainForm MainForm = new Forms.MainForm();
+            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(MainForm.ExceptionHandler);
+			Application.Run(MainForm);
 		}
 		
 	}

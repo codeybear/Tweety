@@ -15,7 +15,7 @@
     <UpgradeBackupLocation />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkSubset>Client</TargetFrameworkSubset>
-    <ApplicationIcon>Peace Dove.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Peace Dove.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -166,6 +166,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Peace Dove.ico" />
+    <Content Include="Resources\Peace Dove.ico" />
   </ItemGroup>
 </Project>
