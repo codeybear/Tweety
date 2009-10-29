@@ -96,6 +96,7 @@ namespace Core
 
                 Result UserInfo = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));
                 StatusInfo.ProfileImage = UserInfo.ProfileImage;
+                StatusInfo.ProfileImageUrl = UserInfo.ProfileImageUrl;
 
                 StatusList.Add(StatusInfo);
             }

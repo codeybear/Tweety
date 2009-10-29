@@ -26,7 +26,6 @@ namespace Core
                 request.Credentials = new NetworkCredential(sUserName, sPassword);
 
             HttpWebResponse Response = (HttpWebResponse)request.GetResponse();
-            Console.WriteLine("{0} - {1}", Response.StatusCode, Response.StatusDescription);
             return Response.GetResponseStream();
         }
 

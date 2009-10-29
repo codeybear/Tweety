@@ -23,8 +23,8 @@ namespace Core
             get { return Properties.Settings.Default.MessageNewTweets; }
         }
 
-        public static System.Drawing.Bitmap TweetyIcon {
-            get { return Properties.Resource.Twitter; }
+        public static string TweetyIconUri {
+            get { return "/WPFTest;component/Resources/Peace%20Dove.ico"; }
         }
 
         public static void Save() {
