@@ -9,13 +9,15 @@ namespace Pages {
         private System.Windows.Forms.Timer CloseTimer = new System.Windows.Forms.Timer();
         private event Action LinkClicked = delegate { };
 
-        public Alert(string sMessage, string sImageUri) {
+        public Alert(string sMessage, string sImageUri, Action LinkClickEvent) {
             InitializeComponent();
 
-            textDescription.Text = sMessage;
             imgProfile.Source = new BitmapImage(new Uri(sImageUri, UriKind.Relative));
 
-            btnClose.Click += (o, e) => this.Close();
+            LinkClicked = null;
+            LinkClicked += LinkClickEvent;
+            HyperlinkMessage.Inlines.Add(sMessage);
+            HyperlinkMessage.Click += new System.Windows.RoutedEventHandler(HyperlinkMessage_Click);
 
             // Display form in bottom right of screen above taskbar
             System.Drawing.Rectangle rect = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
@@ -31,6 +33,15 @@ namespace Pages {
             // Cancel topmost as soon as the form is loaded
             this.Loaded += (o, e) => this.Topmost = false;
             this.Show();
+        }
+
+        private void HyperlinkMessage_Click(object sender, System.Windows.RoutedEventArgs e) {
+            this.Close();
+            LinkClicked();
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e) {
+            this.Close();
         }
     }
 }

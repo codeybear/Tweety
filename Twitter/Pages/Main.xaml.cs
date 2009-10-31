@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.ComponentModel;
 using System.Windows.Media.Imaging;
 using Core;
 
@@ -72,8 +72,7 @@ namespace Pages {
         }
 
         void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
-            // TODO get username/password from settings
-            e.Result = Twitter.GetFriendsTimeline("pjcooke", "saints99");
+            e.Result = Twitter.GetFriendsTimeline(SettingHelper.UserName, SettingHelper.Password);
         }
 
         void bgwFriendsTimeLine_Completed(object sender, RunWorkerCompletedEventArgs e) {
@@ -93,20 +92,13 @@ namespace Pages {
         }
 
         void bgwMyStatus_DoWork(object sender, DoWorkEventArgs e) {
-            e.Result = Twitter.GetUserInfo("pjcooke");
-            // TODO get username from settings
-            //e.Result = Twitter.GetUserInfo(SettingHelper.UserName);
+            e.Result = Twitter.GetUserInfo(SettingHelper.UserName);
         }
 
         void bgwMyStatus_Completed(object sender, RunWorkerCompletedEventArgs e) {
             if (e.Result != null) {
                 Result MyInfo = (Result)e.Result;
                 txtStatus.Text = MyInfo.Text;
-
-                // TODO sort out visibility
-                //txtStatus.IsVisible = true;
-
-                // TODO get profile image
                 imgProfile.Source = new BitmapImage(new Uri(MyInfo.ProfileImageUrl));
             }
         }
@@ -170,9 +162,7 @@ namespace Pages {
                 AddResultsToGrid(ResultList);
 
                 if (_lLastId != 0) {
-                    // TODO sort out alert box event
-                    Alert Alert = new Alert(SettingHelper.MessageNewTweets, SettingHelper.TweetyIconUri);
-                    //Alert.LinkClicked += new Action(AlertLink_Clicked);
+                    Alert Alert = new Alert(SettingHelper.MessageNewTweets, SettingHelper.TweetyIconUri, () => this.Activate());
                 }
             }
 
