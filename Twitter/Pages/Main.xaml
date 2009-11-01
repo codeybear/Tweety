@@ -4,11 +4,11 @@
     Title="Tweety" Height="530" Width="323" Loaded="Window_Loaded" Background="White" Icon="/Tweety;component/Resources/Peace Dove.ico">
     <Grid Name="grdMain" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70" />
+            <RowDefinition Height="70"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBox Margin="56,5,57,7" Name="txtStatus" TextWrapping="WrapWithOverflow" ClipToBounds="False" SnapsToDevicePixels="False" MouseDown="txtStatus_MouseDown" Background="{x:Null}" BorderThickness="0"></TextBox>
-        <Button Margin="4,4,0,18" x:Name="btnRefresh" HorizontalAlignment="Left" Click="btnRefresh_Click" FontSize="10.667" Width="48" Height="48">
+        <Button Margin="5,8,0,0" x:Name="btnRefresh" HorizontalAlignment="Left" Click="btnRefresh_Click" FontSize="10.667" Width="48" Height="48" VerticalAlignment="Top">
         	<Image Stretch="Fill" Source="/Tweety;component/Resources/Peace Dove.ico" />
 		</Button>
         <ScrollViewer Grid.Row="1">
@@ -19,6 +19,9 @@
             </Grid.ColumnDefinitions>
         </Grid>
         </ScrollViewer>
-        <Image HorizontalAlignment="Right" Margin="0,5,5,17" Name="imgProfile" Stretch="Fill" Width="48" />
+		<Button Name="btnSettings" Click="btnSettings_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,5,0" Height="48" Width="48" Background="{x:Null}">
+			<Image Margin="0" Name="imgProfile" Stretch="Fill"/>
+		</Button>
+        
     </Grid>
 </Window>

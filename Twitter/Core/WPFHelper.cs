@@ -45,14 +45,5 @@ namespace Core
             hyper.Click += new System.Windows.RoutedEventHandler(ClickMethod);
             return hyper;
         }
-
-        //public static System.Windows.Media.Imaging.BitmapImage CreateBitmapImage(string sImageUrl) {
-        //    var ProfileBitmap = new System.Windows.Media.Imaging.BitmapImage();
-        //    ProfileBitmap.BeginInit();
-        //    ProfileBitmap.UriSource = new Uri(sImageUrl);
-        //    ProfileBitmap.EndInit();
-
-        //    return ProfileBitmap;
-        //}
     }	
 }

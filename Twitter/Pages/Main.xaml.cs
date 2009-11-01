@@ -25,6 +25,11 @@ namespace Pages {
         private void btnRefresh_Click(object sender, RoutedEventArgs e) {
             bgwFriendsTimeLine_Start();
         }
+		
+		private void btnSettings_Click(object sender, RoutedEventArgs e) {
+		    Settings SettingsForm = new Settings();
+            SettingsForm.ShowDialog();
+		}
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.RoutedEventArgs e) {
             System.Diagnostics.Process p = new System.Diagnostics.Process();

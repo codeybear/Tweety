@@ -18,9 +18,10 @@ namespace Pages
 
         private void btnOk_Click(object sender, RoutedEventArgs e) {
             try {
-                // TODO make a call that checks both username and password
-                Result UserInfo = Twitter.GetUserInfo(txtUserName.Text);
+                // Make a twitter call that checks both username and password
+                Twitter.GetFriendsTimeline(txtUserName.Text, PasswordBox.Password);
 
+                // No exception so save these settings and continue
                 SettingHelper.UserName = txtUserName.Text.Trim();
                 SettingHelper.Password = PasswordBox.Password.Trim();
                 SettingHelper.Save();
