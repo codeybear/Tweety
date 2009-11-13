@@ -167,7 +167,7 @@ namespace Pages {
                 AddResultsToGrid(ResultList);
 
                 if (_lLastId != 0) {
-                    Alert Alert = new Alert(SettingHelper.MessageNewTweets, SettingHelper.TweetyIconUri, () => this.Activate());
+                    Alert Alert = new Alert(SettingHelper.MessageNewTweets, SettingHelper.TweetyIconUri, () => this.Show());
                 }
             }
 
