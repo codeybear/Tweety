@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Core;
 
 namespace Pages {
@@ -18,18 +19,34 @@ namespace Pages {
 
         public MainWindow() {
             InitializeComponent();
+
+            App.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException); ;
         }
 
         #region Events
 
+        void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
+            // Display and animate the error message button
+            btnError.Content = e.Exception.Message;
+            var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("DisplayError");
+            sb.Begin();
+
+            e.Handled = true;
+        }
+
+        private void btnError_Click(object sender, RoutedEventArgs e) {
+            var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("HideError");
+            sb.Begin();
+        }
+
         private void btnRefresh_Click(object sender, RoutedEventArgs e) {
             bgwFriendsTimeLine_Start();
         }
-		
-		private void btnSettings_Click(object sender, RoutedEventArgs e) {
-		    Settings SettingsForm = new Settings();
+
+        private void btnSettings_Click(object sender, RoutedEventArgs e) {
+            Settings SettingsForm = new Settings();
             SettingsForm.ShowDialog();
-		}
+        }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.RoutedEventArgs e) {
             System.Diagnostics.Process p = new System.Diagnostics.Process();
@@ -57,8 +74,7 @@ namespace Pages {
                 Setup();
         }
 
-        void StatusTimer_Tick(object sender, EventArgs e)
-        {
+        void StatusTimer_Tick(object sender, EventArgs e) {
             bgwFriendsTimeLine_Start();
             bgwMyStatus_Start();
         }
@@ -168,7 +184,7 @@ namespace Pages {
 
                 // New tweets have been found display the alert form
                 if (_lLastId != 0) {
-                    Action AlertClicked = () => { 
+                    Action AlertClicked = () => {
                         this.Show();
                         this.WindowState = System.Windows.WindowState.Normal;
                     };
@@ -181,9 +197,5 @@ namespace Pages {
         }
 
         #endregion
-
-        public static void ShowError(string ErrorMessage) {
-            MessageBox.Show(ErrorMessage);
-        }
     }
 }

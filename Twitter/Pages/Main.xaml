@@ -1,27 +1,53 @@
-﻿<Window x:Name="window" x:Class="Pages.MainWindow"
+﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Tweety" Height="530" Width="323" Loaded="Window_Loaded" Background="White" Icon="/Tweety;component/Resources/Peace Dove.ico">
-    <Grid Name="grdMain" HorizontalAlignment="Stretch">
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="window" x:Class="Pages.MainWindow"
+    Title="Tweety" Height="530" Width="323" Loaded="Window_Loaded" Background="White" Icon="/Tweety;component/Resources/Peace Dove.ico" mc:Ignorable="d">
+    <Grid x:Name="grdMain" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="65"/>
+        	<RowDefinition  Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBox Margin="56,5,57,7" Name="txtStatus" TextWrapping="WrapWithOverflow" ClipToBounds="False" SnapsToDevicePixels="False" MouseDown="txtStatus_MouseDown" Background="{x:Null}" BorderThickness="0"></TextBox>
-        <Button Margin="5,8,0,0" x:Name="btnRefresh" HorizontalAlignment="Left" Click="btnRefresh_Click" FontSize="10.667" Width="48" Height="48" VerticalAlignment="Top">
-        	<Image Stretch="Fill" Source="/Tweety;component/Resources/Peace Dove.ico" />
+        <TextBox Margin="56,5,57,7" x:Name="txtStatus" TextWrapping="WrapWithOverflow" ClipToBounds="False" SnapsToDevicePixels="False" Background="{x:Null}" BorderThickness="0"/>
+        <Button Margin="5,5,0,0" x:Name="btnRefresh" HorizontalAlignment="Left" Click="btnRefresh_Click" FontSize="10.667" Width="40" Height="40" VerticalAlignment="Top">
+        	<Image Stretch="Fill" Source="/Tweety;component/Resources/Peace Dove.ico" ToolTip="Refresh Tweets" />
 		</Button>
-        <ScrollViewer Grid.Row="1">
-        <Grid Grid.Row="1" Height="Auto" Margin="0" Name="grdTweets" VerticalAlignment="Stretch" ShowGridLines="False">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="48" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-        </Grid>
+		<Button x:Name="btnSettings" Click="btnSettings_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,5,0" Height="54" Width="54" Background="{x:Null}">
+			<Image Margin="1" x:Name="imgProfile" Stretch="Fill" ToolTip="Settings" />
+		</Button>
+    	<Button x:Name="btnError" Grid.Row="1" Height="0" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="288" Click="btnError_Click" />
+        <ScrollViewer Grid.Row="2">
+            <Grid Grid.Row="2" Height="auto" Margin="0" x:Name="grdTweets" ShowGridLines="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
         </ScrollViewer>
-		<Button Name="btnSettings" Click="btnSettings_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,5,0" Height="48" Width="48" Background="{x:Null}">
-			<Image Margin="0" Name="imgProfile" Stretch="Fill"/>
-		</Button>
-        
     </Grid>
+	
+	<Window.Resources>
+	<Storyboard x:Key="DisplayError">
+		<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="btnError" Storyboard.TargetProperty="(FrameworkElement.Height)">
+			<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+			<SplineDoubleKeyFrame KeyTime="00:00:00.50" Value="24"/>
+		</DoubleAnimationUsingKeyFrames>
+		<ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="btnError" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+			<SplineThicknessKeyFrame KeyTime="00:00:00" Value="0"/>
+			<SplineThicknessKeyFrame KeyTime="00:00:00.50" Value="0,0,0,5"/>
+		</ThicknessAnimationUsingKeyFrames>
+	</Storyboard>
+		<Storyboard x:Key="HideError">
+		<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="btnError" Storyboard.TargetProperty="(FrameworkElement.Height)">
+			<SplineDoubleKeyFrame KeyTime="00:00:00" Value="24"/>
+			<SplineDoubleKeyFrame KeyTime="00:00:00.50" Value="0"/>
+		</DoubleAnimationUsingKeyFrames>
+		<ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="btnError" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+			<SplineThicknessKeyFrame KeyTime="00:00:00" Value="0,0,0,5"/>
+			<SplineThicknessKeyFrame KeyTime="00:00:00.50" Value="0"/>
+		</ThicknessAnimationUsingKeyFrames>		
+	</Storyboard>
+
+</Window.Resources>
 </Window>
