@@ -166,8 +166,14 @@ namespace Pages {
             if (_lLastId != lLastId) {
                 AddResultsToGrid(ResultList);
 
+                // New tweets have been found display the alert form
                 if (_lLastId != 0) {
-                    Alert Alert = new Alert(SettingHelper.MessageNewTweets, SettingHelper.TweetyIconUri, () => this.Show());
+                    Action AlertClicked = () => { 
+                        this.Show();
+                        this.WindowState = System.Windows.WindowState.Normal;
+                    };
+
+                    Alert Alert = new Alert(SettingHelper.MessageNewTweets, SettingHelper.TweetyIconUri, AlertClicked);
                 }
             }
 
@@ -175,5 +181,9 @@ namespace Pages {
         }
 
         #endregion
+
+        public static void ShowError(string ErrorMessage) {
+            MessageBox.Show(ErrorMessage);
+        }
     }
 }
