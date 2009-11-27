@@ -10,9 +10,10 @@ using Core;
 
 namespace Pages {
     public partial class MainWindow : Window {
-        BackgroundWorker bgwFriendsTimeLine = new BackgroundWorker();
-        BackgroundWorker bgwMyStatus = new BackgroundWorker();
-        System.Windows.Forms.Timer StatusTimer;
+        BackgroundWorker _bgwFriendsTimeLine = new BackgroundWorker();
+        BackgroundWorker _bgwMyStatus = new BackgroundWorker();
+        System.Windows.Forms.NotifyIcon _NotifyIcon = new System.Windows.Forms.NotifyIcon();
+        System.Windows.Forms.Timer _StatusTimer;
 
         // Keep track of the last tweet id to check to new tweets
         Int64 _lLastId;
@@ -20,7 +21,8 @@ namespace Pages {
         public MainWindow() {
             InitializeComponent();
 
-            App.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException); ;
+            SetupNotifyIcon();
+            App.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
         }
 
         #region Events
@@ -74,6 +76,16 @@ namespace Pages {
                 Setup();
         }
 
+        private void window_Closing(object sender, CancelEventArgs e) {
+            _NotifyIcon.Dispose();
+            _NotifyIcon = null;
+        }
+
+        private void window_StateChanged(object sender, EventArgs e) {
+            if (this.WindowState == WindowState.Minimized)
+                this.Hide();
+        }
+
         void StatusTimer_Tick(object sender, EventArgs e) {
             bgwFriendsTimeLine_Start();
             bgwMyStatus_Start();
@@ -86,9 +98,9 @@ namespace Pages {
         // Friends Timeline worker methods
 
         void bgwFriendsTimeLine_Start() {
-            if (!bgwFriendsTimeLine.IsBusy) {
+            if (!_bgwFriendsTimeLine.IsBusy) {
                 this.Title = "Tweety - Looking for tweets...";
-                bgwFriendsTimeLine.RunWorkerAsync();
+                _bgwFriendsTimeLine.RunWorkerAsync();
             }
         }
 
@@ -108,8 +120,8 @@ namespace Pages {
 
         // My Status worker methods
         void bgwMyStatus_Start() {
-            if (!bgwMyStatus.IsBusy)
-                bgwMyStatus.RunWorkerAsync();
+            if (!_bgwMyStatus.IsBusy)
+                _bgwMyStatus.RunWorkerAsync();
         }
 
         void bgwMyStatus_DoWork(object sender, DoWorkEventArgs e) {
@@ -158,19 +170,19 @@ namespace Pages {
         /// <summary> Setup for the page to get tweets</summary>
         private void Setup() {
             // Setup timer to get friends timeline
-            StatusTimer = new System.Windows.Forms.Timer();
-            StatusTimer.Tick += new EventHandler(StatusTimer_Tick);
-            StatusTimer.Interval = 1000 * 120;
-            StatusTimer.Start();
+            _StatusTimer = new System.Windows.Forms.Timer();
+            _StatusTimer.Tick += new EventHandler(StatusTimer_Tick);
+            _StatusTimer.Interval = 1000 * 120;
+            _StatusTimer.Start();
 
             // Get friends timeline
-            bgwFriendsTimeLine.DoWork += new DoWorkEventHandler(bgwFriendsTimeLine_DoWork);
-            bgwFriendsTimeLine.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwFriendsTimeLine_Completed);
+            _bgwFriendsTimeLine.DoWork += new DoWorkEventHandler(bgwFriendsTimeLine_DoWork);
+            _bgwFriendsTimeLine.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwFriendsTimeLine_Completed);
             bgwFriendsTimeLine_Start();
 
             // Get my details
-            bgwMyStatus.DoWork += new DoWorkEventHandler(bgwMyStatus_DoWork);
-            bgwMyStatus.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwMyStatus_Completed);
+            _bgwMyStatus.DoWork += new DoWorkEventHandler(bgwMyStatus_DoWork);
+            _bgwMyStatus.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwMyStatus_Completed);
             bgwMyStatus_Start();
         }
 
@@ -184,18 +196,30 @@ namespace Pages {
 
                 // New tweets have been found display the alert form
                 if (_lLastId != 0) {
-                    Action AlertClicked = () => {
-                        this.Show();
-                        this.WindowState = System.Windows.WindowState.Normal;
-                    };
-
-                    Alert Alert = new Alert(SettingHelper.MessageNewTweets, SettingHelper.TweetyIconUri, AlertClicked);
+                    Alert Alert = new Alert(SettingHelper.MessageNewTweets, SettingHelper.TweetyIconUri, RestoreWindow);
                 }
             }
 
             _lLastId = lLastId;
         }
 
+        private void RestoreWindow() {
+            this.Show();
+            this.WindowState = System.Windows.WindowState.Normal;
+        }
+
+        private void SetupNotifyIcon() {
+            _NotifyIcon.Text = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+            _NotifyIcon.Icon = new System.Drawing.Icon("Peace Dove.ico");
+            _NotifyIcon.Click += new EventHandler((o, e) => RestoreWindow());
+            _NotifyIcon.Visible = true;
+        }
+
         #endregion
+
+        private void txtStatus_TextChanged(object sender, TextChangedEventArgs e) {
+
+        }
+
     }
 }

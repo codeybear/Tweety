@@ -15,7 +15,7 @@ namespace Pages {
             imgProfile.Source = new BitmapImage(new Uri(sImageUri, UriKind.Relative));
 
             LinkClicked = null;
-            LinkClicked += LinkClickEvent;
+            LinkClicked += new Action(LinkClickEvent);
             HyperlinkMessage.Inlines.Add(sMessage);
             HyperlinkMessage.Click += new System.Windows.RoutedEventHandler(HyperlinkMessage_Click);
 
