@@ -91,7 +91,8 @@ namespace Core
 
             foreach (XmlNode StatusNode in xml.GetElementsByTagName("status")) {
                 Result StatusInfo = new Result();
-                StatusInfo.Text = StatusNode["text"].InnerText;
+                string StatusText = WebHelper.UrlDecode(StatusNode["text"].InnerText);
+                StatusInfo.Text = StatusText;
                 StatusInfo.ID = StatusNode["id"].InnerText;
 
                 Result UserInfo = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));

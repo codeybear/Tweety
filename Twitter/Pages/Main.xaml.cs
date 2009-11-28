@@ -22,6 +22,8 @@ namespace Pages {
             InitializeComponent();
 
             SetupNotifyIcon();
+            
+            // Setup global error handler
             App.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
         }
 
@@ -50,15 +52,24 @@ namespace Pages {
             SettingsForm.ShowDialog();
         }
 
+        private void txtStatus_TextChanged(object sender, TextChangedEventArgs e) {
+            UpdateStatusButtons(true);
+        }
+
+        private void btnUpdateStatus_Click(object sender, RoutedEventArgs e) {
+            Twitter.UpdateStatus(txtStatus.Text, SettingHelper.UserName, SettingHelper.Password);
+            UpdateStatusButtons(false);
+        }
+
+        private void btnCancelUpdate_Click(object sender, RoutedEventArgs e) {
+            UpdateStatusButtons(false);
+        }
+
         private void Hyperlink_RequestNavigate(object sender, System.Windows.RoutedEventArgs e) {
             System.Diagnostics.Process p = new System.Diagnostics.Process();
             Hyperlink link = (Hyperlink)sender;
             p.StartInfo.FileName = link.NavigateUri.AbsoluteUri;
             p.Start();
-        }
-
-        private void txtStatus_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-
         }
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e) {
@@ -131,11 +142,12 @@ namespace Pages {
         void bgwMyStatus_Completed(object sender, RunWorkerCompletedEventArgs e) {
             if (e.Result != null) {
                 Result MyInfo = (Result)e.Result;
+                txtStatus.TextChanged -= txtStatus_TextChanged;
                 txtStatus.Text = MyInfo.Text;
+                txtStatus.TextChanged += txtStatus_TextChanged;
                 imgProfile.Source = new BitmapImage(new Uri(MyInfo.ProfileImageUrl));
             }
         }
-
 
         #endregion
 
@@ -209,17 +221,26 @@ namespace Pages {
         }
 
         private void SetupNotifyIcon() {
-            _NotifyIcon.Text = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+            _NotifyIcon.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
             _NotifyIcon.Icon = new System.Drawing.Icon("Peace Dove.ico");
             _NotifyIcon.Click += new EventHandler((o, e) => RestoreWindow());
             _NotifyIcon.Visible = true;
         }
 
-        #endregion
-
-        private void txtStatus_TextChanged(object sender, TextChangedEventArgs e) {
-
+        private void UpdateStatusButtons(bool SetVisible) {
+            if (SetVisible) {
+                btnUpdateStatus.Visibility = Visibility.Visible;
+                btnCancelUpdate.Visibility = Visibility.Visible;
+                btnSettings.Visibility = Visibility.Hidden;
+            }
+            else {
+                btnUpdateStatus.Visibility = Visibility.Hidden;
+                btnCancelUpdate.Visibility = Visibility.Hidden;
+                btnSettings.Visibility = Visibility.Visible;
+            }
         }
+
+        #endregion
 
     }
 }

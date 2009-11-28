@@ -42,5 +42,17 @@ namespace Core
 
             return OutStream.ToArray();
         }
+
+        /// <summary> UrlDecodes a string without requiring System.Web </summary>
+        /// <remarks> This is to avoid including system.web which means it can use the client only version
+        /// of the framework, giving a potentially smaller framework download</remarks>
+        public static string UrlDecode(string text) {
+            // pre-process for + sign space formatting since System.Uri doesn't handle it
+            text = text.Replace("+", " ");
+            text = text.Replace("&lt", "<");
+            text = text.Replace("&gt", ">");
+            return System.Uri.UnescapeDataString(text);
+        }
+
     }
 }

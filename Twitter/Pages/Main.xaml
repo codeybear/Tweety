@@ -14,7 +14,9 @@
         <Button Margin="5,5,0,0" x:Name="btnRefresh" HorizontalAlignment="Left" Click="btnRefresh_Click" FontSize="10.667" Width="40" Height="40" VerticalAlignment="Top">
         	<Image Stretch="Fill" Source="/Tweety;component/Resources/Peace Dove.ico" ToolTip="Refresh Tweets" />
 		</Button>
-		<Button x:Name="btnSettings" Click="btnSettings_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,5,0" Height="54" Width="54" Background="{x:Null}">
+        <Button x:Name="btnUpdateStatus" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,5,0" Background="OrangeRed" Height="22" Width="50" Content="Save" Visibility="Hidden" Click="btnUpdateStatus_Click" IsDefault="True" />
+        <Button x:Name="btnCancelUpdate" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,28,5,0" Background="LightSkyBlue" Height="22" Width="50" Content="Cancel" Visibility="Hidden" Click="btnCancelUpdate_Click" IsCancel="True" />
+        <Button x:Name="btnSettings" Click="btnSettings_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,5,0" Height="54" Width="54" Background="{x:Null}">
 			<Image Margin="1" x:Name="imgProfile" Stretch="Fill" ToolTip="Settings" />
 		</Button>
     	<Button x:Name="btnError" Grid.Row="1" Height="0" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="288" Click="btnError_Click" />

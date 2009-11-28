@@ -15,9 +15,9 @@ namespace Pages {
             imgProfile.Source = new BitmapImage(new Uri(sImageUri, UriKind.Relative));
 
             LinkClicked = null;
-            LinkClicked += new Action(LinkClickEvent);
+            LinkClicked += LinkClickEvent;
             HyperlinkMessage.Inlines.Add(sMessage);
-            HyperlinkMessage.Click += new System.Windows.RoutedEventHandler(HyperlinkMessage_Click);
+            HyperlinkMessage.Click += HyperlinkMessage_Click;
 
             // Display form in bottom right of screen above taskbar
             System.Drawing.Rectangle rect = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
