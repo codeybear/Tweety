@@ -21,7 +21,9 @@
     <Grid Height="auto" x:Name="grdMain" Width="auto">      
         <Image x:Name="imgProfile" Height="35" Width="35" VerticalAlignment="Center" HorizontalAlignment="Left" Stretch="Fill" Margin="10,10,0,10" />
         <TextBlock Margin="60,0,8,0" x:Name="textDescription" VerticalAlignment="Center" FontSize="14"><Hyperlink Name="HyperlinkMessage"></Hyperlink></TextBlock>
-        <Button x:Name="btnClose" Content="x" Height="20" Margin="0,7.05,8,0" VerticalAlignment="Top" Width="20" FontSize="14" VerticalContentAlignment="Center" HorizontalAlignment="Right" Click="btnClose_Click" />       
-    </Grid>
+            <Button x:Name="btnClose" Height="20" Margin="0,8,8,0" VerticalAlignment="Top" Width="20" FontSize="14" VerticalContentAlignment="Center" HorizontalAlignment="Right" Click="btnClose_Click">
+                <Image Margin="0" Name="CloseImage" Stretch="Fill" Source="/Tweety;component/Resources/delete_16x.ico" />
+            </Button>
+        </Grid>
 	</Border>
 </Window>
