@@ -31,7 +31,14 @@ namespace Pages {
 
         void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
             // Display and animate the error message button
-            btnError.Content = e.Exception.Message;
+            string sMessage;
+
+            if (e.Exception.InnerException == null)
+                sMessage = e.Exception.Message;
+            else
+                sMessage = e.Exception.InnerException.Message;
+
+            btnError.Content = sMessage;
             var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("DisplayError");
             sb.Begin();
 
@@ -124,8 +131,11 @@ namespace Pages {
 
             if (e.Result != null) {
                 HandleResults((List<Result>)e.Result);
-                // TODO sort out error button
-                //ShowMessage(false, "");
+
+                if (btnError.Height > 0) {
+                    var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("DisplayError");
+                    sb.Begin();
+                }
             }
         }
 

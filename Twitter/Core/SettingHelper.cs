@@ -27,10 +27,6 @@ namespace Core
             get { return "/Tweety;component/Resources/Peace%20Dove.ico"; }
         }
 
-        //public static System.Drawing.Icon TweetyIcon {
-        //    //get { }
-        //}
-
         public static void Save() {
             Properties.Settings.Default.Save();
         }

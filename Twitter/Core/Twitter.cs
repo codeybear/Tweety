@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace Core
-{
+namespace Core {
     public class StatusAlert {
         public String ScreenName;
         public String Name;
@@ -12,16 +11,14 @@ namespace Core
         public String CreatedAt;
     }
 
-    public class Result
-    {
+    public class Result {
         public String ID;
         public String Text;
         public String ProfileImageUrl;
-        public System.Drawing.Bitmap ProfileImage;
+        public String DateUpdated;
     }
 
-    public static class Twitter
-    {
+    public static class Twitter {
         private const int MAXCHARACTERS = 149;
         private const string TWITTER_URL = "http://twitter.com/";
         private const string PATH_FRIENDS_STATUS = "statuses/friends/";
@@ -96,7 +93,6 @@ namespace Core
                 StatusInfo.ID = StatusNode["id"].InnerText;
 
                 Result UserInfo = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));
-                StatusInfo.ProfileImage = UserInfo.ProfileImage;
                 StatusInfo.ProfileImageUrl = UserInfo.ProfileImageUrl;
 
                 StatusList.Add(StatusInfo);
@@ -112,7 +108,7 @@ namespace Core
             XmlNode UserStatusNode = UserNode.SelectSingleNode("status");
 
             // This info may not exist on all user nodes
-            if(UserStatusNode != null)
+            if (UserStatusNode != null)
                 UserInfo.Text = UserStatusNode["text"].InnerText;
 
             UserInfo.ProfileImageUrl = UserNode["profile_image_url"].InnerText;
@@ -121,8 +117,6 @@ namespace Core
                 byte[] ImageBytes = WebHelper.GetBytesFromURL(UserInfo.ProfileImageUrl);
                 _ImageCache.StoreImage(UserInfo.ProfileImageUrl, ImageBytes);
             }
-
-            UserInfo.ProfileImage = _ImageCache.GetImage(UserInfo.ProfileImageUrl);
 
             return UserInfo;
         }
