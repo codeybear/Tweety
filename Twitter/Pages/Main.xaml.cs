@@ -39,8 +39,11 @@ namespace Pages {
                 sMessage = e.Exception.InnerException.Message;
 
             btnError.Content = sMessage;
-            var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("DisplayError");
-            sb.Begin();
+
+            if (btnError.Height == 0) {
+                var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("DisplayError");
+                sb.Begin();
+            }
 
             e.Handled = true;
         }
@@ -133,7 +136,7 @@ namespace Pages {
                 HandleResults((List<Result>)e.Result);
 
                 if (btnError.Height > 0) {
-                    var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("DisplayError");
+                    var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("HideError");
                     sb.Begin();
                 }
             }
