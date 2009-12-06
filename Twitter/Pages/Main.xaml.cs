@@ -235,7 +235,8 @@ namespace Pages {
 
         private void SetupNotifyIcon() {
             _NotifyIcon.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-            _NotifyIcon.Icon = new System.Drawing.Icon("Peace Dove.ico");
+            System.IO.Stream IconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Tweety;component/Resources/Peace Dove.ico")).Stream;
+            _NotifyIcon.Icon = new System.Drawing.Icon(IconStream);
             _NotifyIcon.Click += new EventHandler((o, e) => RestoreWindow());
             _NotifyIcon.Visible = true;
         }
