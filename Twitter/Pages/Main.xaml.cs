@@ -229,8 +229,8 @@ namespace Pages {
         }
 
         private void RestoreWindow() {
-            this.Show();
             this.WindowState = System.Windows.WindowState.Normal;
+            this.Activate();
         }
 
         private void SetupNotifyIcon() {
