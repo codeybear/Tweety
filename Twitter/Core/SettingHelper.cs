@@ -16,11 +16,11 @@ namespace Core
         }
 
         public static string MessageInvalidUserSettings {
-            get { return Properties.Settings.Default.MessageInvalidUserSettings; }
+            get { return "Unable to validate user settings"; }
         }
 
         public static string MessageNewTweets {
-            get { return Properties.Settings.Default.MessageNewTweets; }
+            get { return "New tweets have arrived"; }
         }
 
         public static string TweetyIconUri {

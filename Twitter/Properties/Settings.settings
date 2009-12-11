@@ -8,11 +8,5 @@
     <Setting Name="PassWord" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="MessageInvalidUserSettings" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Unable to validate user settings</Value>
-    </Setting>
-    <Setting Name="MessageNewTweets" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">New tweets have arrived</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

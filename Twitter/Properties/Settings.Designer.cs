@@ -46,23 +46,5 @@ namespace Core.Properties {
                 this["PassWord"] = value;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Unable to validate user settings")]
-        public string MessageInvalidUserSettings {
-            get {
-                return ((string)(this["MessageInvalidUserSettings"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("New tweets have arrived")]
-        public string MessageNewTweets {
-            get {
-                return ((string)(this["MessageNewTweets"]));
-            }
-        }
     }
 }
