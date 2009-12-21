@@ -8,7 +8,6 @@ namespace Core {
         public String ScreenName;
         public String Name;
         public String Text;
-        public String CreatedAt;
     }
 
     public class Result {
@@ -16,6 +15,7 @@ namespace Core {
         public String Text;
         public String ProfileImageUrl;
         public String DateUpdated;
+        public String CreatedAt;
     }
 
     public static class Twitter {
@@ -91,6 +91,7 @@ namespace Core {
                 string StatusText = WebHelper.UrlDecode(StatusNode["text"].InnerText);
                 StatusInfo.Text = StatusText;
                 StatusInfo.ID = StatusNode["id"].InnerText;
+                StatusInfo.CreatedAt = ConvertTwitterDate(StatusNode["created_at"].InnerText);
 
                 Result UserInfo = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));
                 StatusInfo.ProfileImageUrl = UserInfo.ProfileImageUrl;
@@ -99,6 +100,19 @@ namespace Core {
             }
 
             return StatusList;
+        }
+
+        /// <summary> Parse twitter date into user friendly display date/time. </summary>
+        /// <param name="TwitterDate">DateTime as returned by twitter. e.g. Sun Dec 20 15:16:16 +0000 2009</param>
+        private static string ConvertTwitterDate(string TwitterDate) {
+            string[] Elements = TwitterDate.Split(' ');
+
+            string DayElement = Convert.ToInt32(Elements[2]) == DateTime.Now.Day ? "Today" : Elements[0];
+            
+            string TimeElement = Elements[3];
+            TimeElement = TimeElement.Substring(0, TimeElement.LastIndexOf(':'));
+
+            return string.Concat(DayElement, " ", TimeElement);
         }
 
         private static Result GetUserInfoFromNode(XmlNode UserNode) {

@@ -179,10 +179,11 @@ namespace Pages {
                 TestBlock.Margin = new Thickness(4);
                 TestBlock.TextWrapping = TextWrapping.Wrap;
                 TestBlock.Inlines.AddRange(WPFHelper.CreateInlineTextWithLinks(Status.Text, Hyperlink_RequestNavigate));
+                TestBlock.Inlines.Add(new Italic(new Run(Environment.NewLine + Status.CreatedAt)));
                 Grid.SetColumn(TestBlock, 1);
                 Grid.SetRow(TestBlock, grdTweets.RowDefinitions.Count - 1);
                 grdTweets.Children.Add(TestBlock);
-
+                
                 // Create the profile image for grid
                 Image ProfileImage = new Image();
                 ProfileImage.Source = new BitmapImage(new Uri(Status.ProfileImageUrl));
