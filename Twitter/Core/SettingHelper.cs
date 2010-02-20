@@ -24,7 +24,7 @@ namespace Core
         }
 
         public static string TweetyIconUri {
-            get { return "/Tweety;component/Resources/Peace%20Dove.ico"; }
+            get { return "pack://application:,,,/Tweety;component/Resources/Peace Dove.ico"; }
         }
 
         public static void Save() {

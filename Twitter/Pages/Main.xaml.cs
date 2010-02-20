@@ -230,13 +230,17 @@ namespace Pages {
         }
 
         private void RestoreWindow() {
+            if (this.WindowState == WindowState.Normal)
+                this.WindowState = WindowState.Minimized;
+
             this.Show();
-            this.WindowState = System.Windows.WindowState.Normal;
+            this.WindowState = WindowState.Normal;
         }
 
         private void SetupNotifyIcon() {
             _NotifyIcon.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-            System.IO.Stream IconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Tweety;component/Resources/Peace Dove.ico")).Stream;
+            Uri TweetyUri = new Uri(SettingHelper.TweetyIconUri);
+            System.IO.Stream IconStream = Application.GetResourceStream(TweetyUri).Stream;
             _NotifyIcon.Icon = new System.Drawing.Icon(IconStream);
             _NotifyIcon.Click += new EventHandler((o, e) => RestoreWindow());
             _NotifyIcon.Visible = true;
