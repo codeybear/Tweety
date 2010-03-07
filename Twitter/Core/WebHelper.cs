@@ -31,16 +31,18 @@ namespace Core
 
         /// <summary> For copying a non-seekable stream to a byte array </summary>
         private static byte[] CopyStreamToByteArray(Stream Stream) {
-            MemoryStream OutStream = new MemoryStream();
             byte[] Buffer = new byte[1024];
             int iBytesRead;
 
-            do {
-                iBytesRead = Stream.Read(Buffer, 0, Buffer.Length);
-                OutStream.Write(Buffer, 0, iBytesRead);
-            } while (iBytesRead > 0);
+            using (MemoryStream OutStream = new MemoryStream()) {
 
-            return OutStream.ToArray();
+                do {
+                    iBytesRead = Stream.Read(Buffer, 0, Buffer.Length);
+                    OutStream.Write(Buffer, 0, iBytesRead);
+                } while (iBytesRead > 0);
+
+                return OutStream.ToArray();
+            }
         }
 
         /// <summary> UrlDecodes a string without requiring System.Web </summary>

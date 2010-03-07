@@ -76,10 +76,11 @@ namespace Pages {
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.RoutedEventArgs e) {
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            Hyperlink link = (Hyperlink)sender;
-            p.StartInfo.FileName = link.NavigateUri.AbsoluteUri;
-            p.Start();
+            using (System.Diagnostics.Process p = new System.Diagnostics.Process()) {
+                Hyperlink link = (Hyperlink)sender;
+                p.StartInfo.FileName = link.NavigateUri.AbsoluteUri;
+                p.Start();
+            }
         }
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e) {
@@ -222,7 +223,7 @@ namespace Pages {
 
                 // New tweets have been found display the alert form
                 if (_lLastId != 0) {
-                    Alert Alert = new Alert(SettingHelper.MessageNewTweets, SettingHelper.TweetyIconUri, RestoreWindow);
+                    Alert Alert = new Alert(SettingHelper.MessageNewTweets, SettingHelper.TweetyIconUriString, RestoreWindow);
                 }
             }
 
@@ -239,7 +240,7 @@ namespace Pages {
 
         private void SetupNotifyIcon() {
             _NotifyIcon.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-            Uri TweetyUri = new Uri(SettingHelper.TweetyIconUri);
+            Uri TweetyUri = new Uri(SettingHelper.TweetyIconUriString);
             System.IO.Stream IconStream = Application.GetResourceStream(TweetyUri).Stream;
             _NotifyIcon.Icon = new System.Drawing.Icon(IconStream);
             _NotifyIcon.Click += new EventHandler((o, e) => RestoreWindow());

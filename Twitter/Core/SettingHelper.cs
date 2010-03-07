@@ -23,7 +23,7 @@ namespace Core
             get { return "New tweets have arrived"; }
         }
 
-        public static string TweetyIconUri {
+        public static string TweetyIconUriString {
             get { return "pack://application:,,,/Tweety;component/Resources/Peace Dove.ico"; }
         }
 

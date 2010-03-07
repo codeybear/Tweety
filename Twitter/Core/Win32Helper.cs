@@ -12,7 +12,7 @@ namespace Core
         private const uint SWP_NOACTIVATE = 0x0010;
 
         [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
-        static extern bool SetWindowPos(
+        private static extern bool SetWindowPos(
              int hWnd,                  // window handle
              int hWndInsertAfter,       // placement-order handle
              int X,                     // horizontal position
@@ -22,10 +22,10 @@ namespace Core
              uint uFlags);              // window positioning flags
 
         [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         [DllImport("user32.dll")]
-        static extern bool SetActiveWindow(IntPtr hWnd);
+        private static extern bool SetActiveWindow(IntPtr hWnd);
 
         public static void ShowWindowTopMost(System.Windows.Window Window) {
             IntPtr WindowHandle = new System.Windows.Interop.WindowInteropHelper(Window).Handle;

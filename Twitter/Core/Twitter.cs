@@ -51,13 +51,13 @@ namespace Core {
         }
 
         /// <summary> Get a specified user's profile image </summary>
-        public static System.Drawing.Bitmap GetUserProfileImage(string sUserProfileURL) {
-            if (!_ImageCache.ContainsKey(sUserProfileURL)) {
-                byte[] ImageBytes = WebHelper.GetBytesFromURL(sUserProfileURL);
-                _ImageCache.StoreImage(sUserProfileURL, ImageBytes);
+        public static System.Drawing.Bitmap GetUserProfileImage(string sUserProfileUrlString) {
+            if (!_ImageCache.ContainsKey(sUserProfileUrlString)) {
+                byte[] ImageBytes = WebHelper.GetBytesFromURL(sUserProfileUrlString);
+                _ImageCache.StoreImage(sUserProfileUrlString, ImageBytes);
             }
 
-            return _ImageCache.GetImage(sUserProfileURL);
+            return _ImageCache.GetImage(sUserProfileUrlString);
         }
 
         /// <summary> Get friends timeline </summary>

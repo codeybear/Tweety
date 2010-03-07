@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Core
 {
-    public class Utility
+    public static class Utility
     {
         public class DictItem<TKey, TValue>
         {
@@ -21,33 +21,35 @@ namespace Core
             foreach (TKey Key in Dict.Keys)
                 SaveList.Add(new DictItem<TKey, TValue> { Key = Key, Value = Dict[Key] });
 
-            XmlSerializer serializer = new XmlSerializer(typeof(List<DictItem<TKey, TValue>>));
-            TextWriter Writer = new StreamWriter(sFileName);
-            serializer.Serialize(Writer, SaveList);
-            Writer.Close();
+            XmlSerializer Serializer = new XmlSerializer(typeof(List<DictItem<TKey, TValue>>));
+            using (TextWriter Writer = new StreamWriter(sFileName)) {
+                Serializer.Serialize(Writer, SaveList);
+            }
         }
 
         /// <summary> Deserialize a dictionary from an xml file </summary>
         public static Dictionary<TKey, TValue> DeserializeDictionary<TKey, TValue>(string sFileName) {
             XmlSerializer serializer = new XmlSerializer(typeof(List<DictItem<TKey, TValue>>));
-            FileStream fs = new FileStream(sFileName, FileMode.Open);
-            var LoadList = (List<DictItem<TKey, TValue>>)serializer.Deserialize(fs);
-            fs.Close();
+            List<DictItem<TKey, TValue>> LoadList;
 
-            var LoadDict = new Dictionary<TKey, TValue>();
+            using (FileStream fs = new FileStream(sFileName, FileMode.Open)) {
+                LoadList = (List<DictItem<TKey, TValue>>)serializer.Deserialize(fs);
+            }
 
-            foreach (DictItem<TKey, TValue> Item in LoadList)
-                LoadDict.Add(Item.Key, Item.Value);
+                var LoadDict = new Dictionary<TKey, TValue>();
 
-            return LoadDict;
+                foreach (DictItem<TKey, TValue> Item in LoadList)
+                    LoadDict.Add(Item.Key, Item.Value);
+
+                return LoadDict;
         }
 
         /// <summary> Access an object using Invoke if required </summary>
-        public static void AccessInvoke(ISynchronizeInvoke ThisObject, Action action) {
+        public static void AccessInvoke(ISynchronizeInvoke ThisObject, Action Action) {
             if (ThisObject.InvokeRequired)
-                ThisObject.Invoke(action, null);
+                ThisObject.Invoke(Action, null);
             else
-                action();
+                Action();
         }
     }
 }

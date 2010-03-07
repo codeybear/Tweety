@@ -15,8 +15,9 @@ namespace Core
         }
 
         public Bitmap GetImage(string sURL) {
-            Stream ImageStream = new MemoryStream(_ImageCache[sURL]);
-            return new Bitmap(ImageStream);
+            using (Stream ImageStream = new MemoryStream(_ImageCache[sURL])) {
+                return new Bitmap(ImageStream);
+            }
         }
 
         public bool ContainsKey(string sURL) {
