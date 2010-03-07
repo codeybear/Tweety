@@ -12,7 +12,7 @@ namespace Pages {
         public Alert(string sMessage, string sImageUri, Action LinkClickEvent) {
             InitializeComponent();
 
-            imgProfile.Source = new BitmapImage(new Uri(sImageUri, UriKind.Relative));
+            imgProfile.Source = new BitmapImage(new Uri(sImageUri));
 
             LinkClicked = null;
             LinkClicked += LinkClickEvent;

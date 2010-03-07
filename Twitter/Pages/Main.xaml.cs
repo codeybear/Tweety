@@ -8,8 +8,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Core;
 
-namespace Pages {
-    public partial class MainWindow : Window {
+namespace Pages
+{
+    public partial class MainWindow : Window, IDisposable
+    {
         BackgroundWorker _bgwFriendsTimeLine = new BackgroundWorker();
         BackgroundWorker _bgwMyStatus = new BackgroundWorker();
         System.Windows.Forms.NotifyIcon _NotifyIcon = new System.Windows.Forms.NotifyIcon();
@@ -22,7 +24,7 @@ namespace Pages {
             InitializeComponent();
 
             SetupNotifyIcon();
-            
+
             // Setup global error handler
             App.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
         }
@@ -93,14 +95,12 @@ namespace Pages {
                     Close();
                 else
                     Setup();
-            }
-            else
+            } else
                 Setup();
         }
 
         private void window_Closing(object sender, CancelEventArgs e) {
-            _NotifyIcon.Dispose();
-            _NotifyIcon = null;
+            this.Dispose();
         }
 
         private void window_StateChanged(object sender, EventArgs e) {
@@ -184,7 +184,7 @@ namespace Pages {
                 Grid.SetColumn(TestBlock, 1);
                 Grid.SetRow(TestBlock, grdTweets.RowDefinitions.Count - 1);
                 grdTweets.Children.Add(TestBlock);
-                
+
                 // Create the profile image for grid
                 Image ProfileImage = new Image();
                 ProfileImage.Source = new BitmapImage(new Uri(Status.ProfileImageUrl));
@@ -252,15 +252,20 @@ namespace Pages {
                 btnUpdateStatus.Visibility = Visibility.Visible;
                 btnCancelUpdate.Visibility = Visibility.Visible;
                 btnSettings.Visibility = Visibility.Hidden;
-            }
-            else {
+            } else {
                 btnUpdateStatus.Visibility = Visibility.Hidden;
                 btnCancelUpdate.Visibility = Visibility.Hidden;
                 btnSettings.Visibility = Visibility.Visible;
             }
         }
 
-        #endregion
+        public void Dispose() {
+            _StatusTimer.Dispose();
+            _NotifyIcon.Dispose();
+            _bgwMyStatus.Dispose();
+            _bgwFriendsTimeLine.Dispose();
+        }
 
+        #endregion
     }
 }
