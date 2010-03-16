@@ -62,7 +62,11 @@ namespace Core {
 
         /// <summary> Get friends timeline </summary>
         public static List<Result> GetFriendsTimeline(string sUserName, string sPassword) {
-            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml", WebHelper.HTTPGET, sUserName, sPassword);
+            string NumberOfTweets = "?count=30";
+            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml" + NumberOfTweets,
+                                                             WebHelper.HTTPGET, 
+                                                             sUserName, 
+                                                             sPassword);
             XmlDocument xml = new XmlDocument();
             xml.Load(ResponseStream);
             return GetStatusList(xml);
