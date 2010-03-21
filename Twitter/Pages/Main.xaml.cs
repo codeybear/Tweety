@@ -176,14 +176,14 @@ namespace Pages
                 grdTweets.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
 
                 // Create the text for grid
-                TextBlock TestBlock = new TextBlock();
-                TestBlock.Margin = new Thickness(4);
-                TestBlock.TextWrapping = TextWrapping.Wrap;
-                TestBlock.Inlines.AddRange(WPFHelper.CreateInlineTextWithLinks(Status.Text, Hyperlink_RequestNavigate));
-                TestBlock.Inlines.Add(new Italic(new Run(Environment.NewLine + Status.CreatedAt)));
-                Grid.SetColumn(TestBlock, 1);
-                Grid.SetRow(TestBlock, grdTweets.RowDefinitions.Count - 1);
-                grdTweets.Children.Add(TestBlock);
+                TextBlock TextBlock = new TextBlock();
+                TextBlock.Margin = new Thickness(4);
+                TextBlock.TextWrapping = TextWrapping.Wrap;
+                TextBlock.Inlines.AddRange(WPFHelper.CreateInlineTextWithLinks(Status.Text, Hyperlink_RequestNavigate));
+                TextBlock.Inlines.Add(new Italic(new Run(Environment.NewLine + Status.CreatedAt)));
+                Grid.SetColumn(TextBlock, 1);
+                Grid.SetRow(TextBlock, grdTweets.RowDefinitions.Count - 1);
+                grdTweets.Children.Add(TextBlock);
 
                 // Create the profile image for grid
                 Image ProfileImage = new Image();

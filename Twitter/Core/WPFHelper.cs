@@ -12,21 +12,28 @@ namespace Core
             char[] EndOfURL = new char[] { ' ', ',' };
 
             do {
+                // Search for a url
                 iURLPos = sText.IndexOf("http://", StringComparison.CurrentCultureIgnoreCase);
 
-                if (iURLPos > -1)
-                    para.Inlines.Add(new Run(sText.Substring(0, iURLPos)));
-                else
+                if (iURLPos == -1)  // No url found so just add the text
                     para.Inlines.Add(sText);
 
                 if (iURLPos > -1) {
-                    int iEndOfURLPos = sText.IndexOfAny(EndOfURL, iURLPos) - iURLPos;
-                    if (iEndOfURLPos < 0) iEndOfURLPos = sText.Length - iURLPos;
+                    // Add normal text up to the point of the url
+                    para.Inlines.Add(sText.Substring(0, iURLPos));
+
+                    // Find the length of the url
+                    int iURLLength = sText.IndexOfAny(EndOfURL, iURLPos) - iURLPos;
+
+                    // iEndOfURLPos < 0 means url was at the end of the text, so calculate based on text length
+                    if (iURLLength < 0) iURLLength = sText.Length - iURLPos;
                     
-                    string sHyper = sText.Substring(iURLPos, iEndOfURLPos);
+                    // Create the hyperlink
+                    string sHyper = sText.Substring(iURLPos, iURLLength);
                     para.Inlines.Add(CreateHyperLink(sHyper, sHyper, ClickMethod));
 
-                    sText = sText.Substring(iURLPos + iEndOfURLPos);
+                    // Shorten text to the end of the url onwards
+                    sText = sText.Substring(iURLPos + iURLLength);
                 }
             } while (iURLPos != -1);
 
