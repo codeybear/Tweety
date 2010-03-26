@@ -36,17 +36,23 @@ namespace Pages {
         }
 
         private void HyperlinkMessage_Click(object sender, System.Windows.RoutedEventArgs e) {
-            this.Close();
+            CloseForm();
             LinkClicked();
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e) {
-            this.Close();
+            CloseForm();
         }
 
         private void Timer_Tick(object o, EventArgs e) {
             var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("StoryboardFadeOut");
             sb.Begin();
+            CloseForm();
+        }
+
+        private void CloseForm() {
+            CloseTimer.Dispose();
+            this.Close();
         }
    
     }

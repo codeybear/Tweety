@@ -10,6 +10,8 @@ namespace Core
         private const int HWND_NONTOPMOST = -2;
         private const int HWND_TOPMOST = -1;
         private const int HWND_TOP = 0;
+
+        private const uint SWP_SHOWWINDOW = 0x0040;
         private const uint SWP_NOACTIVATE = 0x0010;
 
         [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
@@ -38,7 +40,7 @@ namespace Core
                          Convert.ToInt32(Window.Top),
                          Convert.ToInt32(Window.Width),
                          Convert.ToInt32(Window.Height),
-                         SWP_NOACTIVATE);
+                         SWP_SHOWWINDOW);
 
             SetWindowPos(WindowHandle.ToInt32(),
                          HWND_NONTOPMOST,
@@ -46,7 +48,7 @@ namespace Core
                          Convert.ToInt32(Window.Top),
                          Convert.ToInt32(Window.Width),
                          Convert.ToInt32(Window.Height),
-                         SWP_NOACTIVATE);
+                         SWP_SHOWWINDOW);
         }
     }
 }
