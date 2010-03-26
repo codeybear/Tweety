@@ -26,7 +26,7 @@ namespace Pages {
 
             // Setup timer to close form
             CloseTimer.Interval = 1000 * 10;
-            CloseTimer.Tick += (o, e) => this.Close();
+            CloseTimer.Tick += new EventHandler(Timer_Tick);
             CloseTimer.Start();
 
             this.Topmost = true;
@@ -43,5 +43,11 @@ namespace Pages {
         private void btnClose_Click(object sender, RoutedEventArgs e) {
             this.Close();
         }
+
+        private void Timer_Tick(object o, EventArgs e) {
+            var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("StoryboardFadeOut");
+            sb.Begin();
+        }
+   
     }
 }

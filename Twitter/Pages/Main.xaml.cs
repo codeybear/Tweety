@@ -41,6 +41,7 @@ namespace Pages
                 sMessage = e.Exception.InnerException.Message;
 
             btnError.Content = sMessage;
+            btnError.ToolTip = sMessage;
 
             if (btnError.Height == 0) {
                 var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("DisplayError");
@@ -231,11 +232,13 @@ namespace Pages
         }
 
         private void RestoreWindow() {
-            if (this.WindowState == WindowState.Normal)
-                this.WindowState = WindowState.Minimized;
-
-            this.Show();
-            this.WindowState = WindowState.Normal;
+            if (this.WindowState == WindowState.Minimized) {
+                this.Show();
+                this.WindowState = WindowState.Normal;
+            } else {
+                this.WindowState = WindowState.Normal;
+                Win32Helper.ShowWindowTopMost(window);
+            }
         }
 
         private void SetupNotifyIcon() {

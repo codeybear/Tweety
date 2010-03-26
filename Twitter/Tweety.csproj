@@ -120,7 +120,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\ImageCache.cs" />
     <Compile Include="Core\WPFHelper.cs" />
     <Compile Include="Pages\Alert.xaml.cs">
       <DependentUpon>Alert.xaml</DependentUpon>

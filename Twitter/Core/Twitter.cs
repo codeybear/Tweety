@@ -26,8 +26,6 @@ namespace Core {
         private const string PATH_STATUS_UPDATE = "statuses/update.xml?source=tweety&status=";
         private const string PATH_USERS_SHOW = "users/show/";
 
-        private static ImageCache _ImageCache = new ImageCache();
-
         //--------------------------------------------------------------
         // Public methods
         //--------------------------------------------------------------
@@ -50,16 +48,6 @@ namespace Core {
             return GetUserInfoFromNode(xml.DocumentElement);
         }
 
-        /// <summary> Get a specified user's profile image </summary>
-        public static System.Drawing.Bitmap GetUserProfileImage(string sUserProfileUrlString) {
-            if (!_ImageCache.ContainsKey(sUserProfileUrlString)) {
-                byte[] ImageBytes = WebHelper.GetBytesFromURL(sUserProfileUrlString);
-                _ImageCache.StoreImage(sUserProfileUrlString, ImageBytes);
-            }
-
-            return _ImageCache.GetImage(sUserProfileUrlString);
-        }
-
         /// <summary> Get friends timeline </summary>
         public static List<Result> GetFriendsTimeline(string sUserName, string sPassword) {
             string NumberOfTweets = "?count=30";
@@ -70,17 +58,6 @@ namespace Core {
             XmlDocument xml = new XmlDocument();
             xml.Load(ResponseStream);
             return GetStatusList(xml);
-        }
-
-        /// <summary> Persist user images on the file system <\summary>
-        public static void SaveImageCache(string sFileName) {
-            _ImageCache.Save(sFileName);
-        }
-
-        /// <summary> Retrieve user images from the file system </summary>
-        public static void LoadImageCache(string sFileName) {
-            if (!File.Exists(sFileName)) return;
-            _ImageCache.Load(sFileName);
         }
 
         //--------------------------------------------------------------
@@ -130,11 +107,6 @@ namespace Core {
                 UserInfo.Text = UserStatusNode["text"].InnerText;
 
             UserInfo.ProfileImageUrl = UserNode["profile_image_url"].InnerText;
-
-            if (!_ImageCache.ContainsKey(UserInfo.ProfileImageUrl)) {
-                byte[] ImageBytes = WebHelper.GetBytesFromURL(UserInfo.ProfileImageUrl);
-                _ImageCache.StoreImage(UserInfo.ProfileImageUrl, ImageBytes);
-            }
 
             return UserInfo;
         }

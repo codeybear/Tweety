@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Windows.Interop;
 using System;
 
 namespace Core
@@ -21,6 +22,7 @@ namespace Core
              int cy,                    // height
              uint uFlags);              // window positioning flags
 
+        /// <summary> ShowWindow(WindowHandle, SW_SHOWNOACTIVATE); </summary>
         [DllImport("user32.dll")]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
@@ -28,9 +30,15 @@ namespace Core
         private static extern bool SetActiveWindow(IntPtr hWnd);
 
         public static void ShowWindowTopMost(System.Windows.Window Window) {
-            IntPtr WindowHandle = new System.Windows.Interop.WindowInteropHelper(Window).Handle;
-            //SetActiveWindow(WindowHandle);
-            //ShowWindow(WindowHandle, SW_SHOWNOACTIVATE);
+            IntPtr WindowHandle = new WindowInteropHelper(Window).Handle;
+
+            SetWindowPos(WindowHandle.ToInt32(),
+                         HWND_TOPMOST,
+                         Convert.ToInt32(Window.Left),
+                         Convert.ToInt32(Window.Top),
+                         Convert.ToInt32(Window.Width),
+                         Convert.ToInt32(Window.Height),
+                         SWP_NOACTIVATE);
 
             SetWindowPos(WindowHandle.ToInt32(),
                          HWND_NONTOPMOST,
