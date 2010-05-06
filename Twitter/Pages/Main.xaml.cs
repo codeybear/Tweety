@@ -237,7 +237,7 @@ namespace Pages
                 this.WindowState = WindowState.Normal;
             } else {
                 this.WindowState = WindowState.Normal;
-                Win32Helper.ShowWindowTopMost(window);
+                NativeMethods.ShowWindowTopMost(window);
             }
         }
 

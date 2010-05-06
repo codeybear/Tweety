@@ -4,7 +4,7 @@ using System;
 
 namespace Core
 {
-    class Win32Helper
+    class NativeMethods
     {
         private const int SW_SHOWNOACTIVATE = 4;
         private const int HWND_NONTOPMOST = -2;
