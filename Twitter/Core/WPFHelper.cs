@@ -10,10 +10,11 @@ namespace Core
             Paragraph para = new Paragraph();
             int iURLPos = 0;
             char[] EndOfURL = new char[] { ' ', ',' };
+            const string HTTP = "http://";
 
             do {
                 // Search for a url
-                iURLPos = sText.IndexOf("http://", StringComparison.CurrentCultureIgnoreCase);
+                iURLPos = sText.IndexOf(HTTP, StringComparison.CurrentCultureIgnoreCase);
 
                 if (iURLPos == -1)  // No url found so just add the text
                     para.Inlines.Add(sText);
@@ -27,10 +28,14 @@ namespace Core
 
                     // iEndOfURLPos < 0 means url was at the end of the text, so calculate based on text length
                     if (iURLLength < 0) iURLLength = sText.Length - iURLPos;
-                    
+
                     // Create the hyperlink
                     string sHyper = sText.Substring(iURLPos, iURLLength);
-                    para.Inlines.Add(CreateHyperLink(sHyper, sHyper, ClickMethod));
+
+                    if (sHyper == HTTP)
+                        para.Inlines.Add(sHyper);
+                    else
+                        para.Inlines.Add(CreateHyperLink(sHyper, sHyper, ClickMethod));
 
                     // Shorten text to the end of the url onwards
                     sText = sText.Substring(iURLPos + iURLLength);
