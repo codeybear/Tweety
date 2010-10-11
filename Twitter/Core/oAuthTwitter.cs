@@ -5,7 +5,7 @@ using System.IO;
 using System.Net;
 using System.Web;
 
-namespace oAuthExample
+namespace Core
 {
     public class oAuthTwitter : OAuthBase
     {

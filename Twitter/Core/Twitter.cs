@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Web;
 using System.Xml;
 
 namespace Core {
@@ -58,19 +59,37 @@ namespace Core {
         /// <summary> Get friends timeline </summary>
         public static List<Result> GetFriendsTimeline() {
             // TODO convert
-            string NumberOfTweets = "?count=30";
-            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml" + NumberOfTweets,
-                                                             WebHelper.HTTPGET, 
-                                                             "", 
-                                                             "");
-            XmlDocument xml = new XmlDocument();
-            xml.Load(ResponseStream);
-            return GetStatusList(xml);
+            string NumberOfTweets = "count=30";
+
+            //Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml" + NumberOfTweets,
+            //                                                 WebHelper.HTTPGET,
+            //                                                 "",
+            //                                                 "");
+
+            oAuthTwitter oAuthTwitter = CreateOAuthTwitterObject();
+            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET, 
+                                                      TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml", 
+                                                      NumberOfTweets);
+
+            XmlDocument xmlDoc = new XmlDocument();
+            Console.WriteLine(HttpUtility.HtmlEncode(xml));
+            xmlDoc.Load(xml);
+            return GetStatusList(xmlDoc);
         }
 
         //--------------------------------------------------------------
         // Private Methods
         //--------------------------------------------------------------
+
+        private static oAuthTwitter CreateOAuthTwitterObject() {
+            oAuthTwitter oAuthTwitter = new oAuthTwitter();
+            oAuthTwitter.ConsumerKey = ConsumerKey;
+            oAuthTwitter.ConsumerSecret = ConsumerSecret;
+            oAuthTwitter.Token = Token;
+            oAuthTwitter.TokenSecret = TokenSecret;
+
+            return oAuthTwitter;
+        }
 
         private static List<Result> GetStatusList(XmlDocument xml) {
             List<Result> StatusList = new List<Result>();
