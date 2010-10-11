@@ -26,13 +26,19 @@ namespace Core {
         private const string PATH_STATUS_UPDATE = "statuses/update.xml?source=tweety&status=";
         private const string PATH_USERS_SHOW = "users/show/";
 
+        public static string ConsumerKey { get; set; }
+        public static string ConsumerSecret { get; set; }
+        public static string Token { get; set; }
+        public static string TokenSecret { get; set; }
+
         //--------------------------------------------------------------
         // Public methods
         //--------------------------------------------------------------
 
         /// <summary> Update a specified user's status </summary>
-        public static String UpdateStatus(string sMessage, string sUserName, string sPassword) {
-            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_STATUS_UPDATE + sMessage, WebHelper.HTTPPOST, sUserName, sPassword);
+        public static String UpdateStatus(string sMessage) {
+            // TODO convert
+            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_STATUS_UPDATE + sMessage, WebHelper.HTTPPOST, "", "");
             StreamReader reader = new StreamReader(ResponseStream);
             string returnValue = reader.ReadToEnd();
             reader.Close();
@@ -41,20 +47,22 @@ namespace Core {
         }
 
         /// <summary> Get a specified user's details </summary>
-        public static Result GetUserInfo(string sUserName) {
-            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_USERS_SHOW + sUserName + ".xml", WebHelper.HTTPGET);
+        public static Result GetUserInfo() {
+            // TODO convert
+            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_USERS_SHOW + "" + ".xml", WebHelper.HTTPGET);
             XmlDocument xml = new XmlDocument();
             xml.Load(ResponseStream);
             return GetUserInfoFromNode(xml.DocumentElement);
         }
 
         /// <summary> Get friends timeline </summary>
-        public static List<Result> GetFriendsTimeline(string sUserName, string sPassword) {
+        public static List<Result> GetFriendsTimeline() {
+            // TODO convert
             string NumberOfTweets = "?count=30";
             Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml" + NumberOfTweets,
                                                              WebHelper.HTTPGET, 
-                                                             sUserName, 
-                                                             sPassword);
+                                                             "", 
+                                                             "");
             XmlDocument xml = new XmlDocument();
             xml.Load(ResponseStream);
             return GetStatusList(xml);

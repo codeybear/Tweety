@@ -70,7 +70,7 @@ namespace Pages
         }
 
         private void btnUpdateStatus_Click(object sender, RoutedEventArgs e) {
-            Twitter.UpdateStatus(txtStatus.Text, SettingHelper.UserName, SettingHelper.Password);
+            Twitter.UpdateStatus(txtStatus.Text);
             UpdateStatusButtons(false);
         }
 
@@ -87,12 +87,20 @@ namespace Pages
         }
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e) {
+            // TODO make setup look for this
+            SettingHelper.Token = "15230032-MGkDM1Z3KLkYMmYiqZxTNaIvqjlMHBMS0uXb1yvfp";
+            SettingHelper.TokenSecret = "2qquZwxM9xzwA40HNaRVkawBm3gdGZDaRFimpOkE3YQ";
+            Twitter.Token = SettingHelper.Token;
+            Twitter.TokenSecret = SettingHelper.TokenSecret;
+            Twitter.ConsumerKey = SettingHelper.ConsumerKey;
+            Twitter.ConsumerSecret = SettingHelper.ConsumerSecret;
+
             // Check for user settings before settings up form
-            if (String.IsNullOrEmpty(SettingHelper.UserName)) {
+            if (String.IsNullOrEmpty(SettingHelper.Token)) {
                 Settings SettingsForm = new Settings();
                 SettingsForm.ShowDialog();
 
-                if (String.IsNullOrEmpty(SettingHelper.UserName))
+                if (String.IsNullOrEmpty(SettingHelper.Token))
                     Close();
                 else
                     Setup();
@@ -128,7 +136,7 @@ namespace Pages
         }
 
         void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
-            e.Result = Twitter.GetFriendsTimeline(SettingHelper.UserName, SettingHelper.Password);
+            e.Result = Twitter.GetFriendsTimeline();
         }
 
         void bgwFriendsTimeLine_Completed(object sender, RunWorkerCompletedEventArgs e) {
@@ -151,7 +159,7 @@ namespace Pages
         }
 
         void bgwMyStatus_DoWork(object sender, DoWorkEventArgs e) {
-            e.Result = Twitter.GetUserInfo(SettingHelper.UserName);
+            e.Result = Twitter.GetUserInfo();
         }
 
         void bgwMyStatus_Completed(object sender, RunWorkerCompletedEventArgs e) {

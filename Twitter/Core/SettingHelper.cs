@@ -5,14 +5,22 @@ namespace Core
     // Wrapper class to get/store user settings
     public static class SettingHelper
     {
-        public static string UserName {
-            get { return Properties.Settings.Default.UserName; }
-            set { Properties.Settings.Default.UserName = value; }
+        public static string ConsumerKey {
+            get { return "NomSLaaS4Ze8Gd2wvSCrZg"; }
         }
 
-        public static string Password {
-            get { return Properties.Settings.Default.PassWord; }
-            set { Properties.Settings.Default.PassWord = value; }
+        public static string ConsumerSecret {
+            get { return "eN2YLUNeUEjWkcGbSJLwgeM2tFBKTx9dmYjwxbnXo"; }
+        }
+
+        public static string Token {
+            get { return Properties.Settings.Default.Token; }
+            set { Properties.Settings.Default.Token = value; }
+        }
+
+        public static string TokenSecret {
+            get { return Properties.Settings.Default.TokenSecret; }
+            set { Properties.Settings.Default.TokenSecret = value; }
         }
 
         public static string MessageInvalidUserSettings {

@@ -12,18 +12,18 @@ namespace Pages
         public Settings() {
             InitializeComponent();
 
-            txtUserName.Text = SettingHelper.UserName;
-            PasswordBox.Password = SettingHelper.Password;
+            //txtUserName.Text = SettingHelper.UserName;
+            //PasswordBox.Password = SettingHelper.Password;
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e) {
             try {
                 // Make a twitter call that checks both username and password
-                Twitter.GetFriendsTimeline(txtUserName.Text, PasswordBox.Password);
+                //Twitter.GetFriendsTimeline(txtUserName.Text, PasswordBox.Password);
 
                 // No exception so save these settings and continue
-                SettingHelper.UserName = txtUserName.Text.Trim();
-                SettingHelper.Password = PasswordBox.Password.Trim();
+                //SettingHelper.UserName = txtUserName.Text.Trim();
+                //SettingHelper.Password = PasswordBox.Password.Trim();
                 SettingHelper.Save();
                 this.Close();
             }
