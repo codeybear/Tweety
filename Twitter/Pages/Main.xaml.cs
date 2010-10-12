@@ -154,8 +154,8 @@ namespace Pages
 
         // My Status worker methods
         void bgwMyStatus_Start() {
-            //if (!_bgwMyStatus.IsBusy)
-            //    _bgwMyStatus.RunWorkerAsync();
+            if (!_bgwMyStatus.IsBusy)
+                _bgwMyStatus.RunWorkerAsync();
         }
 
         void bgwMyStatus_DoWork(object sender, DoWorkEventArgs e) {
