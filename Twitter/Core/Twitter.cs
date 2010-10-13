@@ -23,8 +23,9 @@ namespace Core {
         private const int MAXCHARACTERS = 149;
         private const string TWITTER_URL = "http://twitter.com/";
         private const string PATH_FRIENDS_STATUS = "statuses/friends/";
+        private const string PATH_VERIFY = "account/verify_credentials";
         private const string PATH_FRIENDS_TIMELINE = "statuses/friends_timeline";
-        private const string PATH_STATUS_UPDATE = "statuses/update.xml";
+        private const string PATH_STATUS_UPDATE = "statuses/update";
         private const string PATH_USERS_SHOW = "users/show/";
 
         public static string ConsumerKey { get; set; }
@@ -38,23 +39,21 @@ namespace Core {
 
         /// <summary> Update a specified user's status </summary>
         public static String UpdateStatus(string sMessage) {
-            // TODO convert
             string querystring = "?source=tweety&status=";
-            Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_STATUS_UPDATE + sMessage, WebHelper.HTTPPOST, "", "");
-            StreamReader reader = new StreamReader(ResponseStream);
-            string returnValue = reader.ReadToEnd();
-            reader.Close();
 
-            return returnValue;
+            oAuthTwitter oAuthTwitter = CreateOAuthTwitterObject();
+            return oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.POST,
+                                                      TWITTER_URL + PATH_STATUS_UPDATE + ".xml",
+                                                      "status=" + oAuthTwitter.UrlEncode(sMessage));
         }
 
         /// <summary> Get a specified user's details </summary>
         public static Result GetUserInfo() {
             oAuthTwitter oAuthTwitter = CreateOAuthTwitterObject();
             string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
-                                                      TWITTER_URL + PATH_STATUS_UPDATE + ".xml",
+                                                      TWITTER_URL + PATH_VERIFY + ".xml",
                                                       string.Empty);
-            //Stream ResponseStream = WebHelper.GetWebResponse(TWITTER_URL + PATH_USERS_SHOW + "" + ".xml", WebHelper.HTTPGET);
+
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.LoadXml(xml);
             return GetUserInfoFromNode(xmldoc.DocumentElement);
