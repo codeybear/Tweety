@@ -61,8 +61,16 @@ namespace Pages
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e) {
+            string OriginalToken = SettingHelper.Token;
             Settings SettingsForm = new Settings();
             SettingsForm.ShowDialog();
+
+            // If the settings have been modified then setup again
+            if (OriginalToken != SettingHelper.Token) {
+                GetOAuthSettings();
+                bgwFriendsTimeLine_Start();
+                bgwMyStatus_Start();
+            }
         }
 
         private void txtStatus_TextChanged(object sender, TextChangedEventArgs e) {
@@ -87,12 +95,6 @@ namespace Pages
         }
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e) {
-            // Retrieve OAuth settings
-            Twitter.Token = SettingHelper.Token;
-            Twitter.TokenSecret = SettingHelper.TokenSecret;
-            Twitter.ConsumerKey = SettingHelper.ConsumerKey;
-            Twitter.ConsumerSecret = SettingHelper.ConsumerSecret;
-
             // Check for user settings before settings up form
             if (String.IsNullOrEmpty(SettingHelper.Token)) {
                 Settings SettingsForm = new Settings();
@@ -203,6 +205,8 @@ namespace Pages
 
         /// <summary> Setup for the page to get tweets</summary>
         private void Setup() {
+            GetOAuthSettings();
+
             // Setup timer to get friends timeline
             _StatusTimer = new System.Windows.Forms.Timer();
             _StatusTimer.Tick += new EventHandler(StatusTimer_Tick);
@@ -218,6 +222,14 @@ namespace Pages
             _bgwMyStatus.DoWork += new DoWorkEventHandler(bgwMyStatus_DoWork);
             _bgwMyStatus.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwMyStatus_Completed);
             bgwMyStatus_Start();
+        }
+
+        private static void GetOAuthSettings() {
+            // Retrieve OAuth settings
+            Twitter.Token = SettingHelper.Token;
+            Twitter.TokenSecret = SettingHelper.TokenSecret;
+            Twitter.ConsumerKey = SettingHelper.ConsumerKey;
+            Twitter.ConsumerSecret = SettingHelper.ConsumerSecret;
         }
 
         /// <summary> Check for new tweets, and display if there are any </summary>
