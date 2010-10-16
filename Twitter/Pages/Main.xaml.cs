@@ -87,9 +87,7 @@ namespace Pages
         }
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e) {
-            // TODO make setup look for this
-            SettingHelper.Token = "15230032-MGkDM1Z3KLkYMmYiqZxTNaIvqjlMHBMS0uXb1yvfp";
-            SettingHelper.TokenSecret = "2qquZwxM9xzwA40HNaRVkawBm3gdGZDaRFimpOkE3YQ";
+            // Retrieve OAuth settings
             Twitter.Token = SettingHelper.Token;
             Twitter.TokenSecret = SettingHelper.TokenSecret;
             Twitter.ConsumerKey = SettingHelper.ConsumerKey;
