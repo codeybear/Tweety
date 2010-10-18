@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Web;
 using System.Windows;
 using System.Windows.Controls;
-using System.Web;
 using Core;
 
 namespace Pages
@@ -35,14 +35,14 @@ namespace Pages
                 + "<p><a href=\"" + url.ToString() + "\"><img src=\"http://apiwiki.twitter.com/f/1242697608/Sign-in-with-Twitter-lighter.png\" alt=\"Sign in with Twitter\" /></a></p>"
                 + "</body></html>";
 
-            WebBrowser.NavigateToString(HTML);  
+            WebBrowser.NavigateToString(HTML);
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e) {
             try {
                 oAuthTwitter oAuth = new oAuthTwitter();
-                oAuth.ConsumerKey = Twitter.ConsumerKey;
-                oAuth.ConsumerSecret = Twitter.ConsumerSecret;
+                oAuth.ConsumerKey = SettingHelper.ConsumerKey;
+                oAuth.ConsumerSecret = SettingHelper.ConsumerSecret;
                 oAuth.Token = OAuthToken;
                 oAuth.AccessTokenGet(OAuthToken, txtUpdate.Text);
 
