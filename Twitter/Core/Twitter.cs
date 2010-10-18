@@ -39,12 +39,10 @@ namespace Core {
 
         /// <summary> Update a specified user's status </summary>
         public static String UpdateStatus(string sMessage) {
-            string querystring = "?source=tweety&status=";
-
             oAuthTwitter oAuthTwitter = CreateOAuthTwitterObject();
             return oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.POST,
                                                       TWITTER_URL + PATH_STATUS_UPDATE + ".xml",
-                                                      "status=" + oAuthTwitter.UrlEncode(sMessage));
+                                                      "source=tweety&status=" + oAuthTwitter.UrlEncode(sMessage));
         }
 
         /// <summary> Get a specified user's details </summary>

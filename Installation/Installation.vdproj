@@ -15,14 +15,20 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0111EBB6990140EC948DDE795B662111"
+        "MsmKey" = "8:_A316C77546A14552A2134DC092D160AD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BDC426F29E9C46C4ABAB97A0E76BD61C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0111EBB6990140EC948DDE795B662111"
+        "OwnerKey" = "8:_A316C77546A14552A2134DC092D160AD"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -50,6 +56,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
+                    {
+                    "Name" = "8:.NET Framework 3.5 SP1"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -109,7 +128,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "Version" = "8:3.5.30729"
+                "FrameworkVersion" = "8:3.5.30729"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=76617"
                 }
@@ -117,6 +136,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BDC426F29E9C46C4ABAB97A0E76BD61C"
+            {
+            "SourcePath" = "8:..\\Twitter\\Resources\\Peace Dove.ico"
+            "TargetName" = "8:Peace Dove.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_096F041AA37F4CBF8B99576BA9721252"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -138,7 +177,7 @@
             "{1525181F-901A-416C-8A58-119130FE478E}:_1BD9DA1CBED54F27A525386E6BA81842"
             {
             "Name" = "8:#1916"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:DesktopFolder"
@@ -174,8 +213,9 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Tweety"
         "ProductCode" = "8:{5F5D4DB2-FA3F-4E18-818F-79E8222C8BAE}"
-        "PackageCode" = "8:{F18DF0F5-D704-4A53-BA3D-304807713F9F}"
+        "PackageCode" = "8:{D3F17575-36A4-49D2-AE01-9297B0C9B418}"
         "UpgradeCode" = "8:{7C93B8B5-5D54-4823-ACF4-C2466584544C}"
+        "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
@@ -293,18 +333,18 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_831AF225989F475B9BA003E370CC9E21"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_3B83CDD5FF1A4FC79F5BDA2B950E0728"
             {
             "Name" = "8:Tweety"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
-            "IconIndex" = "3:32512"
+            "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_0111EBB6990140EC948DDE795B662111"
+            "Target" = "8:_A316C77546A14552A2134DC092D160AD"
             "Folder" = "8:_1BD9DA1CBED54F27A525386E6BA81842"
             "WorkingFolder" = "8:_096F041AA37F4CBF8B99576BA9721252"
-            "Icon" = "8:_0111EBB6990140EC948DDE795B662111"
+            "Icon" = "8:_BDC426F29E9C46C4ABAB97A0E76BD61C"
             "Feature" = "8:"
             }
         }
@@ -706,7 +746,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0111EBB6990140EC948DDE795B662111"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A316C77546A14552A2134DC092D160AD"
             {
             "SourcePath" = "8:..\\Twitter\\obj\\Release\\Tweety.exe"
             "TargetName" = "8:"
@@ -726,7 +766,7 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:Release|Any CPU"
+            "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{9AE1FEB9-060E-4C44-A8D9-121CA4B75C82}"
             "ShowKeyOutput" = "11:TRUE"
