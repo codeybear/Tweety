@@ -10,11 +10,15 @@
     
     <Grid x:Name="grdMain" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
-            <RowDefinition Height="65"/>
+            <RowDefinition Height="70"/>
         	<RowDefinition  Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBox Margin="50,6,63,6" x:Name="txtStatus" TextWrapping="WrapWithOverflow" ClipToBounds="False" SnapsToDevicePixels="False" Background="{x:Null}" BorderThickness="0" TextChanged="txtStatus_TextChanged" />
+
+        <ScrollViewer Margin="50,6,63,6" VerticalScrollBarVisibility="Auto">
+            <TextBox  x:Name="txtStatus" TextWrapping="WrapWithOverflow" TextChanged="txtStatus_TextChanged" />
+        </ScrollViewer>
+        
         <Button Margin="5,5,0,0" x:Name="btnRefresh" HorizontalAlignment="Left" Click="btnRefresh_Click" FontSize="10.667" Width="40" Height="40" VerticalAlignment="Top">
         	<Image Stretch="Fill" Source="/Tweety;component/Resources/Peace Dove.ico" ToolTip="Refresh Tweets" />
 		</Button>

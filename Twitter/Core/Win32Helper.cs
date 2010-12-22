@@ -1,6 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows.Interop;
-using System;
 
 namespace Core
 {
@@ -31,6 +31,10 @@ namespace Core
         [DllImport("user32.dll")]
         private static extern bool SetActiveWindow(IntPtr hWnd);
 
+        /// <summary>
+        /// Make a window topmost, without making it permanently topmost
+        /// </summary>
+        /// <param name="Window"></param>
         public static void ShowWindowTopMost(System.Windows.Window Window) {
             IntPtr WindowHandle = new WindowInteropHelper(Window).Handle;
 

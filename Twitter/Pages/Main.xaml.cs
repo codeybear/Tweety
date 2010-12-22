@@ -20,13 +20,16 @@ namespace Pages
         // Keep track of the last tweet id to check to new tweets
         Int64 _lLastId;
 
+        // Keep track of the original status text when status is being updated
+        string _OldStatusText;
+
         public MainWindow() {
             InitializeComponent();
 
             SetupNotifyIcon();
 
             // Setup global error handler
-            App.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
+            //App.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
         }
 
         #region Events
@@ -104,7 +107,8 @@ namespace Pages
                     Close();
                 else
                     Setup();
-            } else
+            }
+            else
                 Setup();
         }
 
@@ -164,11 +168,7 @@ namespace Pages
 
         void bgwMyStatus_Completed(object sender, RunWorkerCompletedEventArgs e) {
             if (e.Result != null) {
-                Result MyInfo = (Result)e.Result;
-                txtStatus.TextChanged -= txtStatus_TextChanged;
-                txtStatus.Text = MyInfo.Text;
-                txtStatus.TextChanged += txtStatus_TextChanged;
-                imgProfile.Source = new BitmapImage(new Uri(MyInfo.ProfileImageUrl));
+                UpdateStatusText((Result)e.Result);
             }
         }
 
@@ -201,6 +201,16 @@ namespace Pages
                 Grid.SetRow(ProfileImage, grdTweets.RowDefinitions.Count - 1);
                 grdTweets.Children.Add(ProfileImage);
             }
+        }
+
+        private void UpdateStatusText(Result result) {
+            // Store original text in case it gets modified
+            _OldStatusText = result.Text;
+
+            txtStatus.TextChanged -= txtStatus_TextChanged;
+            txtStatus.Text = result.Text;
+            txtStatus.TextChanged += txtStatus_TextChanged;
+            imgProfile.Source = new BitmapImage(new Uri(result.ProfileImageUrl));
         }
 
         /// <summary> Setup for the page to get tweets</summary>
@@ -253,7 +263,8 @@ namespace Pages
             if (this.WindowState == WindowState.Minimized) {
                 this.Show();
                 this.WindowState = WindowState.Normal;
-            } else {
+            }
+            else {
                 this.WindowState = WindowState.Normal;
                 NativeMethods.ShowWindowTopMost(window);
             }
@@ -273,10 +284,12 @@ namespace Pages
                 btnUpdateStatus.Visibility = Visibility.Visible;
                 btnCancelUpdate.Visibility = Visibility.Visible;
                 btnSettings.Visibility = Visibility.Hidden;
-            } else {
+            }
+            else {
                 btnUpdateStatus.Visibility = Visibility.Hidden;
                 btnCancelUpdate.Visibility = Visibility.Hidden;
                 btnSettings.Visibility = Visibility.Visible;
+                txtStatus.Text = _OldStatusText;
             }
         }
 
