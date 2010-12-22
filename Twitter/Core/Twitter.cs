@@ -12,7 +12,7 @@ namespace Core {
     }
 
     public class Result {
-        public String ID;
+        public String Id;
         public String Text;
         public String ProfileImageUrl;
         public String DateUpdated;
@@ -20,18 +20,10 @@ namespace Core {
     }
 
     public static class Twitter {
-        private const int MAXCHARACTERS = 149;
         private const string TWITTER_URL = "http://twitter.com/";
-        private const string PATH_FRIENDS_STATUS = "statuses/friends/";
         private const string PATH_VERIFY = "account/verify_credentials";
         private const string PATH_FRIENDS_TIMELINE = "statuses/friends_timeline";
         private const string PATH_STATUS_UPDATE = "statuses/update";
-        private const string PATH_USERS_SHOW = "users/show/";
-
-        public static string ConsumerKey { get; set; }
-        public static string ConsumerSecret { get; set; }
-        public static string Token { get; set; }
-        public static string TokenSecret { get; set; }
 
         //--------------------------------------------------------------
         // Public methods
@@ -39,7 +31,7 @@ namespace Core {
 
         /// <summary> Update a specified user's status </summary>
         public static String UpdateStatus(string sMessage) {
-            oAuthTwitter oAuthTwitter = CreateOAuthTwitterObject();
+            oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
             return oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.POST,
                                                       TWITTER_URL + PATH_STATUS_UPDATE + ".xml",
                                                       "source=tweety&status=" + oAuthTwitter.UrlEncode(sMessage));
@@ -47,7 +39,7 @@ namespace Core {
 
         /// <summary> Get a specified user's details </summary>
         public static Result GetUserInfo() {
-            oAuthTwitter oAuthTwitter = CreateOAuthTwitterObject();
+            oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
             string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
                                                       TWITTER_URL + PATH_VERIFY + ".xml",
                                                       string.Empty);
@@ -60,7 +52,7 @@ namespace Core {
         /// <summary> Get friends timeline </summary>
         public static List<Result> GetFriendsTimeline() {
             string NumberOfTweets = "count=50";
-            oAuthTwitter oAuthTwitter = CreateOAuthTwitterObject();
+            oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
             string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET, 
                                                       TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml", 
                                                       NumberOfTweets);
@@ -74,16 +66,6 @@ namespace Core {
         // Private Methods
         //--------------------------------------------------------------
 
-        private static oAuthTwitter CreateOAuthTwitterObject() {
-            oAuthTwitter oAuthTwitter = new oAuthTwitter();
-            oAuthTwitter.ConsumerKey = ConsumerKey;
-            oAuthTwitter.ConsumerSecret = ConsumerSecret;
-            oAuthTwitter.Token = Token;
-            oAuthTwitter.TokenSecret = TokenSecret;
-
-            return oAuthTwitter;
-        }
-
         private static List<Result> GetStatusList(XmlDocument xml) {
             List<Result> StatusList = new List<Result>();
 
@@ -91,7 +73,7 @@ namespace Core {
                 Result StatusInfo = new Result();
                 string StatusText = WebHelper.UrlDecode(StatusNode["text"].InnerText);
                 StatusInfo.Text = StatusText;
-                StatusInfo.ID = StatusNode["id"].InnerText;
+                StatusInfo.Id = StatusNode["id"].InnerText;
                 StatusInfo.CreatedAt = ConvertTwitterDate(StatusNode["created_at"].InnerText);
 
                 Result UserInfo = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));

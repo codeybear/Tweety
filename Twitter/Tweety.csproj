@@ -110,6 +110,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Compile Include="Core\IOC.cs" />
     <Compile Include="Core\oAuth.cs" />
     <Compile Include="Core\oAuthTwitter.cs" />
     <Compile Include="Core\Win32Helper.cs" />

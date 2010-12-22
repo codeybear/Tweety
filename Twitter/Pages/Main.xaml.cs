@@ -29,7 +29,7 @@ namespace Pages
             SetupNotifyIcon();
 
             // Setup global error handler
-            //App.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
+            App.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
         }
 
         #region Events
@@ -70,7 +70,6 @@ namespace Pages
 
             // If the settings have been modified then setup again
             if (OriginalToken != SettingHelper.Token) {
-                GetOAuthSettings();
                 bgwFriendsTimeLine_Start();
                 bgwMyStatus_Start();
             }
@@ -215,8 +214,6 @@ namespace Pages
 
         /// <summary> Setup for the page to get tweets</summary>
         private void Setup() {
-            GetOAuthSettings();
-
             // Setup timer to get friends timeline
             _StatusTimer = new System.Windows.Forms.Timer();
             _StatusTimer.Tick += new EventHandler(StatusTimer_Tick);
@@ -234,18 +231,10 @@ namespace Pages
             bgwMyStatus_Start();
         }
 
-        private static void GetOAuthSettings() {
-            // Retrieve OAuth settings
-            Twitter.Token = SettingHelper.Token;
-            Twitter.TokenSecret = SettingHelper.TokenSecret;
-            Twitter.ConsumerKey = SettingHelper.ConsumerKey;
-            Twitter.ConsumerSecret = SettingHelper.ConsumerSecret;
-        }
-
         /// <summary> Check for new tweets, and display if there are any </summary>
         void HandleResults(List<Result> ResultList) {
             // Check to see if there are new tweets
-            Int64 lLastId = Convert.ToInt64(ResultList[0].ID);
+            Int64 lLastId = Convert.ToInt64(ResultList[0].Id);
 
             if (_lLastId != lLastId) {
                 AddResultsToGrid(ResultList);
