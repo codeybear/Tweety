@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Web;
 using System.Xml;
 
-namespace Core {
-    public class StatusAlert {
+namespace Core
+{
+    public class StatusAlert
+    {
         public String ScreenName;
         public String Name;
         public String Text;
     }
 
-    public class Result {
+    public class Result
+    {
         public String Id;
         public String Text;
         public String ProfileImageUrl;
@@ -19,11 +20,13 @@ namespace Core {
         public String CreatedAt;
     }
 
-    public static class Twitter {
+    public static class Twitter
+    {
         private const string TWITTER_URL = "http://twitter.com/";
         private const string PATH_VERIFY = "account/verify_credentials";
         private const string PATH_FRIENDS_TIMELINE = "statuses/friends_timeline";
         private const string PATH_STATUS_UPDATE = "statuses/update";
+        private const string EXT = ".xml";
 
         //--------------------------------------------------------------
         // Public methods
@@ -33,7 +36,7 @@ namespace Core {
         public static String UpdateStatus(string sMessage) {
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
             return oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.POST,
-                                                      TWITTER_URL + PATH_STATUS_UPDATE + ".xml",
+                                                      TWITTER_URL + PATH_STATUS_UPDATE + EXT,
                                                       "source=tweety&status=" + oAuthTwitter.UrlEncode(sMessage));
         }
 
@@ -41,7 +44,7 @@ namespace Core {
         public static Result GetUserInfo() {
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
             string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
-                                                      TWITTER_URL + PATH_VERIFY + ".xml",
+                                                      TWITTER_URL + PATH_VERIFY + EXT,
                                                       string.Empty);
 
             XmlDocument xmldoc = new XmlDocument();
@@ -51,11 +54,12 @@ namespace Core {
 
         /// <summary> Get friends timeline </summary>
         public static List<Result> GetFriendsTimeline() {
-            string NumberOfTweets = "count=50";
+            string NumberOfTweets = "?count=60";
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
-            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET, 
-                                                      TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml", 
-                                                      NumberOfTweets);
+            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
+                                                      TWITTER_URL + PATH_FRIENDS_TIMELINE + EXT +
+                                                      NumberOfTweets,
+                                                      string.Empty);
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
@@ -91,7 +95,7 @@ namespace Core {
             string[] Elements = TwitterDate.Split(' ');
 
             string DayElement = Convert.ToInt32(Elements[2]) == DateTime.Now.Day ? "Today" : Elements[0];
-            
+
             string TimeElement = Elements[3];
             TimeElement = TimeElement.Substring(0, TimeElement.LastIndexOf(':'));
 
