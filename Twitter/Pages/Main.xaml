@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <ScrollViewer Margin="50,6,63,6" VerticalScrollBarVisibility="Auto">
-            <TextBox  x:Name="txtStatus" TextWrapping="WrapWithOverflow" TextChanged="txtStatus_TextChanged" Padding="0" />
+            <TextBox  x:Name="txtStatus" TextWrapping="WrapWithOverflow" TextChanged="txtStatus_TextChanged" Padding="0" BorderThickness="0" />
         </ScrollViewer>
         
         <Button Margin="5,5,0,0" x:Name="btnRefresh" HorizontalAlignment="Left" Click="btnRefresh_Click" FontSize="10.667" Width="40" Height="40" VerticalAlignment="Top">

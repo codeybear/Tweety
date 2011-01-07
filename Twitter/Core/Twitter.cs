@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Web;
 using System.Xml;
 
 namespace Core
@@ -28,6 +30,8 @@ namespace Core
         private const string PATH_STATUS_UPDATE = "statuses/update";
         private const string EXT = ".xml";
 
+        public static int NumberOfTweets = 50;
+
         //--------------------------------------------------------------
         // Public methods
         //--------------------------------------------------------------
@@ -54,12 +58,12 @@ namespace Core
 
         /// <summary> Get friends timeline </summary>
         public static List<Result> GetFriendsTimeline() {
-            string NumberOfTweets = "?count=60";
+            string NumberOfTweetsParam = "?count=" + NumberOfTweets;
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
-            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
-                                                      TWITTER_URL + PATH_FRIENDS_TIMELINE + EXT +
-                                                      NumberOfTweets,
-                                                      string.Empty);
+            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET, 
+                                                      TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml" +
+                                                      NumberOfTweetsParam, 
+                                                      "");
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
