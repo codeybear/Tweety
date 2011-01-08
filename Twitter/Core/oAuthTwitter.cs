@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Specialized;
-using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Web;
@@ -60,12 +59,11 @@ namespace Core
             if (response.Length > 0) {
                 //Store the Token and Token Secret
                 NameValueCollection qs = HttpUtility.ParseQueryString(response);
-                if (qs["oauth_token"] != null) {
+                if (qs["oauth_token"] != null)
                     this.Token = qs["oauth_token"];
-                }
-                if (qs["oauth_token_secret"] != null) {
+
+                if (qs["oauth_token_secret"] != null)
                     this.TokenSecret = qs["oauth_token_secret"];
-                }
             }
         }
 
@@ -81,7 +79,6 @@ namespace Core
             string querystring = "";
             string ret = "";
 
-
             //Setup postData for signing.
             //Add the postData to the querystring.
             if (method == Method.POST) {
@@ -89,21 +86,21 @@ namespace Core
                     //Decode the parameters and re-encode using the oAuth UrlEncode method.
                     NameValueCollection qs = HttpUtility.ParseQueryString(postData);
                     postData = "";
+
                     foreach (string key in qs.AllKeys) {
-                        if (postData.Length > 0) {
+                        if (postData.Length > 0)
                             postData += "&";
-                        }
+
                         qs[key] = HttpUtility.UrlDecode(qs[key]);
                         qs[key] = this.UrlEncode(qs[key]);
                         postData += key + "=" + qs[key];
+                    }
 
-                    }
-                    if (url.IndexOf("?") > 0) {
+                    if (url.IndexOf("?") > 0)
                         url += "&";
-                    }
-                    else {
+                    else
                         url += "?";
-                    }
+
                     url += postData;
                 }
             }
@@ -134,9 +131,8 @@ namespace Core
                 querystring = "";
             }
 
-            if (querystring.Length > 0) {
+            if (querystring.Length > 0)
                 outUrl += "?";
-            }
 
             ret = WebRequest(method, outUrl + querystring, postData);
 
@@ -151,39 +147,19 @@ namespace Core
         /// <param name="postData">Data to post in querystring format</param>
         /// <returns>The web server response.</returns>
         public string WebRequest(Method method, string url, string postData) {
-            HttpWebRequest webRequest = null;
-            StreamWriter requestWriter = null;
-            string responseData = "";
-
-            webRequest = System.Net.WebRequest.Create(url) as HttpWebRequest;
+            HttpWebRequest webRequest = System.Net.WebRequest.Create(url) as HttpWebRequest;
             webRequest.Method = method.ToString();
             webRequest.ServicePoint.Expect100Continue = false;
-            //webRequest.UserAgent  = "Identify your application please.";
-            //webRequest.Timeout = 20000;
 
             if (method == Method.POST) {
                 webRequest.ContentType = "application/x-www-form-urlencoded";
 
                 //POST the data.
-                requestWriter = new StreamWriter(webRequest.GetRequestStream());
-                try {
+                using (StreamWriter requestWriter = new StreamWriter(webRequest.GetRequestStream()))
                     requestWriter.Write(postData);
-                }
-                catch {
-                    throw;
-                }
-                finally {
-                    requestWriter.Close();
-                    requestWriter = null;
-                }
             }
 
-            responseData = WebResponseGet(webRequest);
-
-            webRequest = null;
-
-            return responseData;
-
+            return WebResponseGet(webRequest);
         }
 
         /// <summary>
@@ -192,23 +168,8 @@ namespace Core
         /// <param name="webRequest">The request object.</param>
         /// <returns>The response data.</returns>
         public string WebResponseGet(HttpWebRequest webRequest) {
-            StreamReader responseReader = null;
-            string responseData = "";
-
-            try {
-                responseReader = new StreamReader(webRequest.GetResponse().GetResponseStream());
-                responseData = responseReader.ReadToEnd();
-            }
-            catch {
-                throw;
-            }
-            finally {
-                webRequest.GetResponse().GetResponseStream().Close();
-                responseReader.Close();
-                responseReader = null;
-            }
-
-            return responseData;
+            using (StreamReader responseReader = new StreamReader(webRequest.GetResponse().GetResponseStream()))
+                return responseReader.ReadToEnd();
         }
     }
 }

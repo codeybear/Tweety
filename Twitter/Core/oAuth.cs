@@ -8,7 +8,6 @@ namespace Core
 {
     public class OAuthBase
     {
-
         /// <summary>
         /// Provides a predefined set of algorithms that are supported officially by the protocol
         /// </summary>
@@ -46,7 +45,6 @@ namespace Core
         /// </summary>
         protected class QueryParameterComparer : IComparer<QueryParameter>
         {
-
             #region IComparer<QueryParameter> Members
 
             public int Compare(QueryParameter x, QueryParameter y) {
@@ -65,7 +63,7 @@ namespace Core
         protected const string OAuthParameterPrefix = "oauth_";
 
         //
-        // List of know and used oauth parameters' names
+        // List of known and used oauth parameters' names
         //        
         protected const string OAuthConsumerKeyKey = "oauth_consumer_key";
         protected const string OAuthCallbackKey = "oauth_callback";
@@ -93,13 +91,8 @@ namespace Core
         /// <param name="data">The data to hash</param>
         /// <returns>a Base64 string of the hash value</returns>
         private string ComputeHash(HashAlgorithm hashAlgorithm, string data) {
-            if (hashAlgorithm == null) {
-                throw new ArgumentNullException("hashAlgorithm");
-            }
-
-            if (string.IsNullOrEmpty(data)) {
-                throw new ArgumentNullException("data");
-            }
+            if (hashAlgorithm == null) throw new ArgumentNullException("hashAlgorithm");
+            if (string.IsNullOrEmpty(data)) throw new ArgumentNullException("data");
 
             byte[] dataBuffer = System.Text.Encoding.ASCII.GetBytes(data);
             byte[] hashBytes = hashAlgorithm.ComputeHash(dataBuffer);
@@ -113,23 +106,22 @@ namespace Core
         /// <param name="parameters">The query string part of the Url</param>
         /// <returns>A list of QueryParameter each containing the parameter name and value</returns>
         private List<QueryParameter> GetQueryParameters(string parameters) {
-            if (parameters.StartsWith("?")) {
+            if (parameters.StartsWith("?"))
                 parameters = parameters.Remove(0, 1);
-            }
 
             List<QueryParameter> result = new List<QueryParameter>();
 
             if (!string.IsNullOrEmpty(parameters)) {
                 string[] p = parameters.Split('&');
+
                 foreach (string s in p) {
                     if (!string.IsNullOrEmpty(s) && !s.StartsWith(OAuthParameterPrefix)) {
                         if (s.IndexOf('=') > -1) {
                             string[] temp = s.Split('=');
                             result.Add(new QueryParameter(temp[0], temp[1]));
                         }
-                        else {
+                        else
                             result.Add(new QueryParameter(s, string.Empty));
-                        }
                     }
                 }
             }
@@ -147,19 +139,16 @@ namespace Core
             StringBuilder result = new StringBuilder();
 
             foreach (char symbol in value) {
-                if (unreservedChars.IndexOf(symbol) != -1) {
+                if (unreservedChars.IndexOf(symbol) != -1)
                     result.Append(symbol);
-                }
-                else {
+                else
                     //some symbols produce > 2 char values so the system urlencoder must be used to get the correct data
-                    if (String.Format("{0:X2}", (int)symbol).Length > 3) {
+                    if (String.Format("{0:X2}", (int)symbol).Length > 3)
                         result.Append(HttpUtility.UrlEncode(value.Substring(value.IndexOf(symbol), 1)).ToUpper());
-                    }
-                    else {
+                    else
                         result.Append('%' + String.Format("{0:X2}", (int)symbol));
-                    }
-                }
             }
+
             return result.ToString();
         }
 
@@ -171,13 +160,13 @@ namespace Core
         protected string NormalizeRequestParameters(IList<QueryParameter> parameters) {
             StringBuilder sb = new StringBuilder();
             QueryParameter p = null;
+
             for (int i = 0; i < parameters.Count; i++) {
                 p = parameters[i];
                 sb.AppendFormat("{0}={1}", p.Name, p.Value);
 
-                if (i < parameters.Count - 1) {
+                if (i < parameters.Count - 1)
                     sb.Append("&");
-                }
             }
 
             return sb.ToString();
@@ -194,25 +183,11 @@ namespace Core
         /// <param name="signatureType">The signature type. To use the default values use <see cref="OAuthBase.SignatureTypes">OAuthBase.SignatureTypes</see>.</param>
         /// <returns>The signature base</returns>
         public string GenerateSignatureBase(Uri url, string consumerKey, string token, string tokenSecret, string verifier, string httpMethod, string timeStamp, string nonce, string signatureType, out string normalizedUrl, out string normalizedRequestParameters) {
-            if (token == null) {
-                token = string.Empty;
-            }
-
-            if (tokenSecret == null) {
-                tokenSecret = string.Empty;
-            }
-
-            if (string.IsNullOrEmpty(consumerKey)) {
-                throw new ArgumentNullException("consumerKey");
-            }
-
-            if (string.IsNullOrEmpty(httpMethod)) {
-                throw new ArgumentNullException("httpMethod");
-            }
-
-            if (string.IsNullOrEmpty(signatureType)) {
-                throw new ArgumentNullException("signatureType");
-            }
+            if (token == null) token = string.Empty;
+            if (tokenSecret == null) tokenSecret = string.Empty;
+            if (string.IsNullOrEmpty(consumerKey)) throw new ArgumentNullException("consumerKey");
+            if (string.IsNullOrEmpty(httpMethod)) throw new ArgumentNullException("httpMethod");
+            if (string.IsNullOrEmpty(signatureType)) throw new ArgumentNullException("signatureType");
 
             normalizedUrl = null;
             normalizedRequestParameters = null;
@@ -224,21 +199,18 @@ namespace Core
             parameters.Add(new QueryParameter(OAuthSignatureMethodKey, signatureType));
             parameters.Add(new QueryParameter(OAuthConsumerKeyKey, consumerKey));
 
-            if (!string.IsNullOrEmpty(token)) {
+            if (!string.IsNullOrEmpty(token))
                 parameters.Add(new QueryParameter(OAuthTokenKey, token));
-            }
 
-            if (!string.IsNullOrEmpty(verifier)) {
+            if (!string.IsNullOrEmpty(verifier))
                 parameters.Add(new QueryParameter(OAuthVerifier, verifier));
-            }
-
 
             parameters.Sort(new QueryParameterComparer());
 
             normalizedUrl = string.Format("{0}://{1}", url.Scheme, url.Host);
-            if (!((url.Scheme == "http" && url.Port == 80) || (url.Scheme == "https" && url.Port == 443))) {
+            if (!((url.Scheme == "http" && url.Port == 80) || (url.Scheme == "https" && url.Port == 443)))
                 normalizedUrl += ":" + url.Port;
-            }
+
             normalizedUrl += url.AbsolutePath;
             normalizedRequestParameters = NormalizeRequestParameters(parameters);
 
