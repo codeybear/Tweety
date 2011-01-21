@@ -216,18 +216,18 @@ namespace Pages
         private void Setup() {
             // Setup timer to get friends timeline
             _StatusTimer = new System.Windows.Forms.Timer();
-            _StatusTimer.Tick += new EventHandler(StatusTimer_Tick);
+            _StatusTimer.Tick += StatusTimer_Tick;
             _StatusTimer.Interval = 1000 * 120;
             _StatusTimer.Start();
 
             // Get friends timeline
-            _bgwFriendsTimeLine.DoWork += new DoWorkEventHandler(bgwFriendsTimeLine_DoWork);
-            _bgwFriendsTimeLine.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwFriendsTimeLine_Completed);
+            _bgwFriendsTimeLine.DoWork += bgwFriendsTimeLine_DoWork;
+            _bgwFriendsTimeLine.RunWorkerCompleted += bgwFriendsTimeLine_Completed;
             bgwFriendsTimeLine_Start();
 
             // Get my details
-            _bgwMyStatus.DoWork += new DoWorkEventHandler(bgwMyStatus_DoWork);
-            _bgwMyStatus.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgwMyStatus_Completed);
+            _bgwMyStatus.DoWork += bgwMyStatus_DoWork;
+            _bgwMyStatus.RunWorkerCompleted += bgwMyStatus_Completed;
             bgwMyStatus_Start();
         }
 
@@ -261,7 +261,7 @@ namespace Pages
 
         private void SetupNotifyIcon() {
             _NotifyIcon.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-            Uri TweetyUri = new Uri(SettingHelper.TweetyIconUriString);
+            Uri TweetyUri = new Uri(SettingHelper.TweetyIconUriString, UriKind.Relative);
             System.IO.Stream IconStream = Application.GetResourceStream(TweetyUri).Stream;
             _NotifyIcon.Icon = new System.Drawing.Icon(IconStream);
             _NotifyIcon.Click += new EventHandler((o, e) => RestoreWindow());

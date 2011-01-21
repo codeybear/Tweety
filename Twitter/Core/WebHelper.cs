@@ -35,7 +35,6 @@ namespace Core
             int iBytesRead;
 
             using (MemoryStream OutStream = new MemoryStream()) {
-
                 do {
                     iBytesRead = Stream.Read(Buffer, 0, Buffer.Length);
                     OutStream.Write(Buffer, 0, iBytesRead);

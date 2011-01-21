@@ -32,9 +32,9 @@ namespace Core
         }
 
         public static string TweetyIconUriString {
-            get { return "pack://application:,,,/Tweety;component/Resources/Peace Dove.ico"; }
+            get { return @"/Resources/Peace Dove.ico"; }
         }
-
+        //"pack://application:,,,/Tweety;component/Resources/Peace Dove.ico"
         public static void Save() {
             Properties.Settings.Default.Save();
         }

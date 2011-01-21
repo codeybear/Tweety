@@ -8,7 +8,7 @@ namespace Core
 {
     public static class Utility
     {
-        public class DictItem<TKey, TValue>
+        private class DictItem<TKey, TValue>
         {
             public TKey Key;
             public TValue Value;

@@ -4,7 +4,7 @@ using System.Windows.Interop;
 
 namespace Core
 {
-    class NativeMethods
+    static class NativeMethods
     {
         private const int SW_SHOWNOACTIVATE = 4;
         private const int HWND_NONTOPMOST = -2;
@@ -23,13 +23,6 @@ namespace Core
              int cx,                    // width
              int cy,                    // height
              uint uFlags);              // window positioning flags
-
-        /// <summary> ShowWindow(WindowHandle, SW_SHOWNOACTIVATE); </summary>
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        [DllImport("user32.dll")]
-        private static extern bool SetActiveWindow(IntPtr hWnd);
 
         /// <summary>
         /// Make a window topmost, without making it permanently topmost
