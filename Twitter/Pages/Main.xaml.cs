@@ -193,9 +193,8 @@ namespace Pages
                 Grid.SetRow(TextBlock, grdTweets.RowDefinitions.Count - 1);
                 grdTweets.Children.Add(TextBlock);
 
-                // Create the profile image for grid
-                Image ProfileImage = new Image();
-                ProfileImage.Source = new BitmapImage(new Uri(Status.ProfileImageUrl));
+                Image ProfileImage = WPFHelper.CreateImage(Status.ProfileImageUrl);
+                
                 Grid.SetColumn(ProfileImage, 0);
                 Grid.SetRow(ProfileImage, grdTweets.RowDefinitions.Count - 1);
                 grdTweets.Children.Add(ProfileImage);
@@ -278,7 +277,10 @@ namespace Pages
                 btnUpdateStatus.Visibility = Visibility.Hidden;
                 btnCancelUpdate.Visibility = Visibility.Hidden;
                 btnSettings.Visibility = Visibility.Visible;
+
+                txtStatus.TextChanged -= txtStatus_TextChanged;
                 txtStatus.Text = _OldStatusText;
+                txtStatus.TextChanged += txtStatus_TextChanged;
             }
         }
 
