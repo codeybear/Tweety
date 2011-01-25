@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-
+﻿
 namespace Core
 {
     // Wrapper class to get/store user settings
@@ -34,7 +33,7 @@ namespace Core
         public static string TweetyIconUriString {
             get { return @"/Resources/Peace Dove.ico"; }
         }
-        //"pack://application:,,,/Tweety;component/Resources/Peace Dove.ico"
+
         public static void Save() {
             Properties.Settings.Default.Save();
         }

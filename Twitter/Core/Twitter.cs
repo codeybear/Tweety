@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Web;
 using System.Xml;
 
 namespace Core
@@ -49,7 +47,7 @@ namespace Core
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
             string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
                                                       TWITTER_URL + PATH_VERIFY + EXT,
-                                                      string.Empty);
+                                                      "");
 
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.LoadXml(xml);
@@ -60,9 +58,9 @@ namespace Core
         public static List<Result> GetFriendsTimeline() {
             string NumberOfTweetsParam = "?count=" + NumberOfTweets;
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
-            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET, 
+            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
                                                       TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml" +
-                                                      NumberOfTweetsParam, 
+                                                      NumberOfTweetsParam,
                                                       "");
 
             XmlDocument xmlDoc = new XmlDocument();

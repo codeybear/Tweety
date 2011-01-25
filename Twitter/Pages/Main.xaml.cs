@@ -29,7 +29,7 @@ namespace Pages
             SetupNotifyIcon();
 
             // Setup global error handler
-            App.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
+            App.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
         }
 
         #region Events
@@ -97,7 +97,7 @@ namespace Pages
         }
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e) {
-            // Check for user settings before settings up form
+            // Check for user settings before setting up form
             if (String.IsNullOrEmpty(SettingHelper.Token)) {
                 Settings SettingsForm = new Settings();
                 SettingsForm.ShowDialog();
@@ -194,7 +194,7 @@ namespace Pages
                 grdTweets.Children.Add(TextBlock);
 
                 Image ProfileImage = WPFHelper.CreateImage(Status.ProfileImageUrl);
-                
+
                 Grid.SetColumn(ProfileImage, 0);
                 Grid.SetRow(ProfileImage, grdTweets.RowDefinitions.Count - 1);
                 grdTweets.Children.Add(ProfileImage);
