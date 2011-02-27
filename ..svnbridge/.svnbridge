@@ -8,4 +8,9 @@ WPFTest.sln.cache
 Tweety.sln.cache
 WPFTest.sln.cache
 WinFormsFinal
+</Value></Property><Property><Name>svn:ignore</Name><Value>*.suo
+TestResults
+Tweety.sln.cache
+WPFTest.sln.cache
+WinFormsFinal
 </Value></Property></Properties></ItemProperties>

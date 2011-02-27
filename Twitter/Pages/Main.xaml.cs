@@ -139,7 +139,7 @@ namespace Pages
         }
 
         void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
-            e.Result = Twitter.GetFriendsTimeline();
+            e.Result = Twitter.GetFriendsTimelineWithRetweets();
         }
 
         void bgwFriendsTimeLine_Completed(object sender, RunWorkerCompletedEventArgs e) {
@@ -187,8 +187,16 @@ namespace Pages
                 TextBlock TextBlock = new TextBlock();
                 TextBlock.Margin = new Thickness(4);
                 TextBlock.TextWrapping = TextWrapping.Wrap;
+
+                if (!string.IsNullOrEmpty(Status.ReTweetedBy)) { 
+                    TextBlock.Inlines.Add(new Italic(new Run(Environment.NewLine + 
+                                                             "Retweeted by " + 
+                                                             Status.ReTweetedBy +
+                                                             Environment.NewLine)));
+                }
+
                 TextBlock.Inlines.AddRange(WPFHelper.CreateInlineTextWithLinks(Status.Text, Hyperlink_RequestNavigate));
-                TextBlock.Inlines.Add(new Italic(new Run(Environment.NewLine + Status.CreatedAt)));
+                TextBlock.Inlines.Add(new Italic(new Run(Environment.NewLine + Status.CreatedAtDisplay)));
                 Grid.SetColumn(TextBlock, 1);
                 Grid.SetRow(TextBlock, grdTweets.RowDefinitions.Count - 1);
                 grdTweets.Children.Add(TextBlock);

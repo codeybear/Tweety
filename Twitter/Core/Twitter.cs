@@ -4,28 +4,26 @@ using System.Xml;
 
 namespace Core
 {
-    public class StatusAlert
-    {
-        public String ScreenName;
-        public String Name;
-        public String Text;
-    }
-
     public class Result
     {
-        public String Id;
-        public String Text;
-        public String ProfileImageUrl;
-        public String DateUpdated;
-        public String CreatedAt;
+        public string Id;
+        public string Text;
+        public string ProfileImageUrl;
+        public string DateUpdated;
+        public DateTime CreatedAt;
+        public string CreatedAtDisplay;
+        public string CreatedBy;
+        public string ReTweetedBy;
+        public string Name;
     }
 
     public static class Twitter
     {
-        private const string TWITTER_URL = "http://twitter.com/";
+        private const string TWITTER_URL = "http://api.twitter.com/";
         private const string PATH_VERIFY = "account/verify_credentials";
         private const string PATH_FRIENDS_TIMELINE = "statuses/friends_timeline";
         private const string PATH_STATUS_UPDATE = "statuses/update";
+        private const string PATH_FRIENDS_RETWEETS = "statuses/retweeted_to_me";
         private const string EXT = ".xml";
 
         public static int NumberOfTweets = 50;
@@ -68,6 +66,24 @@ namespace Core
             return GetStatusList(xmlDoc);
         }
 
+        public static List<Result> GetFriendsTimelineWithRetweets() {
+            oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
+            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
+                                                      TWITTER_URL + PATH_FRIENDS_RETWEETS + ".xml" +
+                                                      "",
+                                                      "");
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+
+            List<Result> timeLine = GetFriendsTimeline();
+            timeLine.AddRange(GetStatusList(xmlDoc));
+            timeLine.Sort((Status1, Status2) => Status1.CreatedAt.CompareTo(Status2.CreatedAt));
+            timeLine.Reverse();
+
+            return timeLine;
+        }
+
         //--------------------------------------------------------------
         // Private Methods
         //--------------------------------------------------------------
@@ -77,13 +93,16 @@ namespace Core
 
             foreach (XmlNode StatusNode in xml.GetElementsByTagName("status")) {
                 Result StatusInfo = new Result();
-                string StatusText = WebHelper.UrlDecode(StatusNode["text"].InnerText);
-                StatusInfo.Text = StatusText;
-                StatusInfo.Id = StatusNode["id"].InnerText;
-                StatusInfo.CreatedAt = ConvertTwitterDate(StatusNode["created_at"].InnerText);
 
-                Result UserInfo = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));
-                StatusInfo.ProfileImageUrl = UserInfo.ProfileImageUrl;
+                XmlNode RetweetStatusNode = StatusNode.SelectSingleNode("retweeted_status");
+                if (RetweetStatusNode != null) {
+                    StatusInfo = GetStatusFromNode(RetweetStatusNode);
+                    Result RetweetInfo = GetStatusFromNode(StatusNode);
+                    StatusInfo.ReTweetedBy = RetweetInfo.Name;
+                }
+                else {
+                    StatusInfo = GetStatusFromNode(StatusNode);
+                }
 
                 StatusList.Add(StatusInfo);
             }
@@ -91,15 +110,34 @@ namespace Core
             return StatusList;
         }
 
+        private static Result GetStatusFromNode(XmlNode StatusNode) {
+            Result StatusInfo = new Result();
+            string StatusText = WebHelper.UrlDecode(StatusNode["text"].InnerText);
+            StatusInfo.Text = StatusText;
+            StatusInfo.Id = StatusNode["id"].InnerText;
+            StatusInfo.CreatedAtDisplay = ConvertTwitterDateDisplay(StatusNode["created_at"].InnerText);
+            StatusInfo.CreatedAt = ConvertTwitterDate(StatusNode["created_at"].InnerText);
+
+            Result UserInfo = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));
+            StatusInfo.ProfileImageUrl = UserInfo.ProfileImageUrl;
+            StatusInfo.CreatedBy = UserInfo.CreatedBy;
+            StatusInfo.Name = UserInfo.Name;
+
+            return StatusInfo;
+        }
+
+        public static DateTime ConvertTwitterDate(string TwitterDate) {
+            const string format = "ddd MMM dd HH:mm:ss zzzz yyyy";
+            return DateTime.ParseExact(TwitterDate, format, System.Globalization.CultureInfo.InvariantCulture);
+        }
+
         /// <summary> Parse twitter date into user friendly display date/time. </summary>
-        /// <param name="TwitterDate">DateTime as returned by twitter. e.g. Sun Dec 20 15:16:16 +0000 2009</param>
-        private static string ConvertTwitterDate(string TwitterDate) {
-            string[] Elements = TwitterDate.Split(' ');
+        /// <param name="TwitterDate">DateTime as returned by twitter. e.g. Sat Feb 26 20:27:09 +0000 2011</param>
+        public static string ConvertTwitterDateDisplay(string TwitterDate) {
+            DateTime dt = ConvertTwitterDate(TwitterDate);
 
-            string DayElement = Convert.ToInt32(Elements[2]) == DateTime.Now.Day ? "Today" : Elements[0];
-
-            string TimeElement = Elements[3];
-            TimeElement = TimeElement.Substring(0, TimeElement.LastIndexOf(':'));
+            string DayElement = dt.Date == DateTime.Now.Date ? "Today" : dt.DayOfWeek.ToString();
+            string TimeElement = dt.ToShortTimeString();
 
             return string.Concat(DayElement, " ", TimeElement);
         }
@@ -115,8 +153,10 @@ namespace Core
                 UserInfo.Text = UserStatusNode["text"].InnerText;
 
             UserInfo.ProfileImageUrl = UserNode["profile_image_url"].InnerText;
+            UserInfo.Name = UserNode["name"].InnerText;
 
             return UserInfo;
         }
+
     }
 }

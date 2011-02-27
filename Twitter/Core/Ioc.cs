@@ -6,7 +6,7 @@ namespace Core
     /// <summary>
     /// Simple implementation of an Ioc Container.
     /// </summary>
-    static class Ioc
+    public static class Ioc
     {
         public delegate object Creator();
 
