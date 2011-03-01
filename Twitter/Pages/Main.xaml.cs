@@ -77,6 +77,7 @@ namespace Pages
 
         private void txtStatus_TextChanged(object sender, TextChangedEventArgs e) {
             UpdateStatusButtons(true);
+            CheckLength();
         }
 
         private void btnUpdateStatus_Click(object sender, RoutedEventArgs e) {
@@ -123,6 +124,10 @@ namespace Pages
         void StatusTimer_Tick(object sender, EventArgs e) {
             bgwFriendsTimeLine_Start();
             bgwMyStatus_Start();
+        }
+
+        private void txtStatus_KeyDown(object sender, System.Windows.Input.KeyEventArgs e) {
+
         }
 
         #endregion
@@ -188,9 +193,9 @@ namespace Pages
                 TextBlock.Margin = new Thickness(4);
                 TextBlock.TextWrapping = TextWrapping.Wrap;
 
-                if (!string.IsNullOrEmpty(Status.ReTweetedBy)) { 
-                    TextBlock.Inlines.Add(new Italic(new Run(Environment.NewLine + 
-                                                             "Retweeted by " + 
+                if (!string.IsNullOrEmpty(Status.ReTweetedBy)) {
+                    TextBlock.Inlines.Add(new Italic(new Run(Environment.NewLine +
+                                                             "Retweeted by " +
                                                              Status.ReTweetedBy +
                                                              Environment.NewLine)));
                 }
@@ -277,18 +282,29 @@ namespace Pages
 
         private void UpdateStatusButtons(bool SetVisible) {
             if (SetVisible) {
-                btnUpdateStatus.Visibility = Visibility.Visible;
-                btnCancelUpdate.Visibility = Visibility.Visible;
+                panelUpdateStatus.Visibility = Visibility.Visible;
                 btnSettings.Visibility = Visibility.Hidden;
             }
             else {
-                btnUpdateStatus.Visibility = Visibility.Hidden;
-                btnCancelUpdate.Visibility = Visibility.Hidden;
+                panelUpdateStatus.Visibility = Visibility.Hidden;
                 btnSettings.Visibility = Visibility.Visible;
 
                 txtStatus.TextChanged -= txtStatus_TextChanged;
                 txtStatus.Text = _OldStatusText;
                 txtStatus.TextChanged += txtStatus_TextChanged;
+            }
+        }
+
+        private void CheckLength() {
+                lblLetterCount.Content = txtStatus.Text.Length;
+
+            if (txtStatus.Text.Length > Twitter.TextLength) {
+                btnUpdateStatus.IsEnabled = false;
+                lblLetterCount.Foreground = System.Windows.Media.Brushes.Red;
+            }
+            else {
+                btnUpdateStatus.IsEnabled = true;
+                lblLetterCount.Foreground = System.Windows.Media.Brushes.Black;
             }
         }
 
@@ -300,5 +316,6 @@ namespace Pages
         }
 
         #endregion
+
     }
 }

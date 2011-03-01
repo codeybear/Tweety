@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -6,7 +7,7 @@ namespace Core
 {
     public class Result
     {
-        public string Id;
+        public Int64 Id;
         public string Text;
         public string ProfileImageUrl;
         public string DateUpdated;
@@ -27,6 +28,7 @@ namespace Core
         private const string EXT = ".xml";
 
         public static int NumberOfTweets = 50;
+        public static int TextLength = 140;
 
         //--------------------------------------------------------------
         // Public methods
@@ -67,27 +69,46 @@ namespace Core
         }
 
         public static List<Result> GetFriendsTimelineWithRetweets() {
+            List<Result> TimeLine = GetFriendsTimeline();
+            List<Result> ReTweets = GetFriendsRetweets(TimeLine.Last().Id);
+
+            TimeLine.AddRange(ReTweets);
+            TimeLine.OrderByDescending((status) => status.CreatedAt);
+
+            return TimeLine;
+        }
+
+        public static List<Result> GetFriendsRetweets(Int64 SinceId) {
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
             string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
                                                       TWITTER_URL + PATH_FRIENDS_RETWEETS + ".xml" +
-                                                      "",
+                                                      "?since_id=" + SinceId,
                                                       "");
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xml);
+            return GetStatusList(xmlDoc);
+        }
 
-            List<Result> timeLine = GetFriendsTimeline();
-            timeLine.AddRange(GetStatusList(xmlDoc));
-            timeLine.Sort((Status1, Status2) => Status1.CreatedAt.CompareTo(Status2.CreatedAt));
-            timeLine.Reverse();
+        public static DateTime ConvertTwitterDate(string TwitterDate) {
+            const string format = "ddd MMM dd HH:mm:ss zzzz yyyy";
+            return DateTime.ParseExact(TwitterDate, format, System.Globalization.CultureInfo.InvariantCulture);
+        }
 
-            return timeLine;
+        /// <summary> Parse twitter date into user friendly display date/time. </summary>
+        /// <param name="TwitterDate">DateTime as returned by twitter. e.g. Sat Feb 26 20:27:09 +0000 2011</param>
+        public static string ConvertTwitterDateDisplay(string TwitterDate) {
+            DateTime dt = ConvertTwitterDate(TwitterDate);
+
+            string DayElement = dt.Date == DateTime.Now.Date ? "Today" : dt.DayOfWeek.ToString();
+            string TimeElement = dt.ToShortTimeString();
+
+            return string.Concat(DayElement, " ", TimeElement);
         }
 
         //--------------------------------------------------------------
         // Private Methods
         //--------------------------------------------------------------
-
         private static List<Result> GetStatusList(XmlDocument xml) {
             List<Result> StatusList = new List<Result>();
 
@@ -114,7 +135,7 @@ namespace Core
             Result StatusInfo = new Result();
             string StatusText = WebHelper.UrlDecode(StatusNode["text"].InnerText);
             StatusInfo.Text = StatusText;
-            StatusInfo.Id = StatusNode["id"].InnerText;
+            StatusInfo.Id = Convert.ToInt64(StatusNode["id"].InnerText);
             StatusInfo.CreatedAtDisplay = ConvertTwitterDateDisplay(StatusNode["created_at"].InnerText);
             StatusInfo.CreatedAt = ConvertTwitterDate(StatusNode["created_at"].InnerText);
 
@@ -124,22 +145,6 @@ namespace Core
             StatusInfo.Name = UserInfo.Name;
 
             return StatusInfo;
-        }
-
-        public static DateTime ConvertTwitterDate(string TwitterDate) {
-            const string format = "ddd MMM dd HH:mm:ss zzzz yyyy";
-            return DateTime.ParseExact(TwitterDate, format, System.Globalization.CultureInfo.InvariantCulture);
-        }
-
-        /// <summary> Parse twitter date into user friendly display date/time. </summary>
-        /// <param name="TwitterDate">DateTime as returned by twitter. e.g. Sat Feb 26 20:27:09 +0000 2011</param>
-        public static string ConvertTwitterDateDisplay(string TwitterDate) {
-            DateTime dt = ConvertTwitterDate(TwitterDate);
-
-            string DayElement = dt.Date == DateTime.Now.Date ? "Today" : dt.DayOfWeek.ToString();
-            string TimeElement = dt.ToShortTimeString();
-
-            return string.Concat(DayElement, " ", TimeElement);
         }
 
         private static Result GetUserInfoFromNode(XmlNode UserNode) {

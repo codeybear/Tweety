@@ -71,6 +71,7 @@ namespace Test
         public void GetFriendsTimelineTest() {
             List<Result> actual = Twitter.GetFriendsTimeline();
             Assert.IsTrue(actual.Count > 0);
+            actual.ForEach((status) => Debug.WriteLine("{0}***{1}***{2}", status.CreatedAt, status.Name, status.Text));
         }
 
         [TestMethod()]
@@ -82,7 +83,7 @@ namespace Test
                 if (!string.IsNullOrWhiteSpace(result.ReTweetedBy))
                     Retweets = true;
 
-                Debug.WriteLine("{0} {1} {2}", result.CreatedAt, result.Text, result.ReTweetedBy);
+                Debug.WriteLine("{0}***{1}***{2}", result.CreatedAt, result.ReTweetedBy, result.Text);
             }
 
             if (!Retweets)
