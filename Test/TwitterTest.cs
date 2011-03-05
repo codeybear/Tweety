@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Windows.Documents;
 
 namespace Test
 {
@@ -15,19 +16,7 @@ namespace Test
     {
         private TestContext testContextInstance;
 
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext {
-            get {
-                return testContextInstance;
-            }
-            set {
-                testContextInstance = value;
-            }
-        }
-
+        /// <summary>h
         #region Additional test attributes
 
         [ClassInitialize()]
@@ -63,7 +52,6 @@ namespace Test
         //
         #endregion
 
-
         /// <summary>
         ///A test for GetFriendsTimeline
         ///</summary>
@@ -91,15 +79,20 @@ namespace Test
         }
 
         [TestMethod]
+        public void ConvertTwitterDate() {
+            string DisplayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.ToString(Twitter.DATETIME_FORMAT));
+        }
+
+        [TestMethod]
         public void ConvertTwitterDateToday() {
-            string DisplayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.ToString("ddd MMM dd HH:mm:ss zzzz yyyy"));
+            string DisplayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.ToString(Twitter.DATETIME_FORMAT));
             Assert.AreEqual(DisplayDate.Substring(0, 5), "Today");
             Debug.WriteLine(DisplayDate);
         }
 
         [TestMethod]
         public void ConvertTwitterDateNotToday() {
-            string DisplayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.AddDays(-1).ToString("ddd MMM dd HH:mm:ss zzzz yyyy"));
+            string DisplayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.AddDays(-1).ToString(Twitter.DATETIME_FORMAT));
             Assert.AreNotEqual(DisplayDate.Substring(0, 5), "Today");
             Debug.WriteLine(DisplayDate);
         }

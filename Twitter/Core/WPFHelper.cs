@@ -1,58 +1,43 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Core
 {
-    static class WPFHelper
+    public static class WPFHelper
     {
         /// <summary> Convert a string into an array of inline containing plain text and hyperlinks </summary>
         public static Inline[] CreateInlineTextWithLinks(string sText, EventHandler<System.Windows.RoutedEventArgs> ClickMethod) {
-            Paragraph para = new Paragraph();
-            int iURLPos = 0;
-            char[] EndOfURL = new char[] { ' ', ',' };
-            const string HTTP = "http://";
+            string matchpattern = @"(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'"".,<>?«»“”‘’]))";
+            int LastMatchPos = 0;
+            List<Inline> lines = new List<Inline>();
+            MatchCollection matches = Regex.Matches(sText, matchpattern, RegexOptions.IgnoreCase);
 
-            do {
-                // Search for a url
-                iURLPos = sText.IndexOf(HTTP, StringComparison.CurrentCultureIgnoreCase);
+            // Search for hyperlinks and add preceding text
+            foreach (Match match in matches) {
+                lines.Add(new Run(sText.Substring(LastMatchPos, match.Index - LastMatchPos)));
+                lines.Add(CreateHyperLink(match.Value, match.Value, ClickMethod));
+                LastMatchPos = match.Index + match.Length;
+            }
 
-                if (iURLPos == -1)  // No url found so just add the text
-                    para.Inlines.Add(sText);
+            // Add any remaining text
+            if (LastMatchPos == 0 || LastMatchPos != sText.Length)
+                lines.Add(new Run(sText.Substring(LastMatchPos)));
 
-                if (iURLPos > -1) {
-                    // Add normal text up to the point of the url
-                    para.Inlines.Add(sText.Substring(0, iURLPos));
-
-                    // Find the length of the url
-                    int iURLLength = sText.IndexOfAny(EndOfURL, iURLPos) - iURLPos;
-
-                    // iEndOfURLPos < 0 means url was at the end of the text, so calculate based on text length
-                    if (iURLLength < 0) iURLLength = sText.Length - iURLPos;
-
-                    // Create the hyperlink
-                    string sHyper = sText.Substring(iURLPos, iURLLength);
-
-                    if (sHyper == HTTP)
-                        para.Inlines.Add(sHyper);
-                    else
-                        para.Inlines.Add(CreateHyperLink(sHyper, sHyper, ClickMethod));
-
-                    // Shorten text to the end of the url onwards
-                    sText = sText.Substring(iURLPos + iURLLength);
-                }
-            } while (iURLPos != -1);
-
-            Inline[] lines = new Inline[para.Inlines.Count];
-            para.Inlines.CopyTo(lines, 0);
-
-            return lines;
+            return lines.ToArray();
         }
 
         /// <summary> Create a WPF Hyperlink class </summary>
         public static Hyperlink CreateHyperLink(string sURI, string sDescription, EventHandler<System.Windows.RoutedEventArgs> ClickMethod) {
             Hyperlink hyper = new Hyperlink();
             hyper.Inlines.Add(sDescription);
+
+            if (sURI.StartsWith("www."))
+                sURI = "http://" + sURI;
+
             hyper.NavigateUri = new System.Uri(sURI);
             hyper.Click += new System.Windows.RoutedEventHandler(ClickMethod);
             return hyper;

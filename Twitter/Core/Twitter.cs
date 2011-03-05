@@ -27,6 +27,10 @@ namespace Core
         private const string PATH_FRIENDS_RETWEETS = "statuses/retweeted_to_me";
         private const string EXT = ".xml";
 
+        /// <summary>
+        /// Twitter datetime format
+        /// </summary>
+        public const string DATETIME_FORMAT = "ddd MMM dd HH:mm:ss zzzz yyyy";
         public static int NumberOfTweets = 50;
         public static int TextLength = 140;
 
@@ -91,8 +95,9 @@ namespace Core
         }
 
         public static DateTime ConvertTwitterDate(string TwitterDate) {
-            const string format = "ddd MMM dd HH:mm:ss zzzz yyyy";
-            return DateTime.ParseExact(TwitterDate, format, System.Globalization.CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(TwitterDate, 
+                                       Twitter.DATETIME_FORMAT, 
+                                       System.Globalization.CultureInfo.InvariantCulture);
         }
 
         /// <summary> Parse twitter date into user friendly display date/time. </summary>
@@ -162,6 +167,5 @@ namespace Core
 
             return UserInfo;
         }
-
     }
 }
