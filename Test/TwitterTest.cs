@@ -1,22 +1,18 @@
 ﻿using Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Documents;
 
 namespace Test
 {
-    /// <summary>
-    ///This is a test class for TwitterTest and is intended
-    ///to contain all TwitterTest Unit Tests
-    ///</summary>
     [TestClass()]
     public class TwitterTest
     {
         private TestContext testContextInstance;
 
-        /// <summary>h
         #region Additional test attributes
 
         [ClassInitialize()]
@@ -95,6 +91,11 @@ namespace Test
             string DisplayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.AddDays(-1).ToString(Twitter.DATETIME_FORMAT));
             Assert.AreNotEqual(DisplayDate.Substring(0, 5), "Today");
             Debug.WriteLine(DisplayDate);
+        }
+
+        [TestMethod]
+        public void MyTestMethod() {
+
         }
     }
 }

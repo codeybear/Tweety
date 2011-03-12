@@ -27,9 +27,7 @@ namespace Core
         private const string PATH_FRIENDS_RETWEETS = "statuses/retweeted_to_me";
         private const string EXT = ".xml";
 
-        /// <summary>
-        /// Twitter datetime format
-        /// </summary>
+        /// <summary> Twitter datetime format </summary>
         public const string DATETIME_FORMAT = "ddd MMM dd HH:mm:ss zzzz yyyy";
         public static int NumberOfTweets = 50;
         public static int TextLength = 140;
@@ -77,14 +75,14 @@ namespace Core
             List<Result> ReTweets = GetFriendsRetweets(TimeLine.Last().Id);
 
             TimeLine.AddRange(ReTweets);
-            TimeLine.OrderByDescending((status) => status.CreatedAt);
+            TimeLine = TimeLine.OrderByDescending((status) => status.CreatedAt).ToList();
 
             return TimeLine;
         }
 
         public static List<Result> GetFriendsRetweets(Int64 SinceId) {
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
-            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
+            string xml = oAuthTwitter.oAuthWebRequest(oAuthTwitter.Method.GET,
                                                       TWITTER_URL + PATH_FRIENDS_RETWEETS + ".xml" +
                                                       "?since_id=" + SinceId,
                                                       "");
