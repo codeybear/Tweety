@@ -92,7 +92,7 @@ namespace Pages
         private void Hyperlink_RequestNavigate(object sender, System.Windows.RoutedEventArgs e) {
             using (System.Diagnostics.Process p = new System.Diagnostics.Process()) {
                 Hyperlink link = (Hyperlink)sender;
-                p.StartInfo.FileName = link.NavigateUri.AbsoluteUri;
+                p.StartInfo.FileName = ((Run)link.Inlines.FirstInline).Text;
                 p.Start();
             }
         }

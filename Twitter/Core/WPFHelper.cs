@@ -35,7 +35,7 @@ namespace Core
             Hyperlink hyper = new Hyperlink();
             hyper.Inlines.Add(sDescription);
 
-            if (sURI.StartsWith("www.") || !sURI.StartsWith("http://") || !sURI.StartsWith("https://"))
+            if (!(sURI.StartsWith("http://") || sURI.StartsWith("https://")))
                 sURI = "http://" + sURI;
 
             hyper.NavigateUri = new System.Uri(sURI);

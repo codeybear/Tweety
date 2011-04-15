@@ -128,7 +128,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:3.5.30729 "
+                "FrameworkVersion" = "8:3.5.30729    "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=76617"
                 }
@@ -213,7 +213,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Tweety"
         "ProductCode" = "8:{5F5D4DB2-FA3F-4E18-818F-79E8222C8BAE}"
-        "PackageCode" = "8:{D3F17575-36A4-49D2-AE01-9297B0C9B418}"
+        "PackageCode" = "8:{023BA274-45CC-4F11-9DC2-3A531193074E}"
         "UpgradeCode" = "8:{7C93B8B5-5D54-4823-ACF4-C2466584544C}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -748,7 +748,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A316C77546A14552A2134DC092D160AD"
             {
-            "SourcePath" = "8:..\\Twitter\\obj\\Release\\Tweety.exe"
+            "SourcePath" = "8:..\\Twitter\\obj\\Debug\\Tweety.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_096F041AA37F4CBF8B99576BA9721252"
