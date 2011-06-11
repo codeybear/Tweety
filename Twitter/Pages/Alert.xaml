@@ -4,13 +4,13 @@
     x:Name="window" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="Pages.Alert"
     Title="Alert" Height="91" Width="243" mc:Ignorable="d" BorderThickness="1" ShowInTaskbar="False" WindowStyle="None" AllowsTransparency="True">
 
-	<Window.Resources>
-		<Storyboard x:Key="StoryboardFadeIn">
-			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="{x:Null}" Storyboard.TargetProperty="(UIElement.Opacity)">
-				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:01" Value="1"/>
-			</DoubleAnimationUsingKeyFrames>
-		</Storyboard>
+    <Window.Resources>
+        <Storyboard x:Key="StoryboardFadeIn">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="{x:Null}" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:01" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
         <Storyboard x:Key="StoryboardFadeOut">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="window" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
@@ -18,11 +18,11 @@
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
-	<Window.Triggers>
-		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
-			<BeginStoryboard Storyboard="{StaticResource StoryboardFadeIn}"/>
-		</EventTrigger>
-	</Window.Triggers>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource StoryboardFadeIn}"/>
+        </EventTrigger>
+    </Window.Triggers>
     <Border Name="MainBorder" BorderThickness="2" Padding="0" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
     <Grid Height="auto" x:Name="grdMain" Width="auto">      
         <Image x:Name="imgProfile" Height="35" Width="35" VerticalAlignment="Center" HorizontalAlignment="Left" Stretch="Fill" Margin="10,10,0,10" />
@@ -31,5 +31,5 @@
                 <Image Margin="0" Name="CloseImage" Stretch="Fill" Source="/Tweety;component/Resources/delete_16x.ico" />
             </Button>
         </Grid>
-	</Border>
+    </Border>
 </Window>

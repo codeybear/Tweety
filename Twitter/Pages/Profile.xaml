@@ -1,0 +1,9 @@
+﻿<Window x:Class="Pages.Profile"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Profile" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="243" Width="218">
+    <Grid>
+        <Image Height="72" HorizontalAlignment="Left" Margin="12,12,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="72" DataContext="{Binding}" />
+        <TextBox Margin="12,90,12,12" Name="txtProfile" TextWrapping="WrapWithOverflow" />
+    </Grid>
+</Window>

@@ -207,6 +207,10 @@ namespace Pages
                 grdTweets.Children.Add(TextBlock);
 
                 Image ProfileImage = WPFHelper.CreateImage(Status.ProfileImageUrl);
+                ProfileImage.ToolTip = Status.Name;
+                string UserId = Status.Name;
+                Profile ProfileWindow = new Profile(UserId);
+                ProfileImage.MouseDown += (o, e) => ProfileWindow.ShowDialog();
 
                 Grid.SetColumn(ProfileImage, 0);
                 Grid.SetRow(ProfileImage, grdTweets.RowDefinitions.Count - 1);
