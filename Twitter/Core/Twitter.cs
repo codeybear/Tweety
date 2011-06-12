@@ -5,24 +5,32 @@ using System.Xml;
 
 namespace Core
 {
-    public class Result
+    public class Status
     {
         public Int64 Id;
         public string Text;
-        public string ProfileImageUrl;
         public string DateUpdated;
         public DateTime CreatedAt;
         public string CreatedAtDisplay;
-        public string CreatedBy;
         public string ReTweetedBy;
+        public User User;
+    }
+
+    public class User
+    {
         public string Name;
+        public string ScreenName;
+        public string Location;
+        public string Description;
+        public string ProfileImageUrl;
+        public string StatusText;
     }
 
     public static class Twitter
     {
         private const string TWITTER_URL = "http://api.twitter.com/";
         private const string PATH_VERIFY = "account/verify_credentials";
-        private const string PATH_FRIENDS_TIMELINE = "statuses/friends_timeline";
+        private const string PATH_HOME_TIMELINE = "statuses/home_timeline";
         private const string PATH_STATUS_UPDATE = "statuses/update";
         private const string PATH_FRIENDS_RETWEETS = "statuses/retweeted_to_me";
         private const string EXT = ".xml";
@@ -45,7 +53,7 @@ namespace Core
         }
 
         /// <summary> Get a specified user's details </summary>
-        public static Result GetUserInfo() {
+        public static User GetUserInfo() {
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
             string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
                                                       TWITTER_URL + PATH_VERIFY + EXT,
@@ -57,34 +65,12 @@ namespace Core
         }
 
         /// <summary> Get friends timeline </summary>
-        public static List<Result> GetFriendsTimeline() {
+        public static List<Status> GetHomeTimeline() {
             string NumberOfTweetsParam = "?count=" + NumberOfTweets;
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
             string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
-                                                      TWITTER_URL + PATH_FRIENDS_TIMELINE + ".xml" +
+                                                      TWITTER_URL + PATH_HOME_TIMELINE + ".xml" +
                                                       NumberOfTweetsParam,
-                                                      "");
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            return GetStatusList(xmlDoc);
-        }
-
-        public static List<Result> GetFriendsTimelineWithRetweets() {
-            List<Result> TimeLine = GetFriendsTimeline();
-            List<Result> ReTweets = GetFriendsRetweets(TimeLine.Last().Id);
-
-            TimeLine.AddRange(ReTweets);
-            TimeLine = TimeLine.OrderByDescending((status) => status.CreatedAt).ToList();
-
-            return TimeLine;
-        }
-
-        public static List<Result> GetFriendsRetweets(Int64 SinceId) {
-            oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
-            string xml = oAuthTwitter.oAuthWebRequest(oAuthTwitter.Method.GET,
-                                                      TWITTER_URL + PATH_FRIENDS_RETWEETS + ".xml" +
-                                                      "?since_id=" + SinceId,
                                                       "");
 
             XmlDocument xmlDoc = new XmlDocument();
@@ -112,17 +98,17 @@ namespace Core
         //--------------------------------------------------------------
         // Private Methods
         //--------------------------------------------------------------
-        private static List<Result> GetStatusList(XmlDocument xml) {
-            List<Result> StatusList = new List<Result>();
+        private static List<Status> GetStatusList(XmlDocument xml) {
+            List<Status> StatusList = new List<Status>();
 
             foreach (XmlNode StatusNode in xml.GetElementsByTagName("status")) {
-                Result StatusInfo = new Result();
+                Status StatusInfo = new Status();
 
                 XmlNode RetweetStatusNode = StatusNode.SelectSingleNode("retweeted_status");
                 if (RetweetStatusNode != null) {
                     StatusInfo = GetStatusFromNode(RetweetStatusNode);
-                    Result RetweetInfo = GetStatusFromNode(StatusNode);
-                    StatusInfo.ReTweetedBy = RetweetInfo.Name;
+                    Status RetweetInfo = GetStatusFromNode(StatusNode);
+                    StatusInfo.ReTweetedBy = RetweetInfo.User.Name;
                 }
                 else {
                     StatusInfo = GetStatusFromNode(StatusNode);
@@ -134,34 +120,33 @@ namespace Core
             return StatusList;
         }
 
-        private static Result GetStatusFromNode(XmlNode StatusNode) {
-            Result StatusInfo = new Result();
+        private static Status GetStatusFromNode(XmlNode StatusNode) {
+            Status StatusInfo = new Status();
             string StatusText = WebHelper.UrlDecode(StatusNode["text"].InnerText);
             StatusInfo.Text = StatusText;
             StatusInfo.Id = Convert.ToInt64(StatusNode["id"].InnerText);
             StatusInfo.CreatedAtDisplay = ConvertTwitterDateDisplay(StatusNode["created_at"].InnerText);
             StatusInfo.CreatedAt = ConvertTwitterDate(StatusNode["created_at"].InnerText);
-
-            Result UserInfo = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));
-            StatusInfo.ProfileImageUrl = UserInfo.ProfileImageUrl;
-            StatusInfo.CreatedBy = UserInfo.CreatedBy;
-            StatusInfo.Name = UserInfo.Name;
+            StatusInfo.User = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));
 
             return StatusInfo;
         }
 
-        private static Result GetUserInfoFromNode(XmlNode UserNode) {
-            Result UserInfo = new Result();
+        private static User GetUserInfoFromNode(XmlNode UserNode) {
+            User UserInfo = new User();
 
             // Get the user's latest status
             XmlNode UserStatusNode = UserNode.SelectSingleNode("status");
 
             // This info may not exist on all user nodes
             if (UserStatusNode != null)
-                UserInfo.Text = UserStatusNode["text"].InnerText;
+                UserInfo.StatusText = UserStatusNode["text"].InnerText;
 
             UserInfo.ProfileImageUrl = UserNode["profile_image_url"].InnerText;
             UserInfo.Name = UserNode["name"].InnerText;
+            UserInfo.ScreenName = UserNode["screen_name"].InnerText;
+            UserInfo.Location = UserNode["location"].InnerText;
+            UserInfo.Description = UserNode["description"].InnerText;
 
             return UserInfo;
         }

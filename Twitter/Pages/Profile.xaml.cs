@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Core;
 
 namespace Pages
 {
@@ -18,8 +19,12 @@ namespace Pages
     /// </summary>
     public partial class Profile : Window
     {
-        public Profile(string UserId) {
+        public Profile(User user) {
             InitializeComponent();
+            txtScreenName.Text = user.ScreenName;
+            txtName.Text = "@" + user.Name;
+            txtProfile.Text = user.Description;
+            ImageProfile = WPFHelper.CreateImage(user.ProfileImageUrl);
         }
     }
 }

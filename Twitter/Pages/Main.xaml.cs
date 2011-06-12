@@ -144,14 +144,14 @@ namespace Pages
         }
 
         void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
-            e.Result = Twitter.GetFriendsTimelineWithRetweets();
+            e.Result = Twitter.GetHomeTimeline();
         }
 
         void bgwFriendsTimeLine_Completed(object sender, RunWorkerCompletedEventArgs e) {
             this.Title = "Tweety";
 
             if (e.Result != null) {
-                HandleResults((List<Result>)e.Result);
+                HandleResults((List<Status>)e.Result);
 
                 if (btnError.Height > 0) {
                     var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("HideError");
@@ -172,7 +172,7 @@ namespace Pages
 
         void bgwMyStatus_Completed(object sender, RunWorkerCompletedEventArgs e) {
             if (e.Result != null) {
-                UpdateStatusText((Result)e.Result);
+                UpdateStatusText((User)e.Result);
             }
         }
 
@@ -181,11 +181,11 @@ namespace Pages
         #region Support Methods
 
         /// <summary> Display list of tweets inside the Grid control </summary>
-        private void AddResultsToGrid(List<Result> ResultList) {
+        private void AddResultsToGrid(List<Status> StatusList) {
             grdTweets.RowDefinitions.Clear();
             grdTweets.Children.Clear();
 
-            foreach (Result Status in ResultList) {
+            foreach (Status Status in StatusList) {
                 grdTweets.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
 
                 // Create the text for grid
@@ -206,11 +206,14 @@ namespace Pages
                 Grid.SetRow(TextBlock, grdTweets.RowDefinitions.Count - 1);
                 grdTweets.Children.Add(TextBlock);
 
-                Image ProfileImage = WPFHelper.CreateImage(Status.ProfileImageUrl);
-                ProfileImage.ToolTip = Status.Name;
-                string UserId = Status.Name;
-                Profile ProfileWindow = new Profile(UserId);
-                ProfileImage.MouseDown += (o, e) => ProfileWindow.ShowDialog();
+                Image ProfileImage = WPFHelper.CreateImage(Status.User.ProfileImageUrl);
+                ProfileImage.ToolTip = Status.User.Name;
+                User user = Status.User;
+
+                ProfileImage.MouseDown += (o, e) => {
+                    Profile ProfileWindow = new Profile(user);
+                    ProfileWindow.ShowDialog();
+                };
 
                 Grid.SetColumn(ProfileImage, 0);
                 Grid.SetRow(ProfileImage, grdTweets.RowDefinitions.Count - 1);
@@ -218,14 +221,14 @@ namespace Pages
             }
         }
 
-        private void UpdateStatusText(Result result) {
+        private void UpdateStatusText(User user) {
             // Store original text in case it gets modified
-            _OldStatusText = result.Text;
+            _OldStatusText = user.StatusText;
 
             txtStatus.TextChanged -= txtStatus_TextChanged;
-            txtStatus.Text = result.Text;
+            txtStatus.Text = user.StatusText;
             txtStatus.TextChanged += txtStatus_TextChanged;
-            imgProfile.Source = new BitmapImage(new Uri(result.ProfileImageUrl));
+            imgProfile.Source = new BitmapImage(new Uri(user.ProfileImageUrl));
         }
 
         /// <summary> Setup for the page to get tweets</summary>
@@ -248,7 +251,7 @@ namespace Pages
         }
 
         /// <summary> Check for new tweets, and display if there are any </summary>
-        void HandleResults(List<Result> ResultList) {
+        void HandleResults(List<Status> ResultList) {
             // Check to see if there are new tweets
             Int64 lLastId = Convert.ToInt64(ResultList[0].Id);
 

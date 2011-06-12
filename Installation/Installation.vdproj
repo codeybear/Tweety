@@ -128,7 +128,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:3.5.30729    "
+                "FrameworkVersion" = "8:3.5.30729     "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=76617"
                 }
@@ -213,7 +213,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Tweety"
         "ProductCode" = "8:{5F5D4DB2-FA3F-4E18-818F-79E8222C8BAE}"
-        "PackageCode" = "8:{023BA274-45CC-4F11-9DC2-3A531193074E}"
+        "PackageCode" = "8:{2E0D8F6C-2318-4DD0-B653-7FDEFE67FF36}"
         "UpgradeCode" = "8:{7C93B8B5-5D54-4823-ACF4-C2466584544C}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

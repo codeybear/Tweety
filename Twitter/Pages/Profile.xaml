@@ -1,9 +1,11 @@
 ﻿<Window x:Class="Pages.Profile"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Profile" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="243" Width="218">
+        Title="Profile" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="264" Width="276">
     <Grid>
-        <Image Height="72" HorizontalAlignment="Left" Margin="12,12,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="72" DataContext="{Binding}" />
-        <TextBox Margin="12,90,12,12" Name="txtProfile" TextWrapping="WrapWithOverflow" />
+        <Image HorizontalAlignment="Left" Margin="12,12,0,0" Name="ImageProfile" Stretch="Fill" Width="72" DataContext="{Binding}" Height="72" VerticalAlignment="Top" />
+        <TextBox Margin="12,90,12,12" Name="txtProfile" TextWrapping="WrapWithOverflow" BorderThickness="0" />
+        <TextBox Margin="90,44,12,0" Name="txtScreenName" Height="Auto" VerticalAlignment="Top" BorderThickness="0" FontSize="18" />
+        <TextBox Height="Auto" Margin="90,12,12,0" Name="txtName" VerticalAlignment="Top" BorderThickness="0" FontSize="18" />
     </Grid>
 </Window>

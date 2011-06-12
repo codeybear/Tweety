@@ -13,4 +13,10 @@ TestResults
 Tweety.sln.cache
 WPFTest.sln.cache
 WinFormsFinal
+</Value></Property><Property><Name>svn:ignore</Name><Value>*.docstates
+*.suo
+TestResults
+Tweety.sln.cache
+WPFTest.sln.cache
+WinFormsFinal
 </Value></Property></Properties></ItemProperties>

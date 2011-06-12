@@ -53,25 +53,9 @@ namespace Test
         ///</summary>
         [TestMethod()]
         public void GetFriendsTimelineTest() {
-            List<Result> actual = Twitter.GetFriendsTimeline();
+            List<Status> actual = Twitter.GetHomeTimeline();
             Assert.IsTrue(actual.Count > 0);
-            actual.ForEach((status) => Debug.WriteLine("{0}***{1}***{2}", status.CreatedAt, status.Name, status.Text));
-        }
-
-        [TestMethod()]
-        public void GetFriendsTimelineTestWithRetweets() {
-            List<Result> actual = Twitter.GetFriendsTimelineWithRetweets();
-            bool Retweets = true;
-
-            foreach (Result result in actual) {
-                if (!string.IsNullOrWhiteSpace(result.ReTweetedBy))
-                    Retweets = true;
-
-                Debug.WriteLine("{0}***{1}***{2}", result.CreatedAt, result.ReTweetedBy, result.Text);
-            }
-
-            if (!Retweets)
-                Assert.Inconclusive("Cannot verify retweets");
+            actual.ForEach((status) => Debug.WriteLine("{0}***{1}***{2}", status.CreatedAt, status.User.Name, status.Text));
         }
 
         [TestMethod]
