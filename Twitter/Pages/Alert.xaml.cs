@@ -36,8 +36,8 @@ namespace Pages {
         }
 
         private void HyperlinkMessage_Click(object sender, System.Windows.RoutedEventArgs e) {
-            CloseForm();
             LinkClicked();
+            CloseForm();
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e) {
