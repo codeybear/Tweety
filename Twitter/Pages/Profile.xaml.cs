@@ -21,10 +21,10 @@ namespace Pages
     {
         public Profile(User user) {
             InitializeComponent();
-            txtScreenName.Text = user.ScreenName;
-            txtName.Text = "@" + user.Name;
+            txtScreenName.Text = "@" + user.ScreenName;
+            txtName.Text =  user.Name;
             txtProfile.Text = user.Description;
-            ImageProfile = WPFHelper.CreateImage(user.ProfileImageUrl);
+            ImageProfile.Source = WPFHelper.CreateImage(user.ProfileImageUrl);
         }
     }
 }

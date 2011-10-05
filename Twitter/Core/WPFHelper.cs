@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Imaging;
 
 namespace Core
 {
@@ -30,7 +31,7 @@ namespace Core
             return lines.ToArray();
         }
 
-        /// <summary> Create a WPF Hyperlink class </summary>
+        /// <summary> Create a WPF Hyperlink Class </summary>
         public static Hyperlink CreateHyperLink(string sURI, string sDescription, EventHandler<System.Windows.RoutedEventArgs> ClickMethod) {
             Hyperlink hyper = new Hyperlink();
             hyper.Inlines.Add(sDescription);
@@ -44,17 +45,15 @@ namespace Core
         }
 
         /// <summary> Create an image from a url </summary>
-        public static Image CreateImage(string ImageURL) {
-            var bi = new System.Windows.Media.Imaging.BitmapImage();
+        public static BitmapImage CreateImage(string ImageURL) {
+            var bi = new BitmapImage();
             bi.BeginInit();
             // Ignore color profile as this can cause an exception on certain images
             bi.CreateOptions = System.Windows.Media.Imaging.BitmapCreateOptions.IgnoreColorProfile;
             bi.UriSource = new Uri(ImageURL);
             bi.EndInit();
 
-            Image ProfileImage = new Image();
-            ProfileImage.Source = bi;
-            return ProfileImage;
+            return bi;
         }
     }
 }

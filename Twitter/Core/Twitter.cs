@@ -43,7 +43,7 @@ namespace Core
         //--------------------------------------------------------------
         // Public methods
         //--------------------------------------------------------------
-
+        
         /// <summary> Update a specified user's status </summary>
         public static String UpdateStatus(string sMessage) {
             oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();

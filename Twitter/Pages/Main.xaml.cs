@@ -206,7 +206,8 @@ namespace Pages
                 Grid.SetRow(TextBlock, grdTweets.RowDefinitions.Count - 1);
                 grdTweets.Children.Add(TextBlock);
 
-                Image ProfileImage = WPFHelper.CreateImage(Status.User.ProfileImageUrl);
+                Image ProfileImage = new Image();
+                ProfileImage.Source = WPFHelper.CreateImage(Status.User.ProfileImageUrl);
                 ProfileImage.ToolTip = Status.User.Name;
                 User user = Status.User;
 
