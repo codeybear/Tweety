@@ -20,7 +20,7 @@ namespace Core
             // Search for hyperlinks and add preceding text
             foreach (Match match in matches) {
                 lines.Add(new Run(sText.Substring(LastMatchPos, match.Index - LastMatchPos)));
-                lines.Add(CreateHyperLink(match.Value, match.Value, ClickMethod));
+                lines.Add(CreateHyperLink(match.Value, ClickMethod));
                 LastMatchPos = match.Index + match.Length;
             }
 
@@ -32,14 +32,14 @@ namespace Core
         }
 
         /// <summary> Create a WPF Hyperlink Class </summary>
-        public static Hyperlink CreateHyperLink(string sURI, string sDescription, EventHandler<System.Windows.RoutedEventArgs> ClickMethod) {
-            Hyperlink hyper = new Hyperlink();
-            hyper.Inlines.Add(sDescription);
-
+        public static Hyperlink CreateHyperLink(string sURI, EventHandler<System.Windows.RoutedEventArgs> ClickMethod) {
             if (!(sURI.StartsWith("http://") || sURI.StartsWith("https://")))
                 sURI = "http://" + sURI;
 
-            hyper.NavigateUri = new System.Uri(sURI);
+            Hyperlink hyper = new Hyperlink();
+            hyper.Inlines.Add(sURI);
+
+            //hyper.NavigateUri = new System.Uri(sURI);
             hyper.Click += new System.Windows.RoutedEventHandler(ClickMethod);
             return hyper;
         }
