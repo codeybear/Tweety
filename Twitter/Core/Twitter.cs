@@ -1,12 +1,9 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace Core
-{
-    public class Status
-    {
+namespace Tweety.Core {
+    public class Status {
         public Int64 Id;
         public string Text;
         public string DateUpdated;
@@ -16,8 +13,7 @@ namespace Core
         public User User;
     }
 
-    public class User
-    {
+    public class User {
         public string Name;
         public string ScreenName;
         public string Location;
@@ -26,8 +22,7 @@ namespace Core
         public string StatusText;
     }
 
-    public static class Twitter
-    {
+    public static class Twitter {
         private const string TWITTER_URL = "http://api.twitter.com/";
         private const string PATH_VERIFY = "account/verify_credentials";
         private const string PATH_HOME_TIMELINE = "statuses/home_timeline";
@@ -37,25 +32,26 @@ namespace Core
 
         /// <summary> Twitter datetime format </summary>
         public const string DATETIME_FORMAT = "ddd MMM dd HH:mm:ss zzzz yyyy";
+
         public static int NumberOfTweets = 50;
         public static int TextLength = 140;
 
         //--------------------------------------------------------------
         // Public methods
         //--------------------------------------------------------------
-        
+
         /// <summary> Update a specified user's status </summary>
         public static String UpdateStatus(string sMessage) {
-            oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
-            return oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.POST,
-                                                      TWITTER_URL + PATH_STATUS_UPDATE + EXT,
-                                                      "source=tweety&status=" + oAuthTwitter.UrlEncode(sMessage));
+            OAuthTwitter oAuthTwitter = Ioc.Create<OAuthTwitter>();
+            return oAuthTwitter.OAuthWebRequest(OAuthTwitter.Method.Post,
+                                                TWITTER_URL + PATH_STATUS_UPDATE + EXT,
+                                                "source=tweety&status=" + oAuthTwitter.UrlEncode(sMessage));
         }
 
         /// <summary> Get a specified user's details </summary>
         public static User GetUserInfo() {
-            oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
-            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
+            OAuthTwitter oAuthTwitter = Ioc.Create<OAuthTwitter>();
+            string xml = oAuthTwitter.OAuthWebRequest(OAuthTwitter.Method.Get,
                                                       TWITTER_URL + PATH_VERIFY + EXT,
                                                       "");
 
@@ -66,11 +62,11 @@ namespace Core
 
         /// <summary> Get friends timeline </summary>
         public static List<Status> GetHomeTimeline() {
-            string NumberOfTweetsParam = "?count=" + NumberOfTweets;
-            oAuthTwitter oAuthTwitter = Ioc.Create<oAuthTwitter>();
-            string xml = oAuthTwitter.oAuthWebRequest(Core.oAuthTwitter.Method.GET,
+            string numberOfTweetsParam = "?count=" + NumberOfTweets;
+            OAuthTwitter oAuthTwitter = Ioc.Create<OAuthTwitter>();
+            string xml = oAuthTwitter.OAuthWebRequest(OAuthTwitter.Method.Get,
                                                       TWITTER_URL + PATH_HOME_TIMELINE + ".xml" +
-                                                      NumberOfTweetsParam,
+                                                      numberOfTweetsParam,
                                                       "");
 
             XmlDocument xmlDoc = new XmlDocument();
@@ -78,77 +74,77 @@ namespace Core
             return GetStatusList(xmlDoc);
         }
 
-        public static DateTime ConvertTwitterDate(string TwitterDate) {
-            return DateTime.ParseExact(TwitterDate, 
-                                       Twitter.DATETIME_FORMAT, 
+        public static DateTime ConvertTwitterDate(string twitterDate) {
+            return DateTime.ParseExact(twitterDate,
+                                       DATETIME_FORMAT,
                                        System.Globalization.CultureInfo.InvariantCulture);
         }
 
         /// <summary> Parse twitter date into user friendly display date/time. </summary>
-        /// <param name="TwitterDate">DateTime as returned by twitter. e.g. Sat Feb 26 20:27:09 +0000 2011</param>
-        public static string ConvertTwitterDateDisplay(string TwitterDate) {
-            DateTime dt = ConvertTwitterDate(TwitterDate);
+        /// <param name="twitterDate">DateTime as returned by twitter. e.g. Sat Feb 26 20:27:09 +0000 2011</param>
+        public static string ConvertTwitterDateDisplay(string twitterDate) {
+            DateTime dt = ConvertTwitterDate(twitterDate);
 
-            string DayElement = dt.Date == DateTime.Now.Date ? "Today" : dt.DayOfWeek.ToString();
-            string TimeElement = dt.ToShortTimeString();
+            string dayElement = dt.Date == DateTime.Now.Date ? "Today" : dt.DayOfWeek.ToString();
+            string timeElement = dt.ToShortTimeString();
 
-            return string.Concat(DayElement, " ", TimeElement);
+            return string.Concat(dayElement, " ", timeElement);
         }
 
         //--------------------------------------------------------------
         // Private Methods
         //--------------------------------------------------------------
         private static List<Status> GetStatusList(XmlDocument xml) {
-            List<Status> StatusList = new List<Status>();
+            List<Status> statusList = new List<Status>();
 
-            foreach (XmlNode StatusNode in xml.GetElementsByTagName("status")) {
-                Status StatusInfo = new Status();
+            foreach (XmlNode statusNode in xml.GetElementsByTagName("status")) {
+                Status statusInfo;
 
-                XmlNode RetweetStatusNode = StatusNode.SelectSingleNode("retweeted_status");
-                if (RetweetStatusNode != null) {
-                    StatusInfo = GetStatusFromNode(RetweetStatusNode);
-                    Status RetweetInfo = GetStatusFromNode(StatusNode);
-                    StatusInfo.ReTweetedBy = RetweetInfo.User.Name;
+                XmlNode retweetStatusNode = statusNode.SelectSingleNode("retweeted_status");
+                if (retweetStatusNode != null) {
+                    statusInfo = GetStatusFromNode(retweetStatusNode);
+                    Status retweetInfo = GetStatusFromNode(statusNode);
+                    statusInfo.ReTweetedBy = retweetInfo.User.Name;
                 }
                 else {
-                    StatusInfo = GetStatusFromNode(StatusNode);
+                    statusInfo = GetStatusFromNode(statusNode);
                 }
 
-                StatusList.Add(StatusInfo);
+                statusList.Add(statusInfo);
             }
 
-            return StatusList;
+            return statusList;
         }
 
-        private static Status GetStatusFromNode(XmlNode StatusNode) {
-            Status StatusInfo = new Status();
-            string StatusText = WebHelper.UrlDecode(StatusNode["text"].InnerText);
-            StatusInfo.Text = StatusText;
-            StatusInfo.Id = Convert.ToInt64(StatusNode["id"].InnerText);
-            StatusInfo.CreatedAtDisplay = ConvertTwitterDateDisplay(StatusNode["created_at"].InnerText);
-            StatusInfo.CreatedAt = ConvertTwitterDate(StatusNode["created_at"].InnerText);
-            StatusInfo.User = GetUserInfoFromNode(StatusNode.SelectSingleNode("user"));
+        private static Status GetStatusFromNode(XmlNode statusNode) {
+            Status statusInfo = new Status();
+            string statusText = WebHelper.UrlDecode(statusNode["text"].InnerText);
+            statusInfo.Text = statusText;
+            statusInfo.Id = Convert.ToInt64(statusNode["id"].InnerText);
+            statusInfo.CreatedAtDisplay = ConvertTwitterDateDisplay(statusNode["created_at"].InnerText);
+            statusInfo.CreatedAt = ConvertTwitterDate(statusNode["created_at"].InnerText);
+            statusInfo.User = GetUserInfoFromNode(statusNode.SelectSingleNode("user"));
 
-            return StatusInfo;
+            return statusInfo;
         }
 
-        private static User GetUserInfoFromNode(XmlNode UserNode) {
-            User UserInfo = new User();
+        private static User GetUserInfoFromNode(XmlNode userNode) {
+            User userInfo = new User();
 
             // Get the user's latest status
-            XmlNode UserStatusNode = UserNode.SelectSingleNode("status");
+            XmlNode userStatusNode = userNode.SelectSingleNode("status");
 
             // This info may not exist on all user nodes
-            if (UserStatusNode != null)
-                UserInfo.StatusText = UserStatusNode["text"].InnerText;
+            if (userStatusNode != null)
+                userInfo.StatusText = userStatusNode["text"].InnerText;
 
-            UserInfo.ProfileImageUrl = UserNode["profile_image_url"].InnerText;
-            UserInfo.Name = UserNode["name"].InnerText;
-            UserInfo.ScreenName = UserNode["screen_name"].InnerText;
-            UserInfo.Location = UserNode["location"].InnerText;
-            UserInfo.Description = UserNode["description"].InnerText;
+            userInfo.ProfileImageUrl = userNode["profile_image_url"].InnerText;
+            userInfo.Name = userNode["name"].InnerText;
+            userInfo.ScreenName = userNode["screen_name"].InnerText;
+            userInfo.Location = userNode["location"].InnerText;
+            userInfo.Description = userNode["description"].InnerText;
 
-            return UserInfo;
+            return userInfo;
         }
     }
 }

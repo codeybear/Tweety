@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Core
+namespace Tweety.Core
 {
     /// <summary>
     /// Simple implementation of an Ioc Container.
@@ -10,15 +10,15 @@ namespace Core
     {
         public delegate object Creator();
 
-        private static readonly Dictionary<Type, Creator> _typeToCreator
+        private static readonly Dictionary<Type, Creator> TypeToCreator
                        = new Dictionary<Type, Creator>();
 
         public static void Register<T>(Creator creator) {
-            _typeToCreator.Add(typeof(T), creator);
+            TypeToCreator.Add(typeof(T), creator);
         }
 
         public static T Create<T>() {
-            return (T)_typeToCreator[typeof(T)]();
+            return (T)TypeToCreator[typeof(T)]();
         }
     }
 }

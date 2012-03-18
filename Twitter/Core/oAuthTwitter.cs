@@ -4,11 +4,11 @@ using System.IO;
 using System.Net;
 using System.Web;
 
-namespace Core
+namespace Tweety.Core
 {
-    public class oAuthTwitter : OAuthBase
+    public class OAuthTwitter : OAuthBase
     {
-        public enum Method { GET, POST };
+        public enum Method { Get, Post };
         public const string REQUEST_TOKEN = "http://twitter.com/oauth/request_token";
         public const string AUTHORIZE = "http://twitter.com/oauth/authorize";
         public const string ACCESS_TOKEN = "http://twitter.com/oauth/access_token";
@@ -35,7 +35,7 @@ namespace Core
         public string AuthorizationLinkGet() {
             string ret = null;
 
-            string response = oAuthWebRequest(Method.GET, REQUEST_TOKEN, String.Empty);
+            string response = OAuthWebRequest(Method.Get, REQUEST_TOKEN, String.Empty);
             if (response.Length > 0) {
                 //response contains token and token secret.  We only need the token.
                 NameValueCollection qs = HttpUtility.ParseQueryString(response);
@@ -54,16 +54,16 @@ namespace Core
             this.Token = authToken;
             this.Verifier = verifier;
 
-            string response = oAuthWebRequest(Method.GET, ACCESS_TOKEN, String.Empty);
+            string response = OAuthWebRequest(Method.Get, ACCESS_TOKEN, String.Empty);
 
             if (response.Length > 0) {
                 //Store the Token and Token Secret
                 NameValueCollection qs = HttpUtility.ParseQueryString(response);
                 if (qs["oauth_token"] != null)
-                    this.Token = qs["oauth_token"];
+                    Token = qs["oauth_token"];
 
                 if (qs["oauth_token_secret"] != null)
-                    this.TokenSecret = qs["oauth_token_secret"];
+                    TokenSecret = qs["oauth_token_secret"];
             }
         }
 
@@ -74,14 +74,14 @@ namespace Core
         /// <param name="url">The full url, including the querystring.</param>
         /// <param name="postData">Data to post (querystring format)</param>
         /// <returns>The web server response.</returns>
-        public string oAuthWebRequest(Method method, string url, string postData) {
-            string outUrl = "";
-            string querystring = "";
-            string ret = "";
+        public string OAuthWebRequest(Method method, string url, string postData) {
+            string outUrl;
+            string querystring;
+            string ret;
 
             //Setup postData for signing.
             //Add the postData to the querystring.
-            if (method == Method.POST) {
+            if (method == Method.Post) {
                 if (postData.Length > 0) {
                     //Decode the parameters and re-encode using the oAuth UrlEncode method.
                     NameValueCollection qs = HttpUtility.ParseQueryString(postData);
@@ -92,7 +92,7 @@ namespace Core
                             postData += "&";
 
                         qs[key] = HttpUtility.UrlDecode(qs[key]);
-                        qs[key] = this.UrlEncode(qs[key]);
+                        qs[key] = UrlEncode(qs[key]);
                         postData += key + "=" + qs[key];
                     }
 
@@ -107,16 +107,16 @@ namespace Core
 
             Uri uri = new Uri(url);
 
-            string nonce = this.GenerateNonce();
-            string timeStamp = this.GenerateTimeStamp();
+            string nonce = GenerateNonce();
+            string timeStamp = GenerateTimeStamp();
 
             //Generate Signature
-            string sig = this.GenerateSignature(uri,
-                this.ConsumerKey,
-                this.ConsumerSecret,
-                this.Token,
-                this.TokenSecret,
-                this.Verifier,
+            string sig = GenerateSignature(uri,
+                ConsumerKey,
+                ConsumerSecret,
+                Token,
+                TokenSecret,
+                Verifier,
                 method.ToString(),
                 timeStamp,
                 nonce,
@@ -126,7 +126,7 @@ namespace Core
             querystring += "&oauth_signature=" + HttpUtility.UrlEncode(sig);
 
             //Convert the querystring to postData
-            if (method == Method.POST) {
+            if (method == Method.Post) {
                 postData = querystring;
                 querystring = "";
             }
@@ -151,7 +151,7 @@ namespace Core
             webRequest.Method = method.ToString();
             webRequest.ServicePoint.Expect100Continue = false;
 
-            if (method == Method.POST) {
+            if (method == Method.Post) {
                 webRequest.ContentType = "application/x-www-form-urlencoded";
 
                 //POST the data.

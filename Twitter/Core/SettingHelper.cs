@@ -1,5 +1,5 @@
 ﻿
-namespace Core
+namespace Tweety.Core
 {
     // Wrapper class to get/store user settings
     public static class SettingHelper

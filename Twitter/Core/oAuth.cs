@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Web;
 
-namespace Core
+namespace Tweety.Core
 {
     public class OAuthBase
     {
@@ -14,7 +14,7 @@ namespace Core
         public enum SignatureTypes
         {
             HMACSHA1,
-            PLAINTEXT,
+            PlainText,
             RSASHA1
         }
 
@@ -77,12 +77,12 @@ namespace Core
         protected const string OAuthVerifier = "oauth_verifier";
 
         protected const string HMACSHA1SignatureType = "HMAC-SHA1";
-        protected const string PlainTextSignatureType = "PLAINTEXT";
+        protected const string PlainTextSignatureType = "PlainText";
         protected const string RSASHA1SignatureType = "RSA-SHA1";
 
-        protected Random random = new Random();
+        protected Random Random = new Random();
 
-        protected string unreservedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
+        protected string UnreservedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
 
         /// <summary>
         /// Helper function to compute a hash value
@@ -94,7 +94,7 @@ namespace Core
             if (hashAlgorithm == null) throw new ArgumentNullException("hashAlgorithm");
             if (string.IsNullOrEmpty(data)) throw new ArgumentNullException("data");
 
-            byte[] dataBuffer = System.Text.Encoding.ASCII.GetBytes(data);
+            byte[] dataBuffer = Encoding.ASCII.GetBytes(data);
             byte[] hashBytes = hashAlgorithm.ComputeHash(dataBuffer);
 
             return Convert.ToBase64String(hashBytes);
@@ -139,7 +139,7 @@ namespace Core
             StringBuilder result = new StringBuilder();
 
             foreach (char symbol in value) {
-                if (unreservedChars.IndexOf(symbol) != -1)
+                if (UnreservedChars.IndexOf(symbol) != -1)
                     result.Append(symbol);
                 else
                     //some symbols produce > 2 char values so the system urlencoder must be used to get the correct data
@@ -262,7 +262,7 @@ namespace Core
             normalizedRequestParameters = null;
 
             switch (signatureType) {
-                case SignatureTypes.PLAINTEXT:
+                case SignatureTypes.PlainText:
                     return HttpUtility.UrlEncode(string.Format("{0}&{1}", consumerSecret, tokenSecret));
                 case SignatureTypes.HMACSHA1:
                     string signatureBase = GenerateSignatureBase(url, consumerKey, token, tokenSecret, verifier, httpMethod, timeStamp, nonce, HMACSHA1SignatureType, out normalizedUrl, out normalizedRequestParameters);
@@ -294,7 +294,7 @@ namespace Core
         /// <returns></returns>
         public virtual string GenerateNonce() {
             // Just a simple implementation of a random number between 123400 and 9999999
-            return random.Next(123400, 9999999).ToString();
+            return Random.Next(123400, 9999999).ToString();
         }
 
     }

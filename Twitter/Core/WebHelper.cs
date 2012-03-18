@@ -1,46 +1,46 @@
 ﻿using System;
 using System.Net;
 using System.IO;
-using System.Xml;
 
-namespace Core
+namespace Tweety.Core
 {
     static class WebHelper
     {
         public const string HTTPGET = "GET";
         public const string HTTPPOST = "POST";
 
-        public static byte[] GetBytesFromURL(string sURL) {
-            return CopyStreamToByteArray(GetWebResponse(sURL, HTTPGET));
+        public static byte[] GetBytesFromURL(string url) {
+            return CopyStreamToByteArray(GetWebResponse(url, HTTPGET));
         }
 
-        public static Stream GetWebResponse(String sURL, String sMethod) {
-            return GetWebResponse(sURL, sMethod, "", "");
+        public static Stream GetWebResponse(String url, String sMethod) {
+            return GetWebResponse(url, sMethod, "", "");
         }
 
-        public static Stream GetWebResponse(String sURL, String sMethod, string sUserName, string sPassword) {
-            HttpWebRequest request = WebRequest.Create(sURL) as HttpWebRequest;
+        public static Stream GetWebResponse(String url, String sMethod, string sUserName, string sPassword) {
+            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             request.Method = sMethod;
 
             if (!string.IsNullOrEmpty(sUserName) && !string.IsNullOrEmpty(sPassword)) 
                 request.Credentials = new NetworkCredential(sUserName, sPassword);
 
-            HttpWebResponse Response = (HttpWebResponse)request.GetResponse();
-            return Response.GetResponseStream();
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            return response.GetResponseStream();
         }
 
         /// <summary> For copying a non-seekable stream to a byte array </summary>
-        private static byte[] CopyStreamToByteArray(Stream Stream) {
-            byte[] Buffer = new byte[1024];
-            int iBytesRead;
+        private static byte[] CopyStreamToByteArray(Stream stream) {
+            byte[] buffer = new byte[1024];
 
-            using (MemoryStream OutStream = new MemoryStream()) {
+            using (MemoryStream outStream = new MemoryStream()) {
+                int bytesRead;
+
                 do {
-                    iBytesRead = Stream.Read(Buffer, 0, Buffer.Length);
-                    OutStream.Write(Buffer, 0, iBytesRead);
-                } while (iBytesRead > 0);
+                    bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    outStream.Write(buffer, 0, bytesRead);
+                } while (bytesRead > 0);
 
-                return OutStream.ToArray();
+                return outStream.ToArray();
             }
         }
 

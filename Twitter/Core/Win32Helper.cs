@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 
-namespace Core
+namespace Tweety.Core
 {
     static class NativeMethods
     {
@@ -18,8 +18,8 @@ namespace Core
         private static extern bool SetWindowPos(
              int hWnd,                  // window handle
              int hWndInsertAfter,       // placement-order handle
-             int X,                     // horizontal position
-             int Y,                     // vertical position
+             int x,                     // horizontal position
+             int y,                     // vertical position
              int cx,                    // width
              int cy,                    // height
              uint uFlags);              // window positioning flags
@@ -27,24 +27,24 @@ namespace Core
         /// <summary>
         /// Make a window topmost, without making it permanently topmost
         /// </summary>
-        /// <param name="Window"></param>
-        public static void ShowWindowTopMost(System.Windows.Window Window) {
-            IntPtr WindowHandle = new WindowInteropHelper(Window).Handle;
+        /// <param name="window"></param>
+        public static void ShowWindowTopMost(System.Windows.Window window) {
+            IntPtr windowHandle = new WindowInteropHelper(window).Handle;
 
-            SetWindowPos(WindowHandle.ToInt32(),
+            SetWindowPos(windowHandle.ToInt32(),
                          HWND_TOPMOST,
-                         Convert.ToInt32(Window.Left),
-                         Convert.ToInt32(Window.Top),
-                         Convert.ToInt32(Window.Width),
-                         Convert.ToInt32(Window.Height),
+                         Convert.ToInt32(window.Left),
+                         Convert.ToInt32(window.Top),
+                         Convert.ToInt32(window.Width),
+                         Convert.ToInt32(window.Height),
                          SWP_SHOWWINDOW);
 
-            SetWindowPos(WindowHandle.ToInt32(),
+            SetWindowPos(windowHandle.ToInt32(),
                          HWND_NONTOPMOST,
-                         Convert.ToInt32(Window.Left),
-                         Convert.ToInt32(Window.Top),
-                         Convert.ToInt32(Window.Width),
-                         Convert.ToInt32(Window.Height),
+                         Convert.ToInt32(window.Left),
+                         Convert.ToInt32(window.Top),
+                         Convert.ToInt32(window.Width),
+                         Convert.ToInt32(window.Height),
                          SWP_SHOWWINDOW);
         }
     }
