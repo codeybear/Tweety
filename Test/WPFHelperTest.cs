@@ -1,6 +1,6 @@
 ﻿using System.Windows.Documents;
-using Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tweety.Core;
 
 namespace Test
 {

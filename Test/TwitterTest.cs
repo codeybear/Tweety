@@ -1,10 +1,10 @@
-﻿using Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Documents;
+using Tweety.Core;
 
 namespace Test
 {
@@ -18,8 +18,8 @@ namespace Test
         [ClassInitialize()]
         public static void MyClassInitialize(TestContext testContext) {
             // Setup the Ioc container
-            Ioc.Register<oAuthTwitter>(() => {
-                oAuthTwitter oAuthTwitter = new oAuthTwitter();
+            Ioc.Register<OAuthTwitter>(() => {
+                OAuthTwitter oAuthTwitter = new OAuthTwitter();
                 oAuthTwitter.ConsumerKey = SettingHelper.ConsumerKey;
                 oAuthTwitter.ConsumerSecret = SettingHelper.ConsumerSecret;
                 oAuthTwitter.Token = "15230032-d7CyRyzNQ2V7Br768V565OC407KnTPKRp0Lg9L7ft";
