@@ -8,7 +8,7 @@
     <ProjectGuid>{9AE1FEB9-060E-4C44-A8D9-121CA4B75C82}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Core</RootNamespace>
+    <RootNamespace>Tweety</RootNamespace>
     <AssemblyName>Tweety</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
