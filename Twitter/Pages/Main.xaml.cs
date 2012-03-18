@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Core;
+using Tweety.Core;
 
 namespace Pages
 {

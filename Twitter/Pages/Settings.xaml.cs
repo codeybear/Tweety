@@ -2,7 +2,7 @@
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
-using Core;
+using Tweety.Core;
 
 namespace Pages
 {
@@ -16,7 +16,7 @@ namespace Pages
         public Settings() {
             InitializeComponent();
 
-            oAuthTwitter oAuth = new oAuthTwitter();
+            OAuthTwitter oAuth = new OAuthTwitter();
             oAuth.ConsumerKey = SettingHelper.ConsumerKey;
             oAuth.ConsumerSecret = SettingHelper.ConsumerSecret;
 
@@ -40,7 +40,7 @@ namespace Pages
 
         private void btnOk_Click(object sender, RoutedEventArgs e) {
             try {
-                oAuthTwitter oAuth = new oAuthTwitter();
+                OAuthTwitter oAuth = new OAuthTwitter();
                 oAuth.ConsumerKey = SettingHelper.ConsumerKey;
                 oAuth.ConsumerSecret = SettingHelper.ConsumerSecret;
                 oAuth.Token = OAuthToken;

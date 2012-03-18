@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
-using Core;
 
 namespace Pages {
     public partial class Alert : Window {

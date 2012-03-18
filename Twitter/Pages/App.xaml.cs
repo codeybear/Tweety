@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Core;
+using Tweety.Core;
 
 namespace Pages {
     public partial class App : Application {
