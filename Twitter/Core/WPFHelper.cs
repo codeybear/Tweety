@@ -47,7 +47,7 @@ namespace Tweety.Core
             var bi = new BitmapImage();
             bi.BeginInit();
             // Ignore color profile as this can cause an exception on certain images
-            bi.CreateOptions = System.Windows.Media.Imaging.BitmapCreateOptions.IgnoreColorProfile;
+            bi.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
             bi.UriSource = new Uri(imageURL);
             bi.EndInit();
 

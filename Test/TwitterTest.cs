@@ -1,17 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Windows.Documents;
 using Tweety.Core;
 
 namespace Test
 {
-    [TestClass()]
+    [TestClass]
     public class TwitterTest
     {
-        private TestContext testContextInstance;
+        private TestContext _testContextInstance;
 
         #region Additional test attributes
 
@@ -51,30 +49,30 @@ namespace Test
         /// <summary>
         ///A test for GetFriendsTimeline
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void GetFriendsTimelineTest() {
             List<Status> actual = Twitter.GetHomeTimeline();
             Assert.IsTrue(actual.Count > 0);
-            actual.ForEach((status) => Debug.WriteLine("{0}***{1}***{2}", status.CreatedAt, status.User.Name, status.Text));
+            actual.ForEach(status => Debug.WriteLine("{0}***{1}***{2}", status.CreatedAt, status.User.Name, status.Text));
         }
 
         [TestMethod]
         public void ConvertTwitterDate() {
-            string DisplayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.ToString(Twitter.DATETIME_FORMAT));
+            string displayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.ToString(Twitter.DATETIME_FORMAT));
         }
 
         [TestMethod]
         public void ConvertTwitterDateToday() {
-            string DisplayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.ToString(Twitter.DATETIME_FORMAT));
-            Assert.AreEqual(DisplayDate.Substring(0, 5), "Today");
-            Debug.WriteLine(DisplayDate);
+            string displayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.ToString(Twitter.DATETIME_FORMAT));
+            Assert.AreEqual(displayDate.Substring(0, 5), "Today");
+            Debug.WriteLine(displayDate);
         }
 
         [TestMethod]
         public void ConvertTwitterDateNotToday() {
-            string DisplayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.AddDays(-1).ToString(Twitter.DATETIME_FORMAT));
-            Assert.AreNotEqual(DisplayDate.Substring(0, 5), "Today");
-            Debug.WriteLine(DisplayDate);
+            string displayDate = Twitter.ConvertTwitterDateDisplay(DateTime.Now.AddDays(-1).ToString(Twitter.DATETIME_FORMAT));
+            Assert.AreNotEqual(displayDate.Substring(0, 5), "Today");
+            Debug.WriteLine(displayDate);
         }
 
         [TestMethod]

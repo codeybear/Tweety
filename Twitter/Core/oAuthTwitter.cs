@@ -51,8 +51,8 @@ namespace Tweety.Core
         /// </summary>
         /// <param name="authToken">The oauth_token is supplied by Twitter's authorization page following the callback.</param>
         public void AccessTokenGet(string authToken, string verifier) {
-            this.Token = authToken;
-            this.Verifier = verifier;
+            Token = authToken;
+            Verifier = verifier;
 
             string response = OAuthWebRequest(Method.Get, ACCESS_TOKEN, String.Empty);
 

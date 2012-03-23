@@ -27,7 +27,6 @@ namespace Tweety.Core {
         private const string PATH_VERIFY = "account/verify_credentials";
         private const string PATH_HOME_TIMELINE = "statuses/home_timeline";
         private const string PATH_STATUS_UPDATE = "statuses/update";
-        private const string PATH_FRIENDS_RETWEETS = "statuses/retweeted_to_me";
         private const string EXT = ".xml";
 
         /// <summary> Twitter datetime format </summary>

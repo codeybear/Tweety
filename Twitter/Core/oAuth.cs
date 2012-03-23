@@ -189,9 +189,6 @@ namespace Tweety.Core
             if (string.IsNullOrEmpty(httpMethod)) throw new ArgumentNullException("httpMethod");
             if (string.IsNullOrEmpty(signatureType)) throw new ArgumentNullException("signatureType");
 
-            normalizedUrl = null;
-            normalizedRequestParameters = null;
-
             List<QueryParameter> parameters = GetQueryParameters(url.Query);
             parameters.Add(new QueryParameter(OAuthVersionKey, OAuthVersion));
             parameters.Add(new QueryParameter(OAuthNonceKey, nonce));
