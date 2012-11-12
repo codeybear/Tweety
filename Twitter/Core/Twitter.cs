@@ -23,7 +23,7 @@ namespace Tweety.Core {
     }
 
     public static class Twitter {
-        private const string TWITTER_URL = "http://api.twitter.com/";
+        private const string TWITTER_URL = "http://api.twitter.com/1/";
         private const string PATH_VERIFY = "account/verify_credentials";
         private const string PATH_HOME_TIMELINE = "statuses/home_timeline";
         private const string PATH_STATUS_UPDATE = "statuses/update";
