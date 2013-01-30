@@ -317,10 +317,10 @@ namespace Pages
         }
 
         public void Dispose() {
-            _StatusTimer.Dispose();
-            _NotifyIcon.Dispose();
-            _bgwMyStatus.Dispose();
-            _bgwFriendsTimeLine.Dispose();
+            if(_StatusTimer != null)_StatusTimer.Dispose();
+            if (_NotifyIcon != null) _NotifyIcon.Dispose();
+            if (_bgwMyStatus != null) _bgwMyStatus.Dispose();
+            if (_bgwFriendsTimeLine != null) _bgwFriendsTimeLine.Dispose();
         }
 
         #endregion
