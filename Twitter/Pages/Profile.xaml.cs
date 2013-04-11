@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using Tweety.Core;
+using TweetSharp;
 
 namespace Pages
 {
@@ -20,7 +21,7 @@ namespace Pages
     /// </summary>
     public partial class Profile : Window
     {
-        public Profile(User user) {
+        public Profile(TwitterUser user) {
             InitializeComponent();
             txtScreenName.Text = "@" + user.ScreenName;
             txtName.Text =  user.Name;

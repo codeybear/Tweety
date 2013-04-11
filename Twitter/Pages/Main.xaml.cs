@@ -6,7 +6,10 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+
 using Tweety.Core;
+using TweetSharp;
+
 
 namespace Pages
 {
@@ -144,14 +147,15 @@ namespace Pages
         }
 
         void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
-            e.Result = Twitter.GetHomeTimeline();
+            var service = Ioc.Create<TwitterService>();
+            e.Result = service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions());
         }
 
         void bgwFriendsTimeLine_Completed(object sender, RunWorkerCompletedEventArgs e) {
             this.Title = "Tweety";
 
             if (e.Result != null) {
-                HandleResults((List<Status>)e.Result);
+                HandleResults((List<TwitterStatus>)e.Result);
 
                 if (btnError.Height > 0) {
                     var sb = (System.Windows.Media.Animation.Storyboard)this.FindResource("HideError");
@@ -181,11 +185,11 @@ namespace Pages
         #region Support Methods
 
         /// <summary> Display list of tweets inside the Grid control </summary>
-        private void AddResultsToGrid(List<Status> StatusList) {
+        private void AddResultsToGrid(List<TwitterStatus> StatusList) {
             grdTweets.RowDefinitions.Clear();
             grdTweets.Children.Clear();
 
-            foreach (Status Status in StatusList) {
+            foreach (TwitterStatus Status in StatusList) {
                 grdTweets.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
 
                 // Create the text for grid
@@ -193,15 +197,16 @@ namespace Pages
                 TextBlock.Margin = new Thickness(4);
                 TextBlock.TextWrapping = TextWrapping.Wrap;
 
-                if (!string.IsNullOrEmpty(Status.ReTweetedBy)) {
+                if (Status.RetweetedStatus != null) {
                     TextBlock.Inlines.Add(new Italic(new Run(Environment.NewLine +
                                                              "Retweeted by " +
-                                                             Status.ReTweetedBy +
+                                                             Status.User.ScreenName +
                                                              Environment.NewLine)));
                 }
 
                 TextBlock.Inlines.AddRange(WPFHelper.CreateInlineTextWithLinks(Status.Text, Hyperlink_RequestNavigate));
-                TextBlock.Inlines.Add(new Italic(new Run(Environment.NewLine + Status.CreatedAtDisplay)));
+                string displayDate = Twitter.ConvertTwitterDateDisplay(Status.CreatedDate);
+                TextBlock.Inlines.Add(new Italic(new Run(Environment.NewLine + displayDate)));
                 Grid.SetColumn(TextBlock, 1);
                 Grid.SetRow(TextBlock, grdTweets.RowDefinitions.Count - 1);
                 grdTweets.Children.Add(TextBlock);
@@ -209,7 +214,7 @@ namespace Pages
                 Image ProfileImage = new Image();
                 ProfileImage.Source = WPFHelper.CreateImage(Status.User.ProfileImageUrl);
                 ProfileImage.ToolTip = Status.User.Name;
-                User user = Status.User;
+                TwitterUser user = Status.User;
 
                 ProfileImage.MouseDown += (o, e) => {
                     Profile ProfileWindow = new Profile(user);
@@ -252,7 +257,7 @@ namespace Pages
         }
 
         /// <summary> Check for new tweets, and display if there are any </summary>
-        void HandleResults(List<Status> ResultList) {
+        void HandleResults(List<TwitterStatus> ResultList) {
             // Check to see if there are new tweets
             Int64 lLastId = Convert.ToInt64(ResultList[0].Id);
 

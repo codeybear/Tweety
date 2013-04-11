@@ -81,9 +81,7 @@ namespace Tweety.Core {
 
         /// <summary> Parse twitter date into user friendly display date/time. </summary>
         /// <param name="twitterDate">DateTime as returned by twitter. e.g. Sat Feb 26 20:27:09 +0000 2011</param>
-        public static string ConvertTwitterDateDisplay(string twitterDate) {
-            DateTime dt = ConvertTwitterDate(twitterDate);
-
+        public static string ConvertTwitterDateDisplay(DateTime dt) {
             string dayElement = dt.Date == DateTime.Now.Date ? "Today" : dt.DayOfWeek.ToString();
             string timeElement = dt.ToShortTimeString();
 
@@ -120,7 +118,7 @@ namespace Tweety.Core {
             string statusText = WebHelper.UrlDecode(statusNode["text"].InnerText);
             statusInfo.Text = statusText;
             statusInfo.Id = Convert.ToInt64(statusNode["id"].InnerText);
-            statusInfo.CreatedAtDisplay = ConvertTwitterDateDisplay(statusNode["created_at"].InnerText);
+            //statusInfo.CreatedAtDisplay = ConvertTwitterDateDisplay(statusNode["created_at"].InnerText);
             statusInfo.CreatedAt = ConvertTwitterDate(statusNode["created_at"].InnerText);
             statusInfo.User = GetUserInfoFromNode(statusNode.SelectSingleNode("user"));
 
