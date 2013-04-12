@@ -148,7 +148,7 @@ namespace Pages
 
         void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
             var service = Ioc.Create<TwitterService>();
-            e.Result = service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions());
+            e.Result = service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions() { Count = 50 });
         }
 
         void bgwFriendsTimeLine_Completed(object sender, RunWorkerCompletedEventArgs e) {
@@ -171,12 +171,13 @@ namespace Pages
         }
 
         void bgwMyStatus_DoWork(object sender, DoWorkEventArgs e) {
-            e.Result = Twitter.GetUserInfo();
+            var service = Ioc.Create<TwitterService>();
+            e.Result = service.VerifyCredentials(new VerifyCredentialsOptions());
         }
 
         void bgwMyStatus_Completed(object sender, RunWorkerCompletedEventArgs e) {
             if (e.Result != null) {
-                UpdateStatusText((User)e.Result);
+                UpdateStatusText((TwitterUser)e.Result);
             }
         }
 
@@ -227,12 +228,12 @@ namespace Pages
             }
         }
 
-        private void UpdateStatusText(User user) {
+        private void UpdateStatusText(TwitterUser user) {
             // Store original text in case it gets modified
-            _OldStatusText = user.StatusText;
+            _OldStatusText = user.Status.Text;
 
             txtStatus.TextChanged -= txtStatus_TextChanged;
-            txtStatus.Text = user.StatusText;
+            txtStatus.Text = user.Status.Text;
             txtStatus.TextChanged += txtStatus_TextChanged;
             imgProfile.Source = new BitmapImage(new Uri(user.ProfileImageUrl));
         }
