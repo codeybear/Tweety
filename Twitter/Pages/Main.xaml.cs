@@ -84,7 +84,8 @@ namespace Pages
         }
 
         private void btnUpdateStatus_Click(object sender, RoutedEventArgs e) {
-            Twitter.UpdateStatus(txtStatus.Text);
+            var service = Ioc.Create<TwitterService>();
+            service.SendTweet(new SendTweetOptions() { Status = txtStatus.Text });
             UpdateStatusButtons(false);
         }
 
@@ -148,7 +149,7 @@ namespace Pages
 
         void bgwFriendsTimeLine_DoWork(object sender, DoWorkEventArgs e) {
             var service = Ioc.Create<TwitterService>();
-            e.Result = service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions() { Count = 50 });
+            e.Result = service.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions() { Count = Twitter.NumberOfTweets });
         }
 
         void bgwFriendsTimeLine_Completed(object sender, RunWorkerCompletedEventArgs e) {
