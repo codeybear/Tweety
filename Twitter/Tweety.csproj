@@ -145,8 +145,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="Core\IOC.cs" />
-    <Compile Include="Core\oAuth.cs" />
-    <Compile Include="Core\oAuthTwitter.cs" />
     <Compile Include="Core\Win32Helper.cs" />
     <Compile Include="Pages\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
