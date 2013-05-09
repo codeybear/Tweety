@@ -48,13 +48,11 @@ namespace Tweety.Core
         /// <remarks> This is to avoid including system.web which means it can use the client only version
         /// of the framework, giving a potentially smaller framework download</remarks>
         public static string UrlDecode(string text) {
-            // pre-process for + - signs space formatting since System.Uri doesn't handle it
-            // TODO use regular expressions here
-            text = text.Replace("+", "");
-            text = text.Replace("-", "");
-            text = text.Replace("%", "");
-            text = text.Replace("&lt", "<");
-            text = text.Replace("&gt", ">");
+            text = text.Replace("&lt;", "<");
+            text = text.Replace("&gt;", ">");
+            text = text.Replace("&quot;", "'");
+            text = text.Replace("&amp;", "\"");
+
             return text;
         }
 

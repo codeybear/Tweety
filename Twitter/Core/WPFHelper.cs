@@ -17,14 +17,15 @@ namespace Tweety.Core
 
             // Search for hyperlinks and add preceding text
             foreach (Match match in matches) {
-                lines.Add(new Run(sText.Substring(lastMatchPos, match.Index - lastMatchPos)));
+                string decoded = WebHelper.UrlDecode(sText.Substring(lastMatchPos, match.Index - lastMatchPos));
+                lines.Add(new Run(decoded));
                 lines.Add(CreateHyperLink(match.Value, clickMethod));
                 lastMatchPos = match.Index + match.Length;
             }
 
             // Add any remaining text
             if (lastMatchPos == 0 || lastMatchPos != sText.Length)
-                lines.Add(new Run(sText.Substring(lastMatchPos)));
+                lines.Add(new Run(WebHelper.UrlDecode(sText.Substring(lastMatchPos))));
 
             return lines.ToArray();
         }
