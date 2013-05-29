@@ -81,16 +81,24 @@ namespace Pages
         private void txtStatus_TextChanged(object sender, TextChangedEventArgs e) {
             UpdateStatusButtons(true);
             CheckLength();
+            _StatusTimer.Stop();
         }
 
         private void btnUpdateStatus_Click(object sender, RoutedEventArgs e) {
             var service = Ioc.Create<TwitterService>();
             service.SendTweet(new SendTweetOptions() { Status = txtStatus.Text });
             UpdateStatusButtons(false);
+            _StatusTimer.Start();
         }
 
         private void btnCancelUpdate_Click(object sender, RoutedEventArgs e) {
             UpdateStatusButtons(false);
+
+            txtStatus.TextChanged -= txtStatus_TextChanged;
+            txtStatus.Text = _OldStatusText;
+            txtStatus.TextChanged += txtStatus_TextChanged;
+
+            _StatusTimer.Start();
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.RoutedEventArgs e) {
@@ -303,10 +311,6 @@ namespace Pages
             else {
                 panelUpdateStatus.Visibility = Visibility.Hidden;
                 btnSettings.Visibility = Visibility.Visible;
-
-                txtStatus.TextChanged -= txtStatus_TextChanged;
-                txtStatus.Text = _OldStatusText;
-                txtStatus.TextChanged += txtStatus_TextChanged;
             }
         }
 
